@@ -86,6 +86,24 @@ nav:
           - 概要: article/index.md
           - 執筆計画アウトライン: article/outline.md
           - 執筆ワークフロー: article/workflow.md
+          - Ruby:
+              - 概要: article/ruby/index.md
+              - 第 1 章 デザインパターンとパターン思考: article/ruby/01-introduction-to-patterns.md
+              - 第 2 章 パターンを支える基本原則: article/ruby/02-principles-and-patterns.md
+              - 第 3 章 開発環境と TDD 基盤: article/ruby/03-tdd-and-tooling.md
+              - 第 4 章 Template Method: article/ruby/04-template-method.md
+              - 第 5 章 Strategy: article/ruby/05-strategy.md
+              - 第 6 章 Observer: article/ruby/06-observer.md
+              - 第 7 章 Composite: article/ruby/07-composite.md
+              - 第 8 章 Iterator: article/ruby/08-iterator.md
+              - 第 9 章 Command: article/ruby/09-command.md
+              - 第 10 章 Adapter: article/ruby/10-adapter.md
+              - 第 11 章 Proxy: article/ruby/11-proxy.md
+              - 第 12 章 Decorator: article/ruby/12-decorator.md
+              - 第 13 章 Singleton: article/ruby/13-singleton.md
+              - 第 14 章 Factory: article/ruby/14-factory.md
+              - 第 15 章 Builder: article/ruby/15-builder.md
+              - 第 16 章 Interpreter: article/ruby/16-interpreter.md
   - リファレンス:
       - 概要: reference/index.md
       - よいソフトウェアとは: reference/よいソフトウェアとは.md
