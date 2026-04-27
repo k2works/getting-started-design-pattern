@@ -74,6 +74,8 @@ nav:
       - リリース計画: development/release_plan.md
       - イテレーション計画:
           - IT1 Ruby: development/iteration_plan-1.md
+      - ふりかえり:
+          - IT1 Ruby: development/retrospective-1.md
   - 運用:
       - 概要: operation/index.md
   - レビュー:
