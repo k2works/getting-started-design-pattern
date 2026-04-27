@@ -76,6 +76,7 @@ nav:
           - IT1 Ruby: development/iteration_plan-1.md
           - IT2 Java: development/iteration_plan-2.md
           - IT3 Python: development/iteration_plan-3.md
+          - IT4 JavaScript: development/iteration_plan-4.md
       - ふりかえり:
           - IT1 Ruby: development/retrospective-1.md
           - IT2 Java: development/retrospective-2.md
@@ -150,6 +151,24 @@ nav:
               - 第 14 章 Factory: article/python/14-factory.md
               - 第 15 章 Builder: article/python/15-builder.md
               - 第 16 章 Interpreter: article/python/16-interpreter.md
+          - JavaScript:
+              - 概要: article/javascript/index.md
+              - 第 1 章 デザインパターンとパターン思考: article/javascript/01-introduction-to-patterns.md
+              - 第 2 章 パターンを支える基本原則: article/javascript/02-principles-and-patterns.md
+              - 第 3 章 開発環境と TDD 基盤: article/javascript/03-tdd-and-tooling.md
+              - 第 4 章 Template Method: article/javascript/04-template-method.md
+              - 第 5 章 Strategy: article/javascript/05-strategy.md
+              - 第 6 章 Observer: article/javascript/06-observer.md
+              - 第 7 章 Composite: article/javascript/07-composite.md
+              - 第 8 章 Iterator: article/javascript/08-iterator.md
+              - 第 9 章 Command: article/javascript/09-command.md
+              - 第 10 章 Adapter: article/javascript/10-adapter.md
+              - 第 11 章 Proxy: article/javascript/11-proxy.md
+              - 第 12 章 Decorator: article/javascript/12-decorator.md
+              - 第 13 章 Singleton: article/javascript/13-singleton.md
+              - 第 14 章 Factory: article/javascript/14-factory.md
+              - 第 15 章 Builder: article/javascript/15-builder.md
+              - 第 16 章 Interpreter: article/javascript/16-interpreter.md
   - リファレンス:
       - 概要: reference/index.md
       - よいソフトウェアとは: reference/よいソフトウェアとは.md
