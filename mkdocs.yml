@@ -74,6 +74,7 @@ nav:
       - リリース計画: development/release_plan.md
       - イテレーション計画:
           - IT1 Ruby: development/iteration_plan-1.md
+          - IT2 Java: development/iteration_plan-2.md
       - ふりかえり:
           - IT1 Ruby: development/retrospective-1.md
       - 完了報告書:
