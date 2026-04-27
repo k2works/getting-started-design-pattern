@@ -10,7 +10,7 @@
 
 ### Java バージョン
 
-本シリーズでは **JDK 17**（LTS）を使用します。
+本シリーズでは **JDK 21**（LTS）を使用します。
 
 ```bash
 # Nix 環境の起動
@@ -131,7 +131,7 @@ Ruby 版と同じ Red-Green-Refactor サイクルで進めます。
 
 ## まとめ
 
-- JDK 17 + Gradle + JUnit 5 + JaCoCo の環境を構築した
+- JDK 21 + Gradle + JUnit 5 + JaCoCo の環境を構築した
 - パッケージは `pattern.{パターン名}` で名前空間を分離する
 - TDD の Red-Green-Refactor サイクルでパターンを段階的に実装する
 - カバレッジ目標は行・ブランチとも 80% 以上

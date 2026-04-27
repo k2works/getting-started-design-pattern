@@ -41,7 +41,7 @@ GoF 『Design Patterns』 のメインターゲット言語である Java で、
 |----|---------|------|
 | 1 | [デザインパターンとパターン思考](01-introduction-to-patterns.md) | GoF の歴史、Java とパターンの関係 |
 | 2 | [パターンを支える基本原則](02-principles-and-patterns.md) | SOLID 原則、インターフェース指向設計 |
-| 3 | [開発環境と TDD 基盤](03-tdd-and-tooling.md) | JDK 17 + Gradle + JUnit 5 + JaCoCo |
+| 3 | [開発環境と TDD 基盤](03-tdd-and-tooling.md) | JDK 21 + Gradle + JUnit 5 + JaCoCo |
 
 ### 第 2 部: 振る舞いの取り扱い
 
