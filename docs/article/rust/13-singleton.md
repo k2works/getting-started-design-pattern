@@ -1,0 +1,65 @@
+# 第 13 章：Singleton
+
+## はじめに
+
+Singleton パターンは、クラスのインスタンスが 1 つだけ存在することを保証するパターンです。Rust では `std::sync::OnceLock` を使ってスレッドセーフに実現します。
+
+## パターンの構造
+
+```plantuml
+@startuml
+class Logger {
+  -messages: Mutex<Vec<String>>
+  +log(message: &str)
+  +messages(): Vec<String>
+  +clear()
+}
+
+class <<module>> singleton {
+  -INSTANCE: OnceLock<Logger>
+  +get_instance(): &'static Logger
+}
+
+singleton --> Logger : creates once
+@enduml
+```
+
+## TDD で作る
+
+### Red
+
+```rust
+#[test]
+fn singleton_returns_same_instance() {
+    let logger1 = get_instance();
+    let logger2 = get_instance();
+    assert!(std::ptr::eq(logger1, logger2));
+}
+```
+
+### Green
+
+```rust
+static INSTANCE: OnceLock<Logger> = OnceLock::new();
+
+pub fn get_instance() -> &'static Logger {
+    INSTANCE.get_or_init(Logger::new)
+}
+```
+
+### Refactor
+
+`OnceLock` は Rust 1.80 以降の標準ライブラリで提供され、`once_cell` クレートの `Lazy` に代わるスレッドセーフな初期化手段です。内部の `Vec` は `Mutex` で保護します。
+
+## 他言語比較
+
+| 言語 | Singleton の実現方法 |
+|------|-------------------|
+| Java | `private` コンストラクタ + `static getInstance()` |
+| Python | モジュールレベル変数 / `__new__` |
+| Ruby | `Singleton` モジュール |
+| **Rust** | **`OnceLock` + `&'static` 参照** |
+
+## まとめ
+
+Rust の Singleton は `OnceLock` により、初期化の一回性とスレッド安全性を言語レベルで保証します。`'static` ライフタイムにより、返される参照がプログラム全体で有効であることが型で表現されます。

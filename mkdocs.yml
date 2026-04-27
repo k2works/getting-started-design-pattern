@@ -264,6 +264,24 @@ nav:
               - 第 14 章 Factory: article/go/14-factory.md
               - 第 15 章 Builder: article/go/15-builder.md
               - 第 16 章 Interpreter: article/go/16-interpreter.md
+          - Rust:
+              - 概要: article/rust/index.md
+              - 第 1 章 デザインパターンとパターン思考: article/rust/01-introduction-to-patterns.md
+              - 第 2 章 パターンを支える基本原則: article/rust/02-principles-and-patterns.md
+              - 第 3 章 開発環境と TDD 基盤: article/rust/03-tdd-and-tooling.md
+              - 第 4 章 Template Method: article/rust/04-template-method.md
+              - 第 5 章 Strategy: article/rust/05-strategy.md
+              - 第 6 章 Observer: article/rust/06-observer.md
+              - 第 7 章 Composite: article/rust/07-composite.md
+              - 第 8 章 Iterator: article/rust/08-iterator.md
+              - 第 9 章 Command: article/rust/09-command.md
+              - 第 10 章 Adapter: article/rust/10-adapter.md
+              - 第 11 章 Proxy: article/rust/11-proxy.md
+              - 第 12 章 Decorator: article/rust/12-decorator.md
+              - 第 13 章 Singleton: article/rust/13-singleton.md
+              - 第 14 章 Factory: article/rust/14-factory.md
+              - 第 15 章 Builder: article/rust/15-builder.md
+              - 第 16 章 Interpreter: article/rust/16-interpreter.md
   - リファレンス:
       - 概要: reference/index.md
       - よいソフトウェアとは: reference/よいソフトウェアとは.md

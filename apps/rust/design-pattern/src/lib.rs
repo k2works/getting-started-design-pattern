@@ -1,0 +1,13 @@
+pub mod template_method;
+pub mod strategy;
+pub mod observer;
+pub mod composite;
+pub mod iterator_pattern;
+pub mod command;
+pub mod adapter;
+pub mod proxy;
+pub mod decorator;
+pub mod singleton;
+pub mod factory;
+pub mod builder;
+pub mod interpreter;

@@ -1,0 +1,20 @@
+name: CI Rust
+
+on:
+  push:
+    branches: [main, develop]
+    paths: ['apps/rust/design-pattern/**', '.github/workflows/ci-rust.yml']
+  pull_request:
+    branches: [main]
+    paths: ['apps/rust/design-pattern/**', '.github/workflows/ci-rust.yml']
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/rust/design-pattern
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - run: cargo test --verbose
