@@ -210,6 +210,24 @@ nav:
               - 第 14 章 Factory: article/csharp/14-factory.md
               - 第 15 章 Builder: article/csharp/15-builder.md
               - 第 16 章 Interpreter: article/csharp/16-interpreter.md
+          - "F#":
+              - 概要: article/fsharp/index.md
+              - 第 1 章 はじめに: article/fsharp/01-introduction-to-patterns.md
+              - 第 2 章 Template Method: article/fsharp/02-template-method.md
+              - 第 3 章 Strategy: article/fsharp/03-strategy.md
+              - 第 4 章 Observer: article/fsharp/04-observer.md
+              - 第 5 章 Composite: article/fsharp/05-composite.md
+              - 第 6 章 Iterator: article/fsharp/06-iterator.md
+              - 第 7 章 Command: article/fsharp/07-command.md
+              - 第 8 章 Adapter: article/fsharp/08-adapter.md
+              - 第 9 章 Proxy: article/fsharp/09-proxy.md
+              - 第 10 章 Decorator: article/fsharp/10-decorator.md
+              - 第 11 章 Singleton: article/fsharp/11-singleton.md
+              - 第 12 章 Factory: article/fsharp/12-factory.md
+              - 第 13 章 Builder: article/fsharp/13-builder.md
+              - 第 14 章 Interpreter: article/fsharp/14-interpreter.md
+              - 第 15 章 パターン総括: article/fsharp/15-patterns-summary.md
+              - 第 16 章 F# の全体像: article/fsharp/16-interpreter.md
   - リファレンス:
       - 概要: reference/index.md
       - よいソフトウェアとは: reference/よいソフトウェアとは.md
