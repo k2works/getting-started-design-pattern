@@ -1,0 +1,14 @@
+{
+  "name": "design-pattern",
+  "version": "1.0.0",
+  "description": "Design Patterns in JavaScript - TDD implementation",
+  "scripts": {
+    "test": "node --experimental-vm-modules node_modules/.bin/jest --verbose",
+    "test:coverage": "node --experimental-vm-modules node_modules/.bin/jest --coverage"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "@jest/globals": "^29.7.0"
+  },
+  "type": "module"
+}
