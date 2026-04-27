@@ -130,6 +130,24 @@ nav:
               - 第 14 章 Factory: article/java/14-factory.md
               - 第 15 章 Builder: article/java/15-builder.md
               - 第 16 章 Interpreter: article/java/16-interpreter.md
+          - Python:
+              - 概要: article/python/index.md
+              - 第 1 章 デザインパターンとパターン思考: article/python/01-introduction-to-patterns.md
+              - 第 2 章 パターンを支える基本原則: article/python/02-principles-and-patterns.md
+              - 第 3 章 開発環境と TDD 基盤: article/python/03-tdd-and-tooling.md
+              - 第 4 章 Template Method: article/python/04-template-method.md
+              - 第 5 章 Strategy: article/python/05-strategy.md
+              - 第 6 章 Observer: article/python/06-observer.md
+              - 第 7 章 Composite: article/python/07-composite.md
+              - 第 8 章 Iterator: article/python/08-iterator.md
+              - 第 9 章 Command: article/python/09-command.md
+              - 第 10 章 Adapter: article/python/10-adapter.md
+              - 第 11 章 Proxy: article/python/11-proxy.md
+              - 第 12 章 Decorator: article/python/12-decorator.md
+              - 第 13 章 Singleton: article/python/13-singleton.md
+              - 第 14 章 Factory: article/python/14-factory.md
+              - 第 15 章 Builder: article/python/15-builder.md
+              - 第 16 章 Interpreter: article/python/16-interpreter.md
   - リファレンス:
       - 概要: reference/index.md
       - よいソフトウェアとは: reference/よいソフトウェアとは.md
