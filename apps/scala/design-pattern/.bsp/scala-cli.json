@@ -1,0 +1,20 @@
+{
+  "name": "scala-cli",
+  "argv": [
+    "/nix/store/j36awfk8lgabr2ngv5d32vy1la99sq3m-scala-cli-1.11.0/bin/scala-cli",
+    "bsp",
+    "--json-options",
+    "/Users/k2works/IdeaProjects/getting-started-design-pattern/apps/scala/design-pattern/.scala-build/ide-options-v2.json",
+    "--json-launcher-options",
+    "/Users/k2works/IdeaProjects/getting-started-design-pattern/apps/scala/design-pattern/.scala-build/ide-launcher-options.json",
+    "--envs-file",
+    "/Users/k2works/IdeaProjects/getting-started-design-pattern/apps/scala/design-pattern/.scala-build/ide-envs.json",
+    "/Users/k2works/IdeaProjects/getting-started-design-pattern/apps/scala/design-pattern"
+  ],
+  "version": "1.11.0",
+  "bspVersion": "2.1.1",
+  "languages": [
+    "scala",
+    "java"
+  ]
+}

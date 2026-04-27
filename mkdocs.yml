@@ -300,6 +300,24 @@ nav:
               - 第 14 章 Factory: article/clojure/14-factory.md
               - 第 15 章 Builder: article/clojure/15-builder.md
               - 第 16 章 Interpreter: article/clojure/16-interpreter.md
+          - Scala:
+              - 概要: article/scala/index.md
+              - 第 1 章 デザインパターンとパターン思考: article/scala/01-introduction-to-patterns.md
+              - 第 2 章 パターンを支える基本原則: article/scala/02-principles-and-patterns.md
+              - 第 3 章 開発環境と TDD 基盤: article/scala/03-tdd-and-tooling.md
+              - 第 4 章 Template Method: article/scala/04-template-method.md
+              - 第 5 章 Strategy: article/scala/05-strategy.md
+              - 第 6 章 Observer: article/scala/06-observer.md
+              - 第 7 章 Composite: article/scala/07-composite.md
+              - 第 8 章 Iterator: article/scala/08-iterator.md
+              - 第 9 章 Command: article/scala/09-command.md
+              - 第 10 章 Adapter: article/scala/10-adapter.md
+              - 第 11 章 Proxy: article/scala/11-proxy.md
+              - 第 12 章 Decorator: article/scala/12-decorator.md
+              - 第 13 章 Singleton: article/scala/13-singleton.md
+              - 第 14 章 Factory: article/scala/14-factory.md
+              - 第 15 章 Builder: article/scala/15-builder.md
+              - 第 16 章 Interpreter: article/scala/16-interpreter.md
   - リファレンス:
       - 概要: reference/index.md
       - よいソフトウェアとは: reference/よいソフトウェアとは.md
