@@ -79,9 +79,11 @@ nav:
       - ふりかえり:
           - IT1 Ruby: development/retrospective-1.md
           - IT2 Java: development/retrospective-2.md
+          - IT3 Python: development/retrospective-3.md
       - 完了報告書:
           - IT1 Ruby: development/iteration_report-1.md
           - IT2 Java: development/iteration_report-2.md
+          - IT3 Python: development/iteration_report-3.md
   - 運用:
       - 概要: operation/index.md
   - レビュー:
