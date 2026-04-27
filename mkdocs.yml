@@ -228,6 +228,24 @@ nav:
               - 第 14 章 Interpreter: article/fsharp/14-interpreter.md
               - 第 15 章 パターン総括: article/fsharp/15-patterns-summary.md
               - 第 16 章 F# の全体像: article/fsharp/16-interpreter.md
+          - PHP:
+              - 概要: article/php/index.md
+              - 第 1 章 デザインパターンとパターン思考: article/php/01-introduction-to-patterns.md
+              - 第 2 章 パターンを支える基本原則: article/php/02-principles-and-patterns.md
+              - 第 3 章 開発環境と TDD 基盤: article/php/03-tdd-and-tooling.md
+              - 第 4 章 Template Method: article/php/04-template-method.md
+              - 第 5 章 Strategy: article/php/05-strategy.md
+              - 第 6 章 Observer: article/php/06-observer.md
+              - 第 7 章 Composite: article/php/07-composite.md
+              - 第 8 章 Iterator: article/php/08-iterator.md
+              - 第 9 章 Command: article/php/09-command.md
+              - 第 10 章 Adapter: article/php/10-adapter.md
+              - 第 11 章 Proxy: article/php/11-proxy.md
+              - 第 12 章 Decorator: article/php/12-decorator.md
+              - 第 13 章 Singleton: article/php/13-singleton.md
+              - 第 14 章 Factory: article/php/14-factory.md
+              - 第 15 章 Builder: article/php/15-builder.md
+              - 第 16 章 Interpreter: article/php/16-interpreter.md
   - リファレンス:
       - 概要: reference/index.md
       - よいソフトウェアとは: reference/よいソフトウェアとは.md
