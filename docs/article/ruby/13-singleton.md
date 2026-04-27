@@ -37,7 +37,7 @@ class ClassBasedLogger {
   + {static} logged_content() : String
 }
 
-module ModuleBasedLogger {
+class ModuleBasedLogger <<module>> {
   - @log : StringIO
   - @level : Integer
   + {static} error(msg)
