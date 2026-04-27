@@ -1,0 +1,45 @@
+name: CI Ruby
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+    paths:
+      - 'apps/ruby/design-pattern/**'
+      - '.github/workflows/ci-ruby.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'apps/ruby/design-pattern/**'
+      - '.github/workflows/ci-ruby.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: apps/ruby/design-pattern
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+          working-directory: apps/ruby/design-pattern
+
+      - name: Run tests
+        run: bundle exec rake test
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: apps/ruby/design-pattern/coverage/
