@@ -71,6 +71,9 @@ nav:
       - 概要: design/index.md
   - 開発:
       - 概要: development/index.md
+      - リリース計画: development/release_plan.md
+      - イテレーション計画:
+          - IT1 Ruby: development/iteration_plan-1.md
   - 運用:
       - 概要: operation/index.md
   - レビュー:
@@ -79,11 +82,10 @@ nav:
       - 概要: adr/index.md
   - 記事:
       - 概要: article/index.md
-      - テスト駆動開発から始めるプログラミング入門: article/getting-start-tdd/index.md
-      - Grokking Functional Programming: article/grokkingfp/index.md
-      - Grokking Concurrency: article/grokking-concurrency/index.md
-      - 関数型デザイン - 原則、パターン、実践: article/functional-desgin-ppp/index.md
-      - 実践データベース設計：基幹業務システム編: article/practical-database-design/index.md
+      - デザインパターンからはじめるプログラミング入門:
+          - 概要: article/index.md
+          - 執筆計画アウトライン: article/outline.md
+          - 執筆ワークフロー: article/workflow.md
   - リファレンス:
       - 概要: reference/index.md
       - よいソフトウェアとは: reference/よいソフトウェアとは.md
