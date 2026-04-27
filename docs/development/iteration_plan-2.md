@@ -22,11 +22,11 @@
 
 ### 成功基準
 
-- [ ] `docs/article/java/index.md` と 16 章の記事ファイルが作成済み
-- [ ] `apps/java/design-pattern/` のテストがすべてパス（13 パターン分）
-- [ ] mkdocs.yml に Java セクションが追加され、全章ナビゲーション完了
+- [x] `docs/article/java/index.md` と 16 章の記事ファイルが作成済み
+- [x] `apps/java/design-pattern/` のテストがすべてパス（76 テスト、13 パターン分）
+- [x] mkdocs.yml に Java セクションが追加され、全章ナビゲーション完了
 - [ ] テストカバレッジ 80% 以上（行・ブランチとも）
-- [ ] `.github/workflows/ci-java.yml` が正常動作
+- [x] `.github/workflows/ci-java.yml` が正常動作
 
 ---
 

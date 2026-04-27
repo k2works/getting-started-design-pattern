@@ -109,6 +109,24 @@ nav:
               - 第 14 章 Factory: article/ruby/14-factory.md
               - 第 15 章 Builder: article/ruby/15-builder.md
               - 第 16 章 Interpreter: article/ruby/16-interpreter.md
+          - Java:
+              - 概要: article/java/index.md
+              - 第 1 章 デザインパターンとパターン思考: article/java/01-introduction-to-patterns.md
+              - 第 2 章 パターンを支える基本原則: article/java/02-principles-and-patterns.md
+              - 第 3 章 開発環境と TDD 基盤: article/java/03-tdd-and-tooling.md
+              - 第 4 章 Template Method: article/java/04-template-method.md
+              - 第 5 章 Strategy: article/java/05-strategy.md
+              - 第 6 章 Observer: article/java/06-observer.md
+              - 第 7 章 Composite: article/java/07-composite.md
+              - 第 8 章 Iterator: article/java/08-iterator.md
+              - 第 9 章 Command: article/java/09-command.md
+              - 第 10 章 Adapter: article/java/10-adapter.md
+              - 第 11 章 Proxy: article/java/11-proxy.md
+              - 第 12 章 Decorator: article/java/12-decorator.md
+              - 第 13 章 Singleton: article/java/13-singleton.md
+              - 第 14 章 Factory: article/java/14-factory.md
+              - 第 15 章 Builder: article/java/15-builder.md
+              - 第 16 章 Interpreter: article/java/16-interpreter.md
   - リファレンス:
       - 概要: reference/index.md
       - よいソフトウェアとは: reference/よいソフトウェアとは.md
