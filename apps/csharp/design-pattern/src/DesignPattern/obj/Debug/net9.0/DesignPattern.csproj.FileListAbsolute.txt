@@ -1,0 +1,12 @@
+/Users/k2works/IdeaProjects/getting-started-design-pattern/apps/csharp/design-pattern/src/DesignPattern/bin/Debug/net9.0/DesignPattern.deps.json
+/Users/k2works/IdeaProjects/getting-started-design-pattern/apps/csharp/design-pattern/src/DesignPattern/bin/Debug/net9.0/DesignPattern.dll
+/Users/k2works/IdeaProjects/getting-started-design-pattern/apps/csharp/design-pattern/src/DesignPattern/bin/Debug/net9.0/DesignPattern.pdb
+/Users/k2works/IdeaProjects/getting-started-design-pattern/apps/csharp/design-pattern/src/DesignPattern/obj/Debug/net9.0/DesignPattern.GeneratedMSBuildEditorConfig.editorconfig
+/Users/k2works/IdeaProjects/getting-started-design-pattern/apps/csharp/design-pattern/src/DesignPattern/obj/Debug/net9.0/DesignPattern.AssemblyInfoInputs.cache
+/Users/k2works/IdeaProjects/getting-started-design-pattern/apps/csharp/design-pattern/src/DesignPattern/obj/Debug/net9.0/DesignPattern.AssemblyInfo.cs
+/Users/k2works/IdeaProjects/getting-started-design-pattern/apps/csharp/design-pattern/src/DesignPattern/obj/Debug/net9.0/DesignPattern.csproj.CoreCompileInputs.cache
+/Users/k2works/IdeaProjects/getting-started-design-pattern/apps/csharp/design-pattern/src/DesignPattern/obj/Debug/net9.0/DesignPattern.sourcelink.json
+/Users/k2works/IdeaProjects/getting-started-design-pattern/apps/csharp/design-pattern/src/DesignPattern/obj/Debug/net9.0/DesignPattern.dll
+/Users/k2works/IdeaProjects/getting-started-design-pattern/apps/csharp/design-pattern/src/DesignPattern/obj/Debug/net9.0/refint/DesignPattern.dll
+/Users/k2works/IdeaProjects/getting-started-design-pattern/apps/csharp/design-pattern/src/DesignPattern/obj/Debug/net9.0/DesignPattern.pdb
+/Users/k2works/IdeaProjects/getting-started-design-pattern/apps/csharp/design-pattern/src/DesignPattern/obj/Debug/net9.0/ref/DesignPattern.dll
