@@ -1,0 +1,24 @@
+name: CI Haskell
+
+on:
+  push:
+    branches: [main, develop]
+    paths: ['apps/haskell/design-pattern/**', '.github/workflows/ci-haskell.yml']
+  pull_request:
+    branches: [main]
+    paths: ['apps/haskell/design-pattern/**', '.github/workflows/ci-haskell.yml']
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/haskell/design-pattern
+    steps:
+      - uses: actions/checkout@v4
+      - uses: haskell-actions/setup@v2
+        with:
+          ghc-version: '9.6'
+          cabal-version: '3.10'
+      - run: cabal update
+      - run: cabal test
