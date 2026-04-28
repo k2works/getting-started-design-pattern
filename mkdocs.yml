@@ -354,6 +354,12 @@ nav:
               - 第 14 章 Factory: article/haskell/14-factory.md
               - 第 15 章 Builder: article/haskell/15-builder.md
               - 第 16 章 Interpreter: article/haskell/16-interpreter.md
+          - 多言語統合解説:
+              - 概要: article/all/index.md
+              - パターン思考の言語横断比較: article/all/01-pattern-thinking-across-languages.md
+              - OOP パターンと関数型代替: article/all/02-oop-vs-fp.md
+              - 各言語のイディオム集: article/all/03-language-idioms.md
+              - 過剰適用・誤用パターン: article/all/04-pattern-anti-patterns.md
   - リファレンス:
       - 概要: reference/index.md
       - よいソフトウェアとは: reference/よいソフトウェアとは.md
