@@ -64,7 +64,15 @@ let htmlFormat =
       OutputHead = fun title -> sprintf "  <head><title>%s</title></head>" title
       OutputBody = fun items -> items |> List.map (fun item -> sprintf "  <body>%s</body>" item)
       OutputEnd = fun _ -> "</html>" }
+
+let plainTextFormat =
+    { OutputStart = fun _ -> "********"
+      OutputHead = fun title -> sprintf "TITLE: %s" title
+      OutputBody = fun items -> items |> List.map (sprintf "- %s")
+      OutputEnd = fun _ -> "********" }
 ```
+
+`generateReport` は骨格だけを保持し、出力開始・見出し・本文・終了の差分を `ReportFormat` に閉じ込めます。
 
 ### Refactor: 設計を改善する
 

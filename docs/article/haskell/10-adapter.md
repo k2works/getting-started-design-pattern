@@ -69,7 +69,35 @@ testOldPrinter = TestCase $ do
 
 ### Green
 
-型クラスのインスタンスを定義するだけです。
+```haskell
+data OldPrinter = OldPrinter
+  { opHeader :: String
+  , opBody   :: String
+  }
+
+data ModernPrinter = ModernPrinter
+  { mpTitle   :: String
+  , mpContent :: String
+  , mpFormat  :: String
+  }
+
+class Renderable a where
+  render :: a -> String
+
+instance Renderable OldPrinter where
+  render p =
+    "=== " ++ opHeader p ++ " ===\n"
+      ++ opBody p ++ "\n"
+
+instance Renderable ModernPrinter where
+  render p
+    | mpFormat p == "html" =
+        "<article><h1>" ++ mpTitle p ++ "</h1><p>" ++ mpContent p ++ "</p></article>"
+    | otherwise =
+        "[" ++ mpTitle p ++ "] " ++ mpContent p
+```
+
+テストを通す段階では、旧式とモダンの両方を `render` にそろえるところまで実装すれば十分です。
 
 ---
 

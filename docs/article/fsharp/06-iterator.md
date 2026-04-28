@@ -55,7 +55,29 @@ let fibonacci =
             yield! fib b (a + b)
         }
     fib 0 1
+
+let rangeSequence start stop =
+    seq {
+        for i in start .. stop do
+            yield i
+    }
+
+type Tree<'T> =
+    | Leaf of 'T
+    | Node of 'T * Tree<'T> list
+
+let rec depthFirst tree =
+    seq {
+        match tree with
+        | Leaf value -> yield value
+        | Node(value, children) ->
+            yield value
+            for child in children do
+                yield! depthFirst child
+    }
 ```
+
+`seq {}` は生成ロジックと遅延評価を同時に表現できるため、Iterator 専用オブジェクトを作る必要がありません。
 
 ### Refactor
 

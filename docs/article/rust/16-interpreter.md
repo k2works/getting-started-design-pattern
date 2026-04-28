@@ -44,7 +44,55 @@ fn and_combines_two_expressions() {
 
 ### Green
 
-`evaluate()` はディレクトリを走査し、各ファイルに対して `matches_expr()` を再帰的に適用します。
+```rust
+pub enum Expression {
+    All,
+    FileName(String),
+    Bigger(u64),
+    And(Box<Expression>, Box<Expression>),
+    Or(Box<Expression>, Box<Expression>),
+    Not(Box<Expression>),
+}
+
+impl Expression {
+    pub fn and(self, rhs: Expression) -> Expression {
+        Expression::And(Box::new(self), Box::new(rhs))
+    }
+}
+
+pub fn evaluate(expr: &Expression, dir: &Path) -> Vec<String> {
+    fs::read_dir(dir)
+        .unwrap()
+        .filter_map(Result::ok)
+        .filter(|entry| matches_expr(expr, &entry.path()))
+        .map(|entry| entry.file_name().to_string_lossy().into_owned())
+        .collect()
+}
+
+fn matches_expr(expr: &Expression, path: &Path) -> bool {
+    match expr {
+        Expression::All => true,
+        Expression::FileName(pattern) => {
+            path.file_name()
+                .and_then(|name| name.to_str())
+                .map(|name| name.ends_with(pattern))
+                .unwrap_or(false)
+        }
+        Expression::Bigger(size) => {
+            path.metadata().map(|m| m.len() > *size).unwrap_or(false)
+        }
+        Expression::And(left, right) => {
+            matches_expr(left, path) && matches_expr(right, path)
+        }
+        Expression::Or(left, right) => {
+            matches_expr(left, path) || matches_expr(right, path)
+        }
+        Expression::Not(inner) => !matches_expr(inner, path),
+    }
+}
+```
+
+評価関数を 1 箇所に集約すると、新しい式を追加したときに `match` の未処理分岐がすぐ見つかります。
 
 ### Refactor
 

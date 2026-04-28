@@ -58,7 +58,52 @@ it('給与変更時に Payroll に通知される', () => {
 
 ### Green: 最小限の実装
 
-`Employee` に `observers` 配列を持たせ、`setSalary()` や `setTitle()` の中で `notifyObservers()` を呼び出します。
+```typescript
+interface Observer {
+  update(employee: Employee): void;
+}
+
+class Employee {
+  private observers: Observer[] = [];
+
+  constructor(
+    private name: string,
+    private title: string,
+    private salary: number
+  ) {}
+
+  addObserver(observer: Observer): void {
+    this.observers.push(observer);
+  }
+
+  setSalary(salary: number): void {
+    this.salary = salary;
+    this.notifyObservers();
+  }
+
+  private notifyObservers(): void {
+    this.observers.forEach(observer => observer.update(this));
+  }
+
+  getSalary(): number {
+    return this.salary;
+  }
+}
+
+class Payroll implements Observer {
+  private lastChange = '';
+
+  update(employee: Employee): void {
+    this.lastChange = `給与変更: ${employee.getSalary()}`;
+  }
+
+  getLastChange(): string {
+    return this.lastChange;
+  }
+}
+```
+
+まずは給与変更通知だけに絞り、`Observer` 契約と通知経路を通します。
 
 ### Refactor
 

@@ -57,7 +57,13 @@ type VirtualProxy<'T> =
 
 let createVirtualProxy description factory =
     { Value = lazy (factory ()); Description = description }
+
+let getValue proxy = proxy.Value.Value
+
+let isValueCreated proxy = proxy.Value.IsValueCreated
 ```
+
+`Lazy<'T>` に初回評価とキャッシュが含まれているため、Virtual Proxy 専用の状態管理を自前で持つ必要がありません。
 
 ### Red: 保護プロキシのテスト
 
@@ -75,12 +81,27 @@ let ``保護プロキシは権限がなければアクセスを拒否する`` ()
 ### Green: 関数ラッパーでアクセス制御
 
 ```fsharp
+type Role = Admin | User | Guest
+
+let roleLevel = function
+    | Guest -> 0
+    | User -> 1
+    | Admin -> 2
+
 let protectionProxy requiredRole action role input =
     if roleLevel role >= roleLevel requiredRole then
         action input
     else
         Error (sprintf "アクセス拒否: %A 権限が必要です" requiredRole)
+
+let loggingProxy log name f input =
+    log (sprintf "start: %s" name)
+    let result = f input
+    log (sprintf "finish: %s" name)
+    result
 ```
+
+保護・ロギングのどちらも「元の関数を包む関数」として表現でき、ラッパー同士の合成も容易です。
 
 ## OOP 版（C#）との比較
 

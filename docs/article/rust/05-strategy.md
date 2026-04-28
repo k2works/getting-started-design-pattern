@@ -48,7 +48,49 @@ pub struct Report {
     pub lines: Vec<String>,
     pub formatter: Box<dyn Fn(&str, &[String]) -> String>,
 }
+
+impl Report {
+    pub fn new(
+        title: &str,
+        lines: Vec<String>,
+        formatter: Box<dyn Fn(&str, &[String]) -> String>,
+    ) -> Self {
+        Self {
+            title: title.to_string(),
+            lines,
+            formatter,
+        }
+    }
+
+    pub fn set_formatter(
+        &mut self,
+        formatter: Box<dyn Fn(&str, &[String]) -> String>,
+    ) {
+        self.formatter = formatter;
+    }
+
+    pub fn output_report(&self) -> String {
+        (self.formatter)(&self.title, &self.lines)
+    }
+}
+
+pub fn html_formatter() -> Box<dyn Fn(&str, &[String]) -> String> {
+    Box::new(|title, lines| {
+        let body = lines
+            .iter()
+            .map(|line| format!("  <p>{}</p>", line))
+            .collect::<Vec<_>>()
+            .join("\n");
+        format!("<html>\n  <h1>{}</h1>\n{}\n</html>", title, body)
+    })
+}
+
+pub fn plain_text_formatter() -> Box<dyn Fn(&str, &[String]) -> String> {
+    Box::new(|title, lines| format!("{}\n{}", title, lines.join("\n")))
+}
 ```
+
+`Report` は戦略を保持するだけで、整形ロジック自体はクロージャに完全に委譲します。
 
 ### Refactor
 

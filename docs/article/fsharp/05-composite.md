@@ -55,7 +55,22 @@ let rec getTotalDuration = function
     | LeafTask(_, duration) -> duration
     | CompositeTask(_, children) ->
         children |> List.sumBy getTotalDuration
+
+let getName = function
+    | LeafTask(name, _) -> name
+    | CompositeTask(name, _) -> name
+
+let rec getLeafCount = function
+    | LeafTask _ -> 1
+    | CompositeTask(_, children) -> children |> List.sumBy getLeafCount
+
+let addChild child = function
+    | LeafTask _ as leaf -> leaf
+    | CompositeTask(name, children) ->
+        CompositeTask(name, children @ [ child ])
 ```
+
+判別共用体 1 つに操作関数を重ねる形なので、クラス階層や可変の子リストを持たずに Composite を記述できます。
 
 ### Refactor
 

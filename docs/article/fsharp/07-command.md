@@ -53,6 +53,26 @@ let ``コマンドを取り消せる`` () =
 ### Green: テストを通す最小のコードを書く
 
 ```fsharp
+type Command<'TState> =
+    { Description: string
+      Execute: 'TState -> 'TState
+      Undo: 'TState -> 'TState }
+
+type CommandHistory<'TState> =
+    { State: 'TState
+      UndoStack: Command<'TState> list
+      RedoStack: Command<'TState> list }
+
+let create initialState =
+    { State = initialState
+      UndoStack = []
+      RedoStack = [] }
+
+let execute command history =
+    { State = command.Execute history.State
+      UndoStack = command :: history.UndoStack
+      RedoStack = [] }
+
 let undo (history: CommandHistory<'TState>) =
     match history.UndoStack with
     | [] -> history
@@ -60,7 +80,14 @@ let undo (history: CommandHistory<'TState>) =
         { State = lastCommand.Undo history.State
           UndoStack = rest
           RedoStack = lastCommand :: history.RedoStack }
+
+let appendText text =
+    { Description = sprintf "append %s" text
+      Execute = fun state -> state + text
+      Undo = fun state -> state.Substring(0, state.Length - text.Length) }
 ```
+
+コマンドを「状態変換のペア」として持つため、実行履歴の管理は純粋なレコード更新に落とし込めます。
 
 ### Refactor
 

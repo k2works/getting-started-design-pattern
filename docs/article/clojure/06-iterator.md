@@ -1,32 +1,10 @@
 # 第 6 章 Iterator -- シーケンス抽象という究極の反復子
 
-## パターンの意図
+## はじめに
 
-Iterator パターンは、コレクションの内部構造を公開せずに、要素へのアクセスを順番に行えるようにするパターンです。
+Iterator パターンは、コレクションの内部構造を隠したまま順番に要素へアクセスするためのパターンです。Clojure では `seq` 抽象と遅延評価がこの役割を標準で担います。
 
-## Clojure での解釈
-
-Clojure のシーケンス抽象（seq）は Iterator パターンの究極の実装です。`map`、`filter`、`reduce`、`take`、`drop` といった関数群が、あらゆるコレクションに対して統一的なインターフェースを提供します。さらに `lazy-seq` による遅延評価は、無限シーケンスさえ扱えます。
-
-## 実装
-
-```clojure
-;; 外部イテレータ風（通常は不要）
-(defn external-iterator [coll]
-  (let [state (atom (seq coll))]
-    {:has-next? (fn [] (boolean @state))
-     :next!     (fn []
-                  (let [current (first @state)]
-                    (swap! state next)
-                    current))}))
-
-;; 遅延シーケンス
-(defn fibonacci []
-  (letfn [(fib [a b] (lazy-seq (cons a (fib b (+ a b)))))]
-    (fib 0 1)))
-```
-
-## クラス図
+## パターンの構造
 
 ```plantuml
 @startuml
@@ -51,13 +29,45 @@ S <.. EI : wraps
 @enduml
 ```
 
-## テスト
+## Clojure イディオム: seq と lazy-seq
+
+```clojure
+;; 外部イテレータ風（通常は不要）
+(defn external-iterator [coll]
+  (let [state (atom (seq coll))]
+    {:has-next? (fn [] (boolean @state))
+     :next!     (fn []
+                  (let [current (first @state)]
+                    (swap! state next)
+                    current))}))
+
+;; 遅延シーケンス
+(defn fibonacci []
+  (letfn [(fib [a b] (lazy-seq (cons a (fib b (+ a b)))))]
+    (fib 0 1)))
+```
+
+## TDD で作る
+
+### Red: 失敗するテストを書く
 
 ```clojure
 (deftest fibonacci-test
   (testing "フィボナッチ数列の最初の10項を取得する"
     (is (= [0 1 1 2 3 5 8 13 21 34] (take 10 (fibonacci))))))
 ```
+
+### Green: 最小限の実装
+
+```clojure
+(defn fibonacci []
+  (letfn [(fib [a b] (lazy-seq (cons a (fib b (+ a b)))))]
+    (fib 0 1)))
+```
+
+### Refactor
+
+通常の Clojure コードでは外部イテレータを自作するより、`map`、`filter`、`reduce`、`take` などのシーケンス API に寄せたほうが読みやすくなります。
 
 ## まとめ
 

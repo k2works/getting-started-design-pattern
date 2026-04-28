@@ -1,10 +1,10 @@
 # 第 16 章 タグ付きタプルで言語を解釈する — Interpreter
 
-## パターンの目的
+## はじめに
 
 Interpreter パターンは、言語の文法を定義し、その文法に基づいて式を解釈するパターンです。Elixir ではタグ付きタプルで AST（抽象構文木）を表現し、再帰的パターンマッチングで評価します。
 
-## 構造
+## パターンの構造
 
 ```plantuml
 @startuml
@@ -43,7 +43,7 @@ B o-- V : contains
 @enduml
 ```
 
-## 実装
+## Elixir イディオム: タグ付きタプルを再帰的に評価する
 
 タグ付きタプルで式を構築し、パターンマッチングで再帰的に評価します。
 
@@ -66,7 +66,9 @@ expr = Interpreter.add(Interpreter.variable(:x), Interpreter.literal(10))
 Interpreter.evaluate(expr, %{x: 5})  # => 15
 ```
 
-## テスト
+## TDD で作る
+
+### Red: 失敗するテストを書く
 
 ```elixir
 test "ネストした式を評価する" do
@@ -84,6 +86,14 @@ test "ゼロ除算はエラーを返す" do
   assert Interpreter.evaluate(expr) == {:error, :division_by_zero}
 end
 ```
+
+### Green: 最小限の実装
+
+まずは `{:literal, value}` と `{:add, left, right}` を評価できるようにし、再帰評価の骨格を固めます。変数やエラー処理はそのあとに拡張します。
+
+### Refactor
+
+AST の構築関数と評価関数を分けておくと、`to_string_expr/1` のような別の解釈器を後付けしやすくなります。
 
 ## Elixir らしさ
 

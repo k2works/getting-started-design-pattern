@@ -58,7 +58,55 @@ fn build_fails_without_display() {
 
 ### Green
 
-Builder のフィールドを `Option` で管理し、`build()` で必須フィールドの存在を検証します。
+```rust
+pub struct ComputerBuilder {
+    display: Option<String>,
+    motherboard: Option<Motherboard>,
+    drives: Vec<Drive>,
+}
+
+impl ComputerBuilder {
+    pub fn new() -> Self {
+        Self {
+            display: None,
+            motherboard: None,
+            drives: Vec::new(),
+        }
+    }
+
+    pub fn display(mut self, display: &str) -> Self {
+        self.display = Some(display.to_string());
+        self
+    }
+
+    pub fn motherboard(mut self, model: &str, cpu: &str, memory_gb: u64) -> Self {
+        self.motherboard = Some(Motherboard {
+            model: model.to_string(),
+            cpu: cpu.to_string(),
+            memory_gb,
+        });
+        self
+    }
+
+    pub fn add_drive(mut self, drive_type: &str, size_gb: u64) -> Self {
+        self.drives.push(Drive {
+            drive_type: drive_type.to_string(),
+            size_gb,
+        });
+        self
+    }
+
+    pub fn build(self) -> Result<Computer, String> {
+        Ok(Computer {
+            display: self.display.ok_or("display is required")?,
+            motherboard: self.motherboard.ok_or("motherboard is required")?,
+            drives: self.drives,
+        })
+    }
+}
+```
+
+未設定値を `Option` で保持しておくと、`build()` が唯一の検証ポイントになります。
 
 ### Refactor
 

@@ -72,7 +72,53 @@ pub trait ReportFormatter {
         result
     }
 }
+
+pub struct HtmlReport {
+    title: String,
+    lines: Vec<String>,
+}
+
+impl HtmlReport {
+    pub fn new(title: &str, lines: Vec<String>) -> Self {
+        Self {
+            title: title.to_string(),
+            lines,
+        }
+    }
+}
+
+impl ReportFormatter for HtmlReport {
+    fn title(&self) -> &str { &self.title }
+    fn lines(&self) -> &[String] { &self.lines }
+    fn output_start(&self) -> String { "<html>\n".to_string() }
+    fn output_line(&self, line: &str) -> String { format!("  <p>{}</p>\n", line) }
+    fn output_end(&self) -> String { "</html>\n".to_string() }
+}
+
+pub struct PlainTextReport {
+    title: String,
+    lines: Vec<String>,
+}
+
+impl PlainTextReport {
+    pub fn new(title: &str, lines: Vec<String>) -> Self {
+        Self {
+            title: title.to_string(),
+            lines,
+        }
+    }
+}
+
+impl ReportFormatter for PlainTextReport {
+    fn title(&self) -> &str { &self.title }
+    fn lines(&self) -> &[String] { &self.lines }
+    fn output_start(&self) -> String { String::new() }
+    fn output_line(&self, line: &str) -> String { format!("{}\n", line) }
+    fn output_end(&self) -> String { String::new() }
+}
 ```
+
+`output_report()` は共通の骨格を保持したまま、出力開始・各行の整形・出力終了だけを実装側に委ねます。
 
 ### Refactor
 

@@ -72,7 +72,30 @@ testDefaultConfig = TestCase $ do
 
 ### Green
 
-レコード値を定義するだけです。Haskell では Singleton のための特別な仕組みは不要です。
+```haskell
+data LogLevel = DEBUG | INFO | WARN
+  deriving (Eq, Show)
+
+data AppConfig = AppConfig
+  { appName     :: String
+  , appVersion  :: String
+  , appDebug    :: Bool
+  , appLogLevel :: LogLevel
+  }
+
+defaultConfig :: AppConfig
+defaultConfig = AppConfig
+  { appName     = "DesignPatternApp"
+  , appVersion  = "1.0.0"
+  , appDebug    = False
+  , appLogLevel = INFO
+  }
+
+enableDebug :: AppConfig -> AppConfig
+enableDebug cfg = cfg { appDebug = True, appLogLevel = DEBUG }
+```
+
+共有値そのものはトップレベル定義で持ち、テストでは必要に応じてレコード更新版を作る形にします。
 
 ---
 

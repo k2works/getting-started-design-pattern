@@ -1,10 +1,10 @@
 # 第 8 章 Enum と Stream で走査する — Iterator
 
-## パターンの目的
+## はじめに
 
 Iterator パターンは、コレクションの内部構造を公開せずに要素へ順次アクセスする方法を提供するパターンです。Elixir では `Enum` と `Stream` モジュールが Iterator パターンそのものです。
 
-## 構造
+## パターンの構造
 
 ```plantuml
 @startuml
@@ -34,7 +34,7 @@ I --> S : uses
 @enduml
 ```
 
-## 実装
+## Elixir イディオム: Enum と Stream の使い分け
 
 即時評価と遅延評価の 2 つのアプローチを使い分けます。
 
@@ -65,7 +65,9 @@ def range_iterator(start, stop, step \\\\ 1) do
 end
 ```
 
-## テスト
+## TDD で作る
+
+### Red: 失敗するテストを書く
 
 ```elixir
 test "遅延評価で変換する" do
@@ -75,6 +77,14 @@ test "遅延評価で変換する" do
   assert result == [6, 12, 18]
 end
 ```
+
+### Green: 最小限の実装
+
+最初は `Enum.filter/2` と `Enum.map/2` を組み合わせた即時評価版を作り、その後に同じ構造で `Stream` 版へ置き換えると意図が見えやすくなります。
+
+### Refactor
+
+即時評価と遅延評価を別関数に分けると、処理量やメモリ効率の違いをコード上で比較しやすくなります。
 
 ## まとめ
 

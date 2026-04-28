@@ -84,7 +84,15 @@ testSortByBalance = TestCase $ do
 ```haskell
 sortByBalance :: Portfolio -> [Account]
 sortByBalance = sortBy (comparing acctBalance) . accounts
+
+accountNames :: Portfolio -> [String]
+accountNames = map acctName . accounts
+
+filterByType :: AccountType -> Portfolio -> [Account]
+filterByType target = filter (\acct -> acctType acct == target) . accounts
 ```
+
+並び替えだけでなく、`map` と `filter` もそろえておくと Haskell における Iterator の実体が見えやすくなります。
 
 ---
 

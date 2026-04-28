@@ -1,46 +1,10 @@
 # 第 9 章 Proxy -- delay と関数ラッパーによる代理
 
-## パターンの意図
+## はじめに
 
-Proxy パターンは、他のオブジェクトへのアクセスを制御するための代理を提供するパターンです。
+Proxy パターンは、本体へのアクセスを仲介して制御するパターンです。Clojure では `delay`、`atom`、クロージャを組み合わせることで、遅延初期化や権限制御、キャッシュを関数レベルで表現できます。
 
-## Clojure での解釈
-
-- **Virtual Proxy**: `delay` / `force` で遅延初期化を実現
-- **Protection Proxy**: 関数ラッパーでアクセス制御
-- **Logging Proxy**: 関数ラッパーでログ記録
-- **Caching Proxy**: atom でキャッシュを管理
-
-## 実装
-
-```clojure
-;; Virtual Proxy
-(defn virtual-proxy [name]
-  (let [resource (delay (create-heavy-resource name))]
-    {:name       name
-     :loaded?    (fn [] (realized? resource))
-     :get-data   (fn [] (:data (force resource)))}))
-
-;; Protection Proxy
-(defn protection-proxy [target-fn allowed-roles]
-  (fn [role & args]
-    (if (contains? (set allowed-roles) role)
-      (apply target-fn args)
-      (throw (ex-info "Access denied" {:role role})))))
-
-;; Caching Proxy
-(defn caching-proxy [target-fn]
-  (let [cache (atom {})]
-    {:call  (fn [& args]
-              (if-let [cached (get @cache args)]
-                cached
-                (let [result (apply target-fn args)]
-                  (swap! cache assoc args result)
-                  result)))
-     :cache (fn [] @cache)}))
-```
-
-## クラス図
+## パターンの構造
 
 ```plantuml
 @startuml
@@ -70,7 +34,35 @@ CP --> T : caches results
 @enduml
 ```
 
-## テスト
+## Clojure イディオム: delay と関数ラッパー
+
+```clojure
+(defn virtual-proxy [name]
+  (let [resource (delay (create-heavy-resource name))]
+    {:name       name
+     :loaded?    (fn [] (realized? resource))
+     :get-data   (fn [] (:data (force resource)))}))
+
+(defn protection-proxy [target-fn allowed-roles]
+  (fn [role & args]
+    (if (contains? (set allowed-roles) role)
+      (apply target-fn args)
+      (throw (ex-info "Access denied" {:role role})))))
+
+(defn caching-proxy [target-fn]
+  (let [cache (atom {})]
+    {:call  (fn [& args]
+              (if-let [cached (get @cache args)]
+                cached
+                (let [result (apply target-fn args)]
+                  (swap! cache assoc args result)
+                  result)))
+     :cache (fn [] @cache)}))
+```
+
+## TDD で作る
+
+### Red: 失敗するテストを書く
 
 ```clojure
 (deftest caching-proxy-test
@@ -82,6 +74,24 @@ CP --> T : caches results
       (is (= 25 ((:call proxy) 5)))
       (is (= 1 @call-count)))))
 ```
+
+### Green: 最小限の実装
+
+```clojure
+(defn caching-proxy [target-fn]
+  (let [cache (atom {})]
+    {:call  (fn [& args]
+              (if-let [cached (get @cache args)]
+                cached
+                (let [result (apply target-fn args)]
+                  (swap! cache assoc args result)
+                  result)))
+     :cache (fn [] @cache)}))
+```
+
+### Refactor
+
+キャッシュ、保護、遅延初期化を別関数に切り出すと、Proxy のバリエーションごとの責務を比較しやすくなります。
 
 ## まとめ
 

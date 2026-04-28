@@ -1,36 +1,10 @@
 # 第 14 章 Interpreter -- データとしての AST
 
-## パターンの意図
+## はじめに
 
-Interpreter パターンは、言語の文法表現を定義し、その表現を使ってインタプリタを構築するパターンです。
+Interpreter パターンは、文法表現をデータ構造として持ち、その評価規則を別に定義するパターンです。Clojure ではマップで AST を表現し、マルチメソッドで評価する構成が自然です。
 
-## Clojure での解釈
-
-Clojure のマップで AST（抽象構文木）ノードを表現し、マルチメソッドで `:type` に応じた評価を行います。「コードはデータ」という Lisp の哲学が最も活きるパターンです。
-
-## 実装
-
-```clojure
-;; AST ノード生成
-(defn literal [value] {:type :literal :value value})
-(defn variable [name] {:type :variable :name name})
-(defn add [left right] {:type :add :left left :right right})
-
-;; 評価
-(defmulti evaluate (fn [node _env] (:type node)))
-
-(defmethod evaluate :literal [node _env]
-  (:value node))
-
-(defmethod evaluate :variable [node env]
-  (get env (:name node)))
-
-(defmethod evaluate :add [node env]
-  (+ (evaluate (:left node) env)
-     (evaluate (:right node) env)))
-```
-
-## クラス図
+## パターンの構造
 
 ```plantuml
 @startuml
@@ -57,7 +31,29 @@ E <|-- BO
 @enduml
 ```
 
-## テスト
+## Clojure イディオム: AST をマップで持つ
+
+```clojure
+(defn literal [value] {:type :literal :value value})
+(defn variable [name] {:type :variable :name name})
+(defn add [left right] {:type :add :left left :right right})
+
+(defmulti evaluate (fn [node _env] (:type node)))
+
+(defmethod evaluate :literal [node _env]
+  (:value node))
+
+(defmethod evaluate :variable [node env]
+  (get env (:name node)))
+
+(defmethod evaluate :add [node env]
+  (+ (evaluate (:left node) env)
+     (evaluate (:right node) env)))
+```
+
+## TDD で作る
+
+### Red: 失敗するテストを書く
 
 ```clojure
 (deftest nested-expression-test
@@ -66,6 +62,26 @@ E <|-- BO
           env  {:x 5 :y 3}]
       (is (= 16 (evaluate expr env))))))
 ```
+
+### Green: 最小限の実装
+
+```clojure
+(defn literal [value] {:type :literal :value value})
+(defn variable [name] {:type :variable :name name})
+(defn add [left right] {:type :add :left left :right right})
+
+(defmulti evaluate (fn [node _env] (:type node)))
+
+(defmethod evaluate :literal [node _env]
+  (:value node))
+
+(defmethod evaluate :variable [node env]
+  (get env (:name node)))
+```
+
+### Refactor
+
+演算子ごとに `defmethod` を増やす構成にしておくと、構文の追加と評価規則の追加を同じ粒度で進められます。
 
 ## まとめ
 

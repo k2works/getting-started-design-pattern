@@ -1,32 +1,10 @@
 # 第 5 章 Composite -- 再帰データとマルチメソッド
 
-## パターンの意図
+## はじめに
 
-Composite パターンは、オブジェクトをツリー構造に組み立て、個々のオブジェクトとその集合を同一視して扱えるようにするパターンです。
+Composite パターンは、個別要素と複合要素を同じように扱うためのパターンです。Clojure では再帰的なマップ / ベクタ構造とマルチメソッドで、ツリーを自然に表現できます。
 
-## Clojure での解釈
-
-Clojure のマップとベクタで再帰的なデータ構造を自然に表現できます。`:type` キーワードでノードの種類を区別し、マルチメソッドでディスパッチします。
-
-## 実装
-
-```clojure
-(defn leaf [name duration]
-  {:type :leaf :name name :duration duration})
-
-(defn composite [name & children]
-  {:type :composite :name name :children (vec children)})
-
-(defmulti total-duration :type)
-
-(defmethod total-duration :leaf [node]
-  (:duration node))
-
-(defmethod total-duration :composite [node]
-  (reduce + 0 (map total-duration (:children node))))
-```
-
-## クラス図
+## パターンの構造
 
 ```plantuml
 @startuml
@@ -49,7 +27,27 @@ C "1" --> "*" N : contains
 @enduml
 ```
 
-## テスト
+## Clojure イディオム: 再帰データ + マルチメソッド
+
+```clojure
+(defn leaf [name duration]
+  {:type :leaf :name name :duration duration})
+
+(defn composite [name & children]
+  {:type :composite :name name :children (vec children)})
+
+(defmulti total-duration :type)
+
+(defmethod total-duration :leaf [node]
+  (:duration node))
+
+(defmethod total-duration :composite [node]
+  (reduce + 0 (map total-duration (:children node))))
+```
+
+## TDD で作る
+
+### Red: 失敗するテストを書く
 
 ```clojure
 (deftest nested-composite-test
@@ -59,6 +57,28 @@ C "1" --> "*" N : contains
           project (composite "Full Project" sub1 sub2)]
       (is (= 14.0 (total-duration project))))))
 ```
+
+### Green: 最小限の実装
+
+```clojure
+(defn leaf [name duration]
+  {:type :leaf :name name :duration duration})
+
+(defn composite [name & children]
+  {:type :composite :name name :children (vec children)})
+
+(defmulti total-duration :type)
+
+(defmethod total-duration :leaf [node]
+  (:duration node))
+
+(defmethod total-duration :composite [node]
+  (reduce + 0 (map total-duration (:children node))))
+```
+
+### Refactor
+
+`:type` を dispatch key にしておくと、新しいノード種別を既存ロジックへ後付けしやすくなります。
 
 ## まとめ
 

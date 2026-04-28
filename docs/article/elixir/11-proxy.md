@@ -1,10 +1,10 @@
 # 第 11 章 遅延評価とアクセス制御で間接化する — Proxy
 
-## パターンの目的
+## はじめに
 
 Proxy パターンは、他のオブジェクトへのアクセスを制御するための代理を提供するパターンです。Elixir では遅延評価（関数のラップ）とパターンマッチングによるアクセス制御で実現します。
 
-## 構造
+## パターンの構造
 
 ```plantuml
 @startuml
@@ -36,7 +36,7 @@ P --> PP : creates
 @enduml
 ```
 
-## 実装
+## Elixir イディオム: タグ付きタプルと関数ラップ
 
 ### 遅延ロードプロキシ
 
@@ -63,7 +63,9 @@ def access(%{allowed_roles: allowed_roles, resource: resource}, role) do
 end
 ```
 
-## テスト
+## TDD で作る
+
+### Red: 失敗するテストを書く
 
 ```elixir
 test "アクセス制御プロキシで拒否されたロールはアクセスできない" do
@@ -71,6 +73,14 @@ test "アクセス制御プロキシで拒否されたロールはアクセス�
   assert {:error, :access_denied} = Proxy.access(resource, :guest)
 end
 ```
+
+### Green: 最小限の実装
+
+まずはアクセス制御プロキシだけを通し、許可されたロールなら `{:ok, resource}`、それ以外は `{:error, :access_denied}` を返す形にします。遅延ロードはその後に足せます。
+
+### Refactor
+
+遅延ロード、保護、ロギングは目的が異なるので、プロキシ生成関数を分けたまま並べておく方が読みやすくなります。
 
 ## まとめ
 

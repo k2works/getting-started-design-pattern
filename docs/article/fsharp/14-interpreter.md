@@ -56,16 +56,38 @@ let ``複雑な式を評価できる`` () =
 type Expression =
     | Number of float
     | Add of Expression * Expression
+    | Subtract of Expression * Expression
     | Multiply of Expression * Expression
-    // ...
+    | Divide of Expression * Expression
+    | Variable of string
+
+type Environment = Map<string, float>
 
 let rec evaluate (env: Environment) = function
     | Number n -> Ok n
+    | Variable name ->
+        env |> Map.tryFind name |> Result.ofOption (sprintf "未定義変数: %s" name)
     | Add(left, right) ->
         evaluateBinary env left right (+)
+    | Subtract(left, right) ->
+        evaluateBinary env left right (-)
     | Multiply(left, right) ->
         evaluateBinary env left right (*)
+    | Divide(left, right) ->
+        match evaluate env left, evaluate env right with
+        | Ok _, Ok 0.0 -> Error "0 では割れません"
+        | Ok l, Ok r -> Ok (l / r)
+        | Error e, _ -> Error e
+        | _, Error e -> Error e
+
+and evaluateBinary env left right op =
+    match evaluate env left, evaluate env right with
+    | Ok l, Ok r -> Ok (op l r)
+    | Error e, _ -> Error e
+    | _, Error e -> Error e
 ```
+
+AST の各ノード型と評価規則を同じ場所に並べることで、文法と意味づけを一緒に保守できます。
 
 ### Refactor
 

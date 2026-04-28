@@ -1,10 +1,10 @@
 # 第 10 章 Protocol でインターフェースを合わせる — Adapter
 
-## パターンの目的
+## はじめに
 
 Adapter パターンは、互換性のないインターフェースを持つ既存のクラスを、期待されるインターフェースに適合させるパターンです。Elixir では Protocol と `defimpl` で実現します。
 
-## 構造
+## パターンの構造
 
 ```plantuml
 @startuml
@@ -30,7 +30,7 @@ P <|.. XML : defimpl
 @enduml
 ```
 
-## 実装
+## Elixir イディオム: Protocol と defimpl
 
 Protocol で共通インターフェースを定義し、各データ型に `defimpl` で実装します。
 
@@ -46,7 +46,9 @@ defimpl DesignPattern.Adapter.Printable, for: DesignPattern.Adapter.CsvData do
 end
 ```
 
-## テスト
+## TDD で作る
+
+### Red: 失敗するテストを書く
 
 ```elixir
 test "異なる型で同じプロトコルが使える" do
@@ -60,6 +62,14 @@ test "異なる型で同じプロトコルが使える" do
   assert Enum.all?(results, &is_binary/1)
 end
 ```
+
+### Green: 最小限の実装
+
+最初は `Printable` protocol と `CsvData` 向けの `defimpl` だけを作り、同じ呼び出しで別型を処理できる流れを先に成立させます。
+
+### Refactor
+
+`JsonData` や `XmlData` の実装を追加していくと、呼び出し側を変えずに対応型だけ増やせる利点が明確になります。
 
 ## Elixir らしさ
 

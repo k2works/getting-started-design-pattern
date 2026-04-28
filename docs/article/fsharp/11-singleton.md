@@ -53,7 +53,18 @@ type AppConfig =
 
 let defaultConfig =
     { DatabaseUrl = "localhost:5432"; MaxConnections = 10; LogLevel = "INFO" }
+
+let withDatabaseUrl url config =
+    { config with DatabaseUrl = url }
+
+let withMaxConnections count config =
+    { config with MaxConnections = count }
+
+let withLogLevel level config =
+    { config with LogLevel = level }
 ```
+
+更新は破壊的変更ではなく `with` 式で新しい値を返すため、共有された Singleton 値を安全に起点として使えます。
 
 ### Refactor
 

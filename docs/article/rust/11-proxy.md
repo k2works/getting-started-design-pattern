@@ -61,7 +61,65 @@ fn virtual_proxy_delays_initialization() {
 
 ### Green
 
-`ProtectionProxy` はオーナーチェックを行い、不正アクセスを `Result::Err` で返します。`VirtualProxy` は `Option<RealBankAccount>` を使い、最初のアクセス時に初期化します。
+```rust
+pub trait BankAccount {
+    fn deposit(&mut self, amount: i64);
+    fn withdraw(&mut self, amount: i64) -> Result<(), String>;
+    fn balance(&self) -> i64;
+}
+
+pub struct RealBankAccount {
+    balance: i64,
+}
+
+impl BankAccount for RealBankAccount {
+    fn deposit(&mut self, amount: i64) {
+        self.balance += amount;
+    }
+
+    fn withdraw(&mut self, amount: i64) -> Result<(), String> {
+        if self.balance < amount {
+            return Err("insufficient funds".into());
+        }
+        self.balance -= amount;
+        Ok(())
+    }
+
+    fn balance(&self) -> i64 {
+        self.balance
+    }
+}
+
+pub struct ProtectionProxy {
+    account: RealBankAccount,
+    owner: String,
+}
+
+impl ProtectionProxy {
+    pub fn deposit_as(&mut self, user: &str, amount: i64) -> Result<(), String> {
+        if user != self.owner {
+            return Err("access denied".into());
+        }
+        self.account.deposit(amount);
+        Ok(())
+    }
+}
+
+pub struct VirtualProxy {
+    initial_balance: i64,
+    account: Option<RealBankAccount>,
+}
+
+impl VirtualProxy {
+    fn ensure_initialized(&mut self) -> &mut RealBankAccount {
+        self.account.get_or_insert_with(|| RealBankAccount {
+            balance: self.initial_balance,
+        })
+    }
+}
+```
+
+Protection Proxy と Virtual Proxy は目的が異なるため、責務を分けて別構造体にする方が読みやすくなります。
 
 ### Refactor
 

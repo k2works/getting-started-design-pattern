@@ -52,7 +52,61 @@ fn decorators_can_be_stacked() {
 
 ### Green
 
-各デコレータは `inner: Box<dyn Writer>` を持ち、`write_line()` で加工してから内部の Writer に委譲します。
+```rust
+pub trait Writer {
+    fn write_line(&mut self, line: &str);
+    fn output(&self) -> String;
+}
+
+pub struct SimpleWriter {
+    lines: Vec<String>,
+}
+
+impl Writer for SimpleWriter {
+    fn write_line(&mut self, line: &str) {
+        self.lines.push(line.to_string());
+    }
+
+    fn output(&self) -> String {
+        self.lines.join("\n")
+    }
+}
+
+pub struct NumberingWriter {
+    inner: Box<dyn Writer>,
+    line_number: usize,
+}
+
+impl Writer for NumberingWriter {
+    fn write_line(&mut self, line: &str) {
+        self.line_number += 1;
+        self.inner
+            .write_line(&format!("{}: {}", self.line_number, line));
+    }
+
+    fn output(&self) -> String {
+        self.inner.output()
+    }
+}
+
+pub struct TimeStampingWriter {
+    inner: Box<dyn Writer>,
+    timestamp: String,
+}
+
+impl Writer for TimeStampingWriter {
+    fn write_line(&mut self, line: &str) {
+        self.inner
+            .write_line(&format!("[{}] {}", self.timestamp, line));
+    }
+
+    fn output(&self) -> String {
+        self.inner.output()
+    }
+}
+```
+
+デコレータ自身は出力を保持せず、常に内側の Writer に委譲することで責務を単純化できます。
 
 ### Refactor
 

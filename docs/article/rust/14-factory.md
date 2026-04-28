@@ -63,7 +63,54 @@ fn pond_creates_ducks() {
 
 ### Green
 
-`OrganismFactory` は `HabitatType` に基づいて適切な `Animal` / `Plant` バリアントを生成します。
+```rust
+pub enum HabitatType {
+    Pond,
+    Jungle,
+}
+
+pub enum Animal {
+    Duck(String),
+    Frog(String),
+    Tiger(String),
+}
+
+impl Animal {
+    pub fn speak(&self) -> &'static str {
+        match self {
+            Animal::Duck(_) => "Quack!",
+            Animal::Frog(_) => "Ribbit!",
+            Animal::Tiger(_) => "Roar!",
+        }
+    }
+}
+
+pub enum Plant {
+    WaterLily(String),
+    Algae(String),
+    Tree(String),
+}
+
+pub struct OrganismFactory;
+
+impl OrganismFactory {
+    pub fn create_animal(habitat: HabitatType, name: &str) -> Animal {
+        match habitat {
+            HabitatType::Pond => Animal::Duck(name.to_string()),
+            HabitatType::Jungle => Animal::Tiger(name.to_string()),
+        }
+    }
+
+    pub fn create_plant(habitat: HabitatType, name: &str) -> Plant {
+        match habitat {
+            HabitatType::Pond => Plant::WaterLily(name.to_string()),
+            HabitatType::Jungle => Plant::Tree(name.to_string()),
+        }
+    }
+}
+```
+
+生成ロジックを `match` に集約することで、環境の追加時に必要な分岐をコンパイラに洗い出させられます。
 
 ### Refactor
 

@@ -85,7 +85,21 @@ testNestedComposite = TestCase $ do
 
 ### Green
 
-`timeRequired` の再帰的な定義がそのまま解答になります。`sum . map timeRequired` で子タスクの時間を合計します。
+```haskell
+taskName :: Task -> String
+taskName (LeafTask name _ _)        = name
+taskName (CompositeTask name _ _)   = name
+
+timeRequired :: Task -> Double
+timeRequired (LeafTask _ t _)       = t
+timeRequired (CompositeTask _ cs _) = sum (map timeRequired cs)
+
+totalTasks :: Task -> Int
+totalTasks (LeafTask _ _ _)         = 1
+totalTasks (CompositeTask _ cs _)   = sum (map totalTasks cs)
+```
+
+`timeRequired` と `totalTasks` を同じ再帰パターンでそろえると、Composite の意図が見えやすくなります。
 
 ---
 

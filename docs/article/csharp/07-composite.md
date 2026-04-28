@@ -81,10 +81,21 @@ public class CompositeTask : Task
 {
     private readonly List<Task> _subTasks = new();
 
+    public void AddSubTask(Task task) => _subTasks.Add(task);
+
     public override double GetTimeRequired() =>
         _subTasks.Sum(t => t.GetTimeRequired());
+
+    public override string GetDescription(int indent = 0)
+    {
+        var prefix = new string(' ', indent * 2);
+        var lines = _subTasks.Select(t => t.GetDescription(indent + 1));
+        return prefix + Name + Environment.NewLine + string.Join(Environment.NewLine, lines);
+    }
 }
 ```
+
+時間計算だけでなく階層表示まで入れておくと、Composite の再帰構造をコードで確認できます。
 
 ### Refactor
 

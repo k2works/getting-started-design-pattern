@@ -48,7 +48,46 @@ fn for_loop_works_via_into_iterator() {
 
 ### Green
 
-`Portfolio` に `IntoIterator` を実装して、標準の `for` ループで走査可能にします。
+```rust
+#[derive(Debug, Clone)]
+pub struct Account {
+    pub name: String,
+    pub balance: i64,
+}
+
+pub struct Portfolio {
+    accounts: Vec<Account>,
+}
+
+impl Portfolio {
+    pub fn new(accounts: Vec<Account>) -> Self {
+        Self { accounts }
+    }
+
+    pub fn add_account(&mut self, account: Account) {
+        self.accounts.push(account);
+    }
+
+    pub fn iter(&self) -> std::slice::Iter<'_, Account> {
+        self.accounts.iter()
+    }
+
+    pub fn total_balance(&self) -> i64 {
+        self.accounts.iter().map(|a| a.balance).sum()
+    }
+}
+
+impl<'a> IntoIterator for &'a Portfolio {
+    type Item = &'a Account;
+    type IntoIter = std::slice::Iter<'a, Account>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.accounts.iter()
+    }
+}
+```
+
+`&Portfolio` に `IntoIterator` を実装しておくと、所有権を消費せずに `for account in &portfolio` と書けます。
 
 ### Refactor
 

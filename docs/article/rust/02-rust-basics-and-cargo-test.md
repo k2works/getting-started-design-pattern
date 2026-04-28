@@ -78,7 +78,36 @@ mod tests {
 
 ### Green: テストを通す
 
-上記の `Account` 構造体と `impl` ブロックを実装します。
+```rust
+#[derive(Debug, PartialEq, Eq)]
+struct Account {
+    name: String,
+    balance: i64,
+}
+
+impl Account {
+    fn new(name: &str, balance: i64) -> Self {
+        Self {
+            name: name.to_string(),
+            balance,
+        }
+    }
+
+    fn deposit(&mut self, amount: i64) {
+        self.balance += amount;
+    }
+
+    fn withdraw(&mut self, amount: i64) -> bool {
+        if self.balance < amount {
+            return false;
+        }
+        self.balance -= amount;
+        true
+    }
+}
+```
+
+最初の `Green` でも、後続の例で再利用しやすいように `new` と `deposit` だけでなく `withdraw` までそろえておくと流れが安定します。
 
 ### Refactor: 改善する
 

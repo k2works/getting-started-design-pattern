@@ -51,7 +51,39 @@ it('MakeCakeTask は全ての子タスクを含む合計時間を返す', () => 
 
 ### Green: 最小限の実装
 
-`CompositeTask.getTimeRequired()` で `reduce` を使い、子タスクの合計を再帰的に計算します。
+```typescript
+abstract class Task {
+  constructor(protected readonly name: string) {}
+
+  getName(): string {
+    return this.name;
+  }
+
+  abstract getTimeRequired(): number;
+
+  totalBasicTasks(): number {
+    return 1;
+  }
+}
+
+class CompositeTask extends Task {
+  protected readonly subTasks: Task[] = [];
+
+  addSubTask(task: Task): void {
+    this.subTasks.push(task);
+  }
+
+  getTimeRequired(): number {
+    return this.subTasks.reduce((total, task) => total + task.getTimeRequired(), 0);
+  }
+
+  override totalBasicTasks(): number {
+    return this.subTasks.reduce((total, task) => total + task.totalBasicTasks(), 0);
+  }
+}
+```
+
+合計時間と基本タスク数の両方を再帰で通しておくと、Composite の利点が見えやすくなります。
 
 ### Refactor
 

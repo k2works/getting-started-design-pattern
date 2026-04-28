@@ -52,9 +52,23 @@ let ``LegacyHtmlRenderer をアダプタ経由で使える`` () =
 ```fsharp
 type Renderer = { Render: string -> string }
 
+type LegacyHtmlRenderer =
+    { RenderHtml: string -> string }
+
+type LegacyJsonRenderer =
+    { RenderJson: string -> string }
+
 let adaptHtmlRenderer (legacy: LegacyHtmlRenderer) : Renderer =
     { Render = legacy.RenderHtml }
+
+let adaptJsonRenderer (legacy: LegacyJsonRenderer) : Renderer =
+    { Render = legacy.RenderJson }
+
+let renderContent (renderer: Renderer) content =
+    renderer.Render content
 ```
+
+アダプタはオブジェクトを包むよりも、「必要な形のレコードを組み直す」方が F# では自然です。
 
 ### Refactor
 

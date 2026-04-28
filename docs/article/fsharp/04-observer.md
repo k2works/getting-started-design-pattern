@@ -60,7 +60,19 @@ type Subject<'T>() =
     member _.AddObserver(observer) = observers <- observer :: observers
     member _.NotifyObservers(value) =
         observers |> List.iter (fun observer -> observer value)
+
+type Employee = { Name: string; Salary: float }
+
+type EmployeeSubject() =
+    let subject = Subject<Employee>()
+    member _.AddObserver(observer) = subject.AddObserver(observer)
+    member _.UpdateSalary(employee, newSalary) =
+        let updated = { employee with Salary = newSalary }
+        subject.NotifyObservers(updated)
+        updated
 ```
+
+通知の仕組みは汎用の `Subject<'T>` に閉じ込め、ドメイン固有の更新処理だけを `EmployeeSubject` に乗せる構成です。
 
 ### Refactor
 

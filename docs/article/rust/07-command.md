@@ -54,7 +54,57 @@ fn create_file_command_creates_and_undoes() {
 
 ### Green
 
-`CreateFileCommand` は `execute()` で `fs::write`、`undo()` で `fs::remove_file` を呼びます。`DeleteFileCommand` は実行前にファイル内容をバックアップし、`undo()` で復元します。
+```rust
+pub trait Command {
+    fn execute(&mut self) -> std::io::Result<()>;
+    fn undo(&mut self) -> std::io::Result<()>;
+    fn description(&self) -> String;
+}
+
+pub struct CreateFileCommand {
+    path: PathBuf,
+    content: String,
+}
+
+impl Command for CreateFileCommand {
+    fn execute(&mut self) -> std::io::Result<()> {
+        fs::write(&self.path, &self.content)
+    }
+
+    fn undo(&mut self) -> std::io::Result<()> {
+        fs::remove_file(&self.path)
+    }
+
+    fn description(&self) -> String {
+        format!("create {}", self.path.display())
+    }
+}
+
+pub struct DeleteFileCommand {
+    path: PathBuf,
+    backup: Option<String>,
+}
+
+impl Command for DeleteFileCommand {
+    fn execute(&mut self) -> std::io::Result<()> {
+        self.backup = Some(fs::read_to_string(&self.path)?);
+        fs::remove_file(&self.path)
+    }
+
+    fn undo(&mut self) -> std::io::Result<()> {
+        if let Some(content) = &self.backup {
+            fs::write(&self.path, content)?;
+        }
+        Ok(())
+    }
+
+    fn description(&self) -> String {
+        format!("delete {}", self.path.display())
+    }
+}
+```
+
+まず単体コマンドを実装し、その上に `Vec<Box<dyn Command>>` を持つ `CompositeCommand` を積み上げるのが素直です。
 
 ### Refactor
 

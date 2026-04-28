@@ -61,7 +61,11 @@ let formatReport (strategy: FormatStrategy) (report: Report) =
     sprintf "%s\n%s" header body
 
 let htmlStrategy : FormatStrategy = fun text -> sprintf "<p>%s</p>" text
+let plainTextStrategy : FormatStrategy = id
+let markdownStrategy : FormatStrategy = fun text -> sprintf "* %s" text
 ```
+
+戦略の差し替えは値の差し替えそのもので、`Report` 側には分岐が一切入りません。
 
 ### Refactor
 

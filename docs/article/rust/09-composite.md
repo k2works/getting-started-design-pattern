@@ -54,9 +54,43 @@ pub enum Task {
     Leaf { name: String, duration: f64 },
     Composite { name: String, children: Vec<Task> },
 }
+
+impl Task {
+    pub fn new_leaf(name: &str, duration: f64) -> Self {
+        Self::Leaf {
+            name: name.to_string(),
+            duration,
+        }
+    }
+
+    pub fn new_composite(name: &str, children: Vec<Task>) -> Self {
+        Self::Composite {
+            name: name.to_string(),
+            children,
+        }
+    }
+
+    pub fn get_time_required(&self) -> f64 {
+        match self {
+            Task::Leaf { duration, .. } => *duration,
+            Task::Composite { children, .. } => {
+                children.iter().map(|child| child.get_time_required()).sum()
+            }
+        }
+    }
+
+    pub fn total_basic_tasks(&self) -> usize {
+        match self {
+            Task::Leaf { .. } => 1,
+            Task::Composite { children, .. } => {
+                children.iter().map(|child| child.total_basic_tasks()).sum()
+            }
+        }
+    }
+}
 ```
 
-`get_time_required()` は再帰的に子要素の合計を計算します。
+`Leaf` と `Composite` の分岐は `match` に集約されるため、クライアント側に型判定を漏らしません。
 
 ### Refactor
 

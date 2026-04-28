@@ -59,7 +59,43 @@ it('DeleteFileCommand の undo はファイルを復元する', () => {
 
 ### Green: 最小限の実装
 
-`DeleteFileCommand` は `execute()` 時にファイル内容を `savedContents` に保存し、`undo()` で復元します。
+```typescript
+class DeleteFileCommand implements Command {
+  readonly description: string;
+  private savedContents: string | null = null;
+
+  constructor(private readonly filePath: string) {
+    this.description = `Delete ${filePath}`;
+  }
+
+  execute(): void {
+    this.savedContents = fs.readFileSync(this.filePath, 'utf-8');
+    fs.unlinkSync(this.filePath);
+  }
+
+  undo(): void {
+    if (this.savedContents !== null) {
+      fs.writeFileSync(this.filePath, this.savedContents);
+    }
+  }
+}
+
+class CompositeCommand implements Command {
+  readonly description = 'Composite command';
+
+  constructor(private readonly commands: Command[]) {}
+
+  execute(): void {
+    this.commands.forEach(command => command.execute());
+  }
+
+  undo(): void {
+    [...this.commands].reverse().forEach(command => command.undo());
+  }
+}
+```
+
+まずは `undo` に必要な状態保存と、複合コマンドの順方向 / 逆方向実行を実装します。
 
 ### Refactor
 

@@ -70,7 +70,23 @@ let createAnimal (animalType: string) (name: string) =
     | "dog" -> Ok(Dog name)
     | "cat" -> Ok(Cat name)
     | unknown -> Error(sprintf "不明な動物タイプ: %s" unknown)
+
+type Habitat = Land | Water | Air
+
+let createAnimalByHabitat habitat name =
+    match habitat with
+    | Land -> Dog name
+    | Water -> Frog name
+    | Air -> Duck name
+
+let animalSound = function
+    | Dog _ -> "ワンワン"
+    | Cat _ -> "ニャー"
+    | Duck _ -> "ガーガー"
+    | Frog _ -> "ケロケロ"
 ```
+
+生成後の振る舞いも同じ判別共用体に対する関数として定義できるので、クラスごとのメソッド分散を避けられます。
 
 ### Refactor
 

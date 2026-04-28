@@ -1,36 +1,10 @@
 # 第 11 章 Singleton -- 名前空間レベルの唯一性
 
-## パターンの意図
+## はじめに
 
-Singleton パターンは、クラスのインスタンスが 1 つだけであることを保証し、グローバルなアクセスポイントを提供するパターンです。
+Singleton パターンは、共有すべきインスタンスを 1 つに限定するパターンです。Clojure では `def` や `defonce` が名前空間レベルの唯一性を自然に提供します。
 
-## Clojure での解釈
-
-Clojure の `def` や `defonce` は名前空間レベルのシングルトンを自然に提供します。`atom` と組み合わせれば、状態を持つシングルトンも表現できます。
-
-## 実装
-
-```clojure
-;; defonce で一度だけ初期化
-(defonce app-config
-  (atom {:database-url "jdbc:postgresql://localhost:5432/mydb"
-         :max-connections 10
-         :log-level :info}))
-
-(defn get-config [key]
-  (get @app-config key))
-
-(defn set-config! [key value]
-  (swap! app-config assoc key value))
-
-;; ロガーシングルトン
-(defonce ^:private log-entries (atom []))
-
-(defn log! [level message]
-  (swap! log-entries conj {:level level :message message}))
-```
-
-## クラス図
+## パターンの構造
 
 ```plantuml
 @startuml
@@ -55,7 +29,29 @@ class "Registry" as R {
 @enduml
 ```
 
-## テスト
+## Clojure イディオム: defonce + atom
+
+```clojure
+(defonce app-config
+  (atom {:database-url "jdbc:postgresql://localhost:5432/mydb"
+         :max-connections 10
+         :log-level :info}))
+
+(defn get-config [key]
+  (get @app-config key))
+
+(defn set-config! [key value]
+  (swap! app-config assoc key value))
+
+(defonce ^:private log-entries (atom []))
+
+(defn log! [level message]
+  (swap! log-entries conj {:level level :message message}))
+```
+
+## TDD で作る
+
+### Red: 失敗するテストを書く
 
 ```clojure
 (deftest singleton-identity-test
@@ -67,6 +63,19 @@ class "Registry" as R {
     (is (= 2 (log-count)))
     (clear-logs!)))
 ```
+
+### Green: 最小限の実装
+
+```clojure
+(defonce ^:private log-entries (atom []))
+
+(defn log! [level message]
+  (swap! log-entries conj {:level level :message message}))
+```
+
+### Refactor
+
+設定、ログ、サービスレジストリのように用途別に singleton を分けると、1 つの巨大な共有状態へ責務が集中するのを防げます。
 
 ## まとめ
 

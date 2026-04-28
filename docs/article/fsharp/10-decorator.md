@@ -55,7 +55,15 @@ let withBrackets : Writer -> Writer =
 
 let compose (decorators: (Writer -> Writer) list) (writer: Writer) : Writer =
     decorators |> List.fold (fun w decorator -> decorator w) writer
+
+let withLineNumbers : Writer -> Writer =
+    fun writer text -> sprintf "1: %s" (writer text)
+
+let withTimestamp (timestamp: string) : Writer -> Writer =
+    fun writer text -> sprintf "[%s] %s" timestamp (writer text)
 ```
+
+Decorator の正体は `Writer -> Writer` の変換なので、追加機能ごとに小さな関数として独立させられます。
 
 ### Refactor
 

@@ -44,7 +44,45 @@ fn adapter_converts_cm_to_inches() {
 
 ### Green
 
-アダプタは `BritishTextObject` を所有し、`TextObject` トレイトを実装します。`size_inches()` 内で `size_cm / 2.54` の変換を行います。
+```rust
+pub trait TextObject {
+    fn text(&self) -> &str;
+    fn size_inches(&self) -> f64;
+    fn color(&self) -> &str;
+}
+
+pub struct BritishTextObject {
+    string: String,
+    size_cm: f64,
+    colour: String,
+}
+
+pub struct BritishTextObjectAdapter {
+    object: BritishTextObject,
+}
+
+impl BritishTextObjectAdapter {
+    pub fn new(object: BritishTextObject) -> Self {
+        Self { object }
+    }
+}
+
+impl TextObject for BritishTextObjectAdapter {
+    fn text(&self) -> &str {
+        &self.object.string
+    }
+
+    fn size_inches(&self) -> f64 {
+        self.object.size_cm / 2.54
+    }
+
+    fn color(&self) -> &str {
+        &self.object.colour
+    }
+}
+```
+
+所有によるラップにしておくと、アダプタ側でライフタイムを露出せずに済みます。
 
 ### Refactor
 

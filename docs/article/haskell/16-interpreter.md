@@ -115,7 +115,29 @@ testComplex = TestCase $ do
 
 ### Green
 
-パターンマッチによる再帰的な評価がそのまま解答です。
+```haskell
+eval :: [(String, Double)] -> Expr -> Double
+eval _   (Lit n)     = n
+eval env (Add a b)   = eval env a + eval env b
+eval env (Sub a b)   = eval env a - eval env b
+eval env (Mul a b)   = eval env a * eval env b
+eval env (Div a b)   = eval env a / eval env b
+eval env (Neg a)     = negate (eval env a)
+eval env (Var name)  = case lookup name env of
+  Just v  -> v
+  Nothing -> 0
+
+display :: Expr -> String
+display (Lit n)     = show n
+display (Add a b)   = "(" ++ display a ++ " + " ++ display b ++ ")"
+display (Sub a b)   = "(" ++ display a ++ " - " ++ display b ++ ")"
+display (Mul a b)   = "(" ++ display a ++ " * " ++ display b ++ ")"
+display (Div a b)   = "(" ++ display a ++ " / " ++ display b ++ ")"
+display (Neg a)     = "-(" ++ display a ++ ")"
+display (Var name)  = name
+```
+
+まずは評価と表示をそろえ、AST の各コンストラクタに対する再帰処理を一通り実装します。
 
 ### Refactor: 式の単純化
 

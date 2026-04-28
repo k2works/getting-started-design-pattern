@@ -81,7 +81,28 @@ testComposed = TestCase $ do
 
 ### Green
 
-関数合成の順序に注意して実装します。右から左に適用されます。
+```haskell
+type Writer = [String] -> [String]
+
+baseWriter :: Writer
+baseWriter = id
+
+withTimestamp :: String -> Writer -> Writer
+withTimestamp ts base =
+  map (\line -> "[" ++ ts ++ "] " ++ line) . base
+
+withLineNumber :: Writer -> Writer
+withLineNumber base =
+  zipWith (\n line -> show n ++ ": " ++ line) [1 :: Int ..] . base
+
+withChecksum :: Writer -> Writer
+withChecksum base lines0 =
+  let rendered = base lines0
+      checksum = sum (map length rendered)
+  in rendered ++ ["[checksum:" ++ show checksum ++ "]"]
+```
+
+関数合成の順序だけでなく、各デコレータが `Writer -> Writer` を保ったまま責務を追加しているところまで実装します。
 
 ---
 

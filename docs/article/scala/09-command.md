@@ -85,7 +85,35 @@ class InsertCommand(document: SliderDocument, position: Int, text: String) exten
   override def execute(): Unit = document.insertString(position, text)
   override def undo(): Unit = document.deleteString(position, text.length)
   override val description: String = s"Insert '$text' at position $position"
+
+class DeleteCommand(document: SliderDocument, position: Int, length: Int) extends Command:
+  private var deletedText: String = ""
+
+  override def execute(): Unit =
+    deletedText = document.substring(position, position + length)
+    document.deleteString(position, length)
+
+  override def undo(): Unit =
+    document.insertString(position, deletedText)
+
+  override val description: String = s"Delete $length chars at position $position"
+
+class CommandHistory:
+  private val history = scala.collection.mutable.ListBuffer.empty[Command]
+
+  def executeCommand(cmd: Command): Unit =
+    cmd.execute()
+    history += cmd
+
+  def undoLast(): Option[Command] =
+    history.lastOption.map { cmd =>
+      cmd.undo()
+      history.remove(history.length - 1)
+      cmd
+    }
 ```
+
+`undo` に必要な削除前文字列と、履歴管理まで実装すると Command の価値が具体化します。
 
 ### Refactor: 振り返り
 

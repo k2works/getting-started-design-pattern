@@ -67,11 +67,23 @@ public sealed class SingletonLogger
     private static readonly Lazy<SingletonLogger> _instance =
         new(() => new SingletonLogger());
 
+    private readonly List<string> _messages = new();
+
     private SingletonLogger() { }
 
     public static SingletonLogger Instance => _instance.Value;
+
+    public void Log(string message) => _messages.Add(message);
+
+    public IReadOnlyList<string> Messages => _messages;
+
+    public string LatestMessage => _messages.LastOrDefault() ?? string.Empty;
+
+    public void Reset() => _messages.Clear();
 }
 ```
+
+単にインスタンスを返すだけでなく、共有状態を読むところまで実装して初めて Singleton の挙動を確認できます。
 
 ---
 

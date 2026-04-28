@@ -60,10 +60,24 @@ let ``パイプラインでコンピュータを構築できる`` () =
 ### Green: パイプライン版の実装
 
 ```fsharp
-let defaultComputer = { Cpu = "Unknown"; Ram = 0; Storage = "None"; Gpu = None; Os = None }
+type Computer =
+    { Cpu: string
+      Ram: int
+      Storage: string
+      Gpu: string option
+      Os: string option }
+
+let defaultComputer =
+    { Cpu = "Unknown"; Ram = 0; Storage = "None"; Gpu = None; Os = None }
+
 let withCpu cpu computer = { computer with Cpu = cpu }
 let withRam ram computer = { computer with Ram = ram }
+let withStorage storage computer = { computer with Storage = storage }
+let withGpu gpu computer = { computer with Gpu = Some gpu }
+let withOs os computer = { computer with Os = Some os }
 ```
+
+Builder を専用クラスにせず、段階的な更新関数の列として表現している点が F# らしい部分です。
 
 ### Red: コンピュテーション式版のテスト
 
@@ -85,7 +99,17 @@ type ComputerBuilder() =
     member _.Yield(_) = defaultComputer
     [<CustomOperation("cpu")>]
     member _.Cpu(computer, cpu) = { computer with Cpu = cpu }
+    [<CustomOperation("ram")>]
+    member _.Ram(computer, ram) = { computer with Ram = ram }
+    [<CustomOperation("storage")>]
+    member _.Storage(computer, storage) = { computer with Storage = storage }
+    [<CustomOperation("gpu")>]
+    member _.Gpu(computer, gpu) = { computer with Gpu = Some gpu }
+
+let computer = ComputerBuilder()
 ```
+
+コンピュテーション式にすると、内部は同じレコード更新でも DSL 風の読みやすい構文にできます。
 
 ## OOP 版（C#）との比較
 

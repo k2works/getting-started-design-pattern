@@ -86,7 +86,16 @@ object PondFactory extends OrganismFactory:
 object JungleFactory extends OrganismFactory:
   def createAnimal(name: String): Animal = Tiger(name)
   def createPlant(name: String): Plant = WaterLily(name)
+
+case class Environment(factory: OrganismFactory):
+  val animal: Animal = factory.createAnimal("代表動物")
+  val plant: Plant = factory.createPlant("代表植物")
+
+  def describe: String =
+    s"${animal.name} は ${animal.speak} と鳴き、${plant.name} は edible = ${plant.edible}"
 ```
+
+Factory を差し替えて環境全体の構成結果まで見えるようにしておくと、抽象化の効果が伝わります。
 
 ### Refactor: 振り返り
 

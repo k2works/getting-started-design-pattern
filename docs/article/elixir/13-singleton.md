@@ -1,10 +1,10 @@
 # 第 13 章 Application 環境で唯一の状態を管理する — Singleton
 
-## パターンの目的
+## はじめに
 
 Singleton パターンは、あるクラスのインスタンスが 1 つだけであることを保証するパターンです。Elixir では Application 環境や GenServer でグローバルな状態を管理します。
 
-## 構造
+## パターンの構造
 
 ```plantuml
 @startuml
@@ -30,7 +30,7 @@ S --> A : delegates to
 @enduml
 ```
 
-## 実装
+## Elixir イディオム: Application 環境への委譲
 
 Application 環境を使ったシンプルな実装です。
 
@@ -46,7 +46,9 @@ def get(key, default \\\\ nil) do
 end
 ```
 
-## テスト
+## TDD で作る
+
+### Red: 失敗するテストを書く
 
 ```elixir
 test "設定値を保存・取得できる" do
@@ -59,6 +61,14 @@ test "存在しないキーにはデフォルト値を返す" do
   assert Singleton.get(:nonexistent, "default") == "default"
 end
 ```
+
+### Green: 最小限の実装
+
+最初は `put/2` と `get/2` だけを `Application.put_env/3` と `Application.get_env/3` に委譲すれば十分です。削除や一覧取得は後続の拡張に回せます。
+
+### Refactor
+
+設定用途なら Application 環境、可変状態や並行アクセスが絡むなら GenServer や ETS に分けて考えるのが実践的です。
 
 ## Elixir における代替アプローチ
 

@@ -59,7 +59,51 @@ it('Decorator を重ねて適用できる', () => {
 
 ### Green: 委譲による実装
 
-各 Decorator は `Writer` を受け取り、`writeLine()` で加工してから内部の `Writer` に委譲します。
+```typescript
+class SimpleWriter implements Writer {
+  private readonly lines: string[] = [];
+
+  writeLine(line: string): void {
+    this.lines.push(line);
+  }
+
+  getOutput(): string {
+    return this.lines.join('\n');
+  }
+}
+
+class NumberingWriter implements Writer {
+  private lineNumber = 1;
+
+  constructor(private readonly writer: Writer) {}
+
+  writeLine(line: string): void {
+    this.writer.writeLine(`${this.lineNumber}: ${line}`);
+    this.lineNumber += 1;
+  }
+
+  getOutput(): string {
+    return this.writer.getOutput();
+  }
+}
+
+class TimeStampingWriter implements Writer {
+  constructor(
+    private readonly writer: Writer,
+    private readonly clock: () => Date = () => new Date()
+  ) {}
+
+  writeLine(line: string): void {
+    this.writer.writeLine(`[${this.clock().toISOString()}] ${line}`);
+  }
+
+  getOutput(): string {
+    return this.writer.getOutput();
+  }
+}
+```
+
+Decorator ごとに加工責務を 1 つに絞り、出力の保持は最下層の `SimpleWriter` に任せます。
 
 ### Refactor
 

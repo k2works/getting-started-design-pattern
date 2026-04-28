@@ -66,10 +66,30 @@ func TestHtmlReport(t *testing.T) {
 
 ```go
 func GenerateReport(format ReportFormat, title string, text []string) string {
-    // テストを通す最小限の実装
-    return "<html>"
+    header := format.Header(title)
+    body := strings.Join(text, "\n")
+    footer := format.Footer()
+    return header + body + footer
+}
+
+type ReportFormat struct {
+    Header func(title string) string
+    Footer func() string
+}
+
+func HtmlFormat() ReportFormat {
+    return ReportFormat{
+        Header: func(title string) string {
+            return "<html><body><h1>" + title + "</h1>"
+        },
+        Footer: func() string {
+            return "</body></html>"
+        },
+    }
 }
 ```
+
+この段階でもハードコードはやめて、後続の Strategy 章へつながる `ReportFormat` の差し替えポイントを先に置いておきます。
 
 ### Refactor: 設計を改善する
 

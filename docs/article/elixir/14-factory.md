@@ -1,10 +1,10 @@
 # 第 14 章 パターンマッチングで適切なデータを生成する — Factory
 
-## パターンの目的
+## はじめに
 
 Factory パターンは、オブジェクトの生成をサブクラスに委ねるパターンです。Elixir ではパターンマッチングを使ったファクトリ関数で実現します。
 
-## 構造
+## パターンの構造
 
 ```plantuml
 @startuml
@@ -38,7 +38,7 @@ F --> T : creates
 @enduml
 ```
 
-## 実装
+## Elixir イディオム: パターンマッチングで生成を分岐
 
 アトムによるパターンマッチングで生成するデータを選択します。
 
@@ -55,7 +55,9 @@ def area(%{type: :circle, radius: r}), do: :math.pi() * r * r
 def area(%{type: :rectangle, width: w, height: h}), do: w * h
 ```
 
-## テスト
+## TDD で作る
+
+### Red: 失敗するテストを書く
 
 ```elixir
 test "円を作成して面積を計算する" do
@@ -64,6 +66,14 @@ test "円を作成して面積を計算する" do
   assert_in_delta Factory.area(circle), 78.54, 0.01
 end
 ```
+
+### Green: 最小限の実装
+
+まずは `:circle` だけを生成できる `create_shape/2` と、その面積計算だけを通せばテストを進められます。ほかの形状は同じパターンで増やせます。
+
+### Refactor
+
+生成関数と操作関数の両方をパターンマッチングでそろえると、データの種類ごとの責務が見えやすくなります。
 
 ## Elixir らしさ
 

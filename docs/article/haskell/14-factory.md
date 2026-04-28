@@ -93,7 +93,27 @@ testSpeak = TestCase $ do
 
 ### Green
 
-ADT のコンストラクタとパターンマッチで実装します。
+```haskell
+data AnimalType = DogType | CatType | DuckType
+  deriving (Eq, Show)
+
+data Animal
+  = Dog  { animalName :: String, animalAge :: Int }
+  | Cat  { animalName :: String, animalAge :: Int }
+  | Duck { animalName :: String, animalAge :: Int }
+
+createAnimal :: AnimalType -> String -> Int -> Animal
+createAnimal DogType  name age = Dog name age
+createAnimal CatType  name age = Cat name age
+createAnimal DuckType name age = Duck name age
+
+speak :: Animal -> String
+speak (Dog name _)  = name ++ " says: ワンワン!"
+speak (Cat name _)  = name ++ " says: ニャー!"
+speak (Duck name _) = name ++ " says: ガーガー!"
+```
+
+Factory の責務は `AnimalType` から適切なコンストラクタを選ぶところに閉じ込めます。
 
 ---
 

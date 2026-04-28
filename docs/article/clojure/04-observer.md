@@ -1,42 +1,10 @@
 # 第 4 章 Observer -- atom と watch による状態監視
 
-## パターンの意図
+## はじめに
 
-Observer パターンは、あるオブジェクトの状態が変化したときに、依存するすべてのオブジェクトに自動的に通知するパターンです。
+Observer パターンは、状態変化を複数の関心事へ自動通知するパターンです。Clojure では `atom` と `add-watch` がこの問題に直接対応しており、手動実装も比較的簡潔です。
 
-## Clojure での解釈
-
-Clojure の `atom` と `add-watch` は Observer パターンを言語レベルで直接サポートしています。また、observer リストを atom で管理する手動実装も可能です。
-
-## 実装（手動版）
-
-```clojure
-(defn create-subject [initial-value]
-  {:state     (atom initial-value)
-   :observers (atom [])})
-
-(defn add-observer [subject observer-fn]
-  (swap! (:observers subject) conj observer-fn))
-
-(defn set-state! [subject new-value]
-  (let [old-value @(:state subject)]
-    (reset! (:state subject) new-value)
-    (doseq [observer @(:observers subject)]
-      (observer old-value new-value))))
-```
-
-## 実装（add-watch 版）
-
-```clojure
-(defn create-watched-atom [initial-value]
-  (atom initial-value))
-
-(defn watch! [a key callback]
-  (add-watch a key (fn [_key _ref old-val new-val]
-                     (callback old-val new-val))))
-```
-
-## クラス図
+## パターンの構造
 
 ```plantuml
 @startuml
@@ -57,7 +25,39 @@ S "1" --> "*" O : notifies
 @enduml
 ```
 
-## テスト
+## Clojure イディオム: atom + add-watch
+
+### 手動実装
+
+```clojure
+(defn create-subject [initial-value]
+  {:state     (atom initial-value)
+   :observers (atom [])})
+
+(defn add-observer [subject observer-fn]
+  (swap! (:observers subject) conj observer-fn))
+
+(defn set-state! [subject new-value]
+  (let [old-value @(:state subject)]
+    (reset! (:state subject) new-value)
+    (doseq [observer @(:observers subject)]
+      (observer old-value new-value))))
+```
+
+### `add-watch` を使う実装
+
+```clojure
+(defn create-watched-atom [initial-value]
+  (atom initial-value))
+
+(defn watch! [a key callback]
+  (add-watch a key (fn [_key _ref old-val new-val]
+                     (callback old-val new-val))))
+```
+
+## TDD で作る
+
+### Red: 失敗するテストを書く
 
 ```clojure
 (deftest observer-notification-test
@@ -68,6 +68,27 @@ S "1" --> "*" O : notifies
       (set-state! subject 42)
       (is (= [{:old 0 :new 42}] @received)))))
 ```
+
+### Green: 最小限の実装
+
+```clojure
+(defn create-subject [initial-value]
+  {:state     (atom initial-value)
+   :observers (atom [])})
+
+(defn add-observer [subject observer-fn]
+  (swap! (:observers subject) conj observer-fn))
+
+(defn set-state! [subject new-value]
+  (let [old-value @(:state subject)]
+    (reset! (:state subject) new-value)
+    (doseq [observer @(:observers subject)]
+      (observer old-value new-value))))
+```
+
+### Refactor
+
+手動実装で通知の仕組みを理解したあと、実運用では `add-watch` を使うと Clojure らしく簡潔に書けます。
 
 ## まとめ
 

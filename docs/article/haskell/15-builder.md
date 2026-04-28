@@ -93,7 +93,37 @@ testChainedBuilding = TestCase $ do
 
 ### Green
 
-各 setter 関数とデフォルト値を定義するだけです。
+```haskell
+data Computer = Computer
+  { cpuType :: String
+  , display :: String
+  , memory  :: Int
+  , storage :: Int
+  , os      :: String
+  , gpu     :: String
+  }
+
+defaultComputer :: Computer
+defaultComputer = Computer
+  { cpuType = "Intel i5"
+  , display = "15.6 inch"
+  , memory  = 8
+  , storage = 256
+  , os      = "Linux"
+  , gpu     = "Integrated"
+  }
+
+setDisplay :: String -> Computer -> Computer
+setDisplay value computer = computer { display = value }
+
+setMemory :: Int -> Computer -> Computer
+setMemory value computer = computer { memory = value }
+
+setOS :: String -> Computer -> Computer
+setOS value computer = computer { os = value }
+```
+
+まずはデフォルト構成と更新関数を定義し、レコード更新をチェーンできる状態まで持っていきます。
 
 ---
 

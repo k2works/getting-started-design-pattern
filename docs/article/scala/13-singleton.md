@@ -66,7 +66,11 @@ object Logger:
   def lastMessage: Option[String] = _messages.lastOption
   def clear(): Unit = _messages = List.empty
   def count: Int = _messages.length
+  def contains(message: String): Boolean = _messages.contains(message)
+  def snapshot(): Vector[String] = _messages.toVector
 ```
+
+読み取り用メソッドを少し足しておくと、共有状態の検証をテストしやすくなります。
 
 ### Refactor: 振り返り
 

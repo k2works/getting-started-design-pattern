@@ -83,7 +83,27 @@ testPureObserver = TestCase $ do
 
 ### Green
 
-純粋版は `PureSubject` のレコード更新で実装できます。
+```haskell
+data Event = SalaryChanged String Double Double
+
+data PureSubject = PureSubject
+  { psName   :: String
+  , psSalary :: Double
+  , psLog    :: [String]
+  }
+
+notify :: PureSubject -> String -> PureSubject
+notify subj msg = subj { psLog = psLog subj ++ [msg] }
+
+changeSalary :: Double -> PureSubject -> PureSubject
+changeSalary newSal subj =
+  let oldSal = psSalary subj
+      msg = psName subj ++ " の給与が " ++ show oldSal ++ " から "
+            ++ show newSal ++ " に変更されました"
+  in notify (subj { psSalary = newSal }) msg
+```
+
+まずは純粋版だけを通し、給与更新と通知ログ追加を 1 つの状態遷移として実装します。
 
 ---
 

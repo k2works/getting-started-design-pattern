@@ -1,37 +1,10 @@
 # 第 10 章 Decorator -- 関数合成による装飾
 
-## パターンの意図
+## はじめに
 
-Decorator パターンは、オブジェクトに動的に新しい責務を追加するパターンです。
+Decorator パターンは、既存の振る舞いを壊さずに責務を重ねるパターンです。Clojure では関数合成がそのままデコレータになるため、非常に直接的に書けます。
 
-## Clojure での解釈
-
-Clojure では関数合成がデコレータそのものです。各デコレータは `(fn [text] -> text)` 形式の関数を受け取り、新しい関数を返す高階関数として実装します。
-
-## 実装
-
-```clojure
-(defn plain-writer [text] text)
-
-(defn with-numbering [writer-fn]
-  (fn [text]
-    (let [result (writer-fn text)
-          lines  (clojure.string/split-lines result)]
-      (clojure.string/join
-        "\n"
-        (map-indexed (fn [i line] (str (inc i) ": " line)) lines)))))
-
-(defn with-timestamp [writer-fn]
-  (fn [text]
-    (let [result (writer-fn text)]
-      (str "[" (java.time.LocalDateTime/now) "]\n" result))))
-
-(defn with-brackets [writer-fn]
-  (fn [text]
-    (str "<<< " (writer-fn text) " >>>")))
-```
-
-## クラス図
+## パターンの構造
 
 ```plantuml
 @startuml
@@ -60,7 +33,32 @@ WB --> PW : decorates
 @enduml
 ```
 
-## テスト
+## Clojure イディオム: 高階関数のネスト
+
+```clojure
+(defn plain-writer [text] text)
+
+(defn with-numbering [writer-fn]
+  (fn [text]
+    (let [result (writer-fn text)
+          lines  (clojure.string/split-lines result)]
+      (clojure.string/join
+        "\n"
+        (map-indexed (fn [i line] (str (inc i) ": " line)) lines)))))
+
+(defn with-timestamp [writer-fn]
+  (fn [text]
+    (let [result (writer-fn text)]
+      (str "[" (java.time.LocalDateTime/now) "]\n" result))))
+
+(defn with-brackets [writer-fn]
+  (fn [text]
+    (str "<<< " (writer-fn text) " >>>")))
+```
+
+## TDD で作る
+
+### Red: 失敗するテストを書く
 
 ```clojure
 (deftest composed-decorators-test
@@ -69,6 +67,20 @@ WB --> PW : decorates
           result (writer "hello")]
       (is (= "<<< HELLO >>>" result)))))
 ```
+
+### Green: 最小限の実装
+
+```clojure
+(defn plain-writer [text] text)
+
+(defn with-brackets [writer-fn]
+  (fn [text]
+    (str "<<< " (writer-fn text) " >>>")))
+```
+
+### Refactor
+
+行番号、タイムスタンプ、大文字化のような責務を個別の高階関数に切ると、合成順序による違いも追いやすくなります。
 
 ## まとめ
 

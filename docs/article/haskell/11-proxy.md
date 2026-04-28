@@ -98,7 +98,27 @@ testAccessDenied = TestCase $ do
 
 ### Green
 
-`Either` 型でアクセスの成功/失敗を型安全に表現します。
+```haskell
+data AccessLevel = Guest | Member | Admin
+  deriving (Eq, Ord, Show)
+
+data Document = Document
+  { docTitle   :: String
+  , docContent :: String
+  }
+
+data ProtectedDoc = ProtectedDoc
+  { pdDoc           :: Document
+  , pdRequiredLevel :: AccessLevel
+  }
+
+accessDocument :: AccessLevel -> ProtectedDoc -> Either String Document
+accessDocument userLevel pd
+  | userLevel >= pdRequiredLevel pd = Right (pdDoc pd)
+  | otherwise = Left "アクセス拒否"
+```
+
+まずは保護プロキシだけを `Either` で通し、アクセス可否を型に乗せて表現します。
 
 ---
 

@@ -1,44 +1,10 @@
 # 第 13 章 Builder -- スレッディングマクロで段階構築
 
-## パターンの意図
+## はじめに
 
-Builder パターンは、複雑なオブジェクトの構築をその表現から分離し、同じ構築プロセスで異なる表現を作成できるようにするパターンです。
+Builder パターンは、複雑なオブジェクトを段階的に構築するパターンです。Clojure では不変マップと `->` マクロの組み合わせが、自然な fluent interface になります。
 
-## Clojure での解釈
-
-Clojure のスレッディングマクロ `->` は、Builder パターンの流れるようなインターフェース（fluent interface）を自然に表現します。不変マップを段階的に `assoc` で構築していきます。
-
-## 実装
-
-```clojure
-(defn new-computer [] {:type :computer})
-
-(defn with-cpu [computer cpu] (assoc computer :cpu cpu))
-(defn with-ram [computer ram-gb] (assoc computer :ram-gb ram-gb))
-(defn with-storage [computer storage-gb] (assoc computer :storage-gb storage-gb))
-(defn with-gpu [computer gpu] (assoc computer :gpu gpu))
-
-(defn validate-computer [computer]
-  (doseq [field [:cpu :ram-gb :storage-gb]]
-    (when-not (get computer field)
-      (throw (ex-info (str "Missing required field: " (name field))
-                      {:field field}))))
-  computer)
-
-(defn build-computer [computer]
-  (-> computer validate-computer (assoc :built true)))
-
-;; Director 風プリセット
-(defn gaming-computer []
-  (-> (new-computer)
-      (with-cpu "Intel Core i9")
-      (with-ram 32)
-      (with-storage 2000)
-      (with-gpu "NVIDIA RTX 4090")
-      build-computer))
-```
-
-## クラス図
+## パターンの構造
 
 ```plantuml
 @startuml
@@ -71,7 +37,30 @@ D --> BF : uses
 @enduml
 ```
 
-## テスト
+## Clojure イディオム: assoc をチェーンする
+
+```clojure
+(defn new-computer [] {:type :computer})
+
+(defn with-cpu [computer cpu] (assoc computer :cpu cpu))
+(defn with-ram [computer ram-gb] (assoc computer :ram-gb ram-gb))
+(defn with-storage [computer storage-gb] (assoc computer :storage-gb storage-gb))
+(defn with-gpu [computer gpu] (assoc computer :gpu gpu))
+
+(defn validate-computer [computer]
+  (doseq [field [:cpu :ram-gb :storage-gb]]
+    (when-not (get computer field)
+      (throw (ex-info (str "Missing required field: " (name field))
+                      {:field field}))))
+  computer)
+
+(defn build-computer [computer]
+  (-> computer validate-computer (assoc :built true)))
+```
+
+## TDD で作る
+
+### Red: 失敗するテストを書く
 
 ```clojure
 (deftest validation-fails-test
@@ -79,6 +68,21 @@ D --> BF : uses
     (is (thrown? clojure.lang.ExceptionInfo
                 (-> (new-computer) (with-cpu "Intel") build-computer)))))
 ```
+
+### Green: 最小限の実装
+
+```clojure
+(defn new-computer [] {:type :computer})
+
+(defn with-cpu [computer cpu] (assoc computer :cpu cpu))
+
+(defn build-computer [computer]
+  (assoc computer :built true))
+```
+
+### Refactor
+
+検証ロジックを `validate-computer` へ分離し、プリセット構成は `gaming-computer` のような director 関数としてまとめると見通しが良くなります。
 
 ## まとめ
 

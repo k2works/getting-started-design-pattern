@@ -40,12 +40,32 @@ fn singleton_returns_same_instance() {
 ### Green
 
 ```rust
+use std::sync::{Mutex, OnceLock};
+
+pub struct Logger {
+    messages: Mutex<Vec<String>>,
+}
+
+impl Logger {
+    pub fn new() -> Self {
+        Self {
+            messages: Mutex::new(Vec::new()),
+        }
+    }
+
+    pub fn log(&self, message: &str) {
+        self.messages.lock().unwrap().push(message.to_string());
+    }
+}
+
 static INSTANCE: OnceLock<Logger> = OnceLock::new();
 
 pub fn get_instance() -> &'static Logger {
     INSTANCE.get_or_init(Logger::new)
 }
 ```
+
+`Logger` 自体は通常の構造体として保ち、唯一性の保証だけを `OnceLock` に任せると見通しがよくなります。
 
 ### Refactor
 

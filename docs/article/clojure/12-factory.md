@@ -1,41 +1,10 @@
 # 第 12 章 Factory -- マルチメソッドによる生成
 
-## パターンの意図
+## はじめに
 
-Factory パターンは、オブジェクトの生成をサブクラスに委譲し、生成するオブジェクトの型を実行時に決定するパターンです。
+Factory パターンは、生成ロジックを呼び出し側から分離するパターンです。Clojure ではタイプキーワードとマルチメソッドを使うと、生成対象の追加に強い構成にできます。
 
-## Clojure での解釈
-
-マルチメソッドでタイプキーワードに応じたディスパッチを行います。新しい型を追加する際にも、既存のコードを変更せずに `defmethod` を追加するだけです（開放閉鎖原則）。
-
-## 実装
-
-```clojure
-(defmulti create-animal :type)
-
-(defmethod create-animal :dog [{:keys [name]}]
-  {:type :dog :name name :sound "Woof!" :legs 4})
-
-(defmethod create-animal :cat [{:keys [name]}]
-  {:type :cat :name name :sound "Meow!" :legs 4})
-
-(defmethod create-animal :bird [{:keys [name]}]
-  {:type :bird :name name :sound "Tweet!" :legs 2})
-
-(defmethod create-animal :default [{:keys [type name]}]
-  {:type type :name (or name "Unknown") :sound "..." :legs 0})
-
-;; Abstract Factory 風
-(defn create-habitat [habitat-type]
-  (case habitat-type
-    :farm  [(create-animal {:type :dog :name "Rex"})
-            (create-animal {:type :cat :name "Whiskers"})
-            (create-animal {:type :bird :name "Tweety"})]
-    :ocean [{:type :whale :name "Moby" :sound "Ooooo!" :legs 0}]
-    []))
-```
-
-## クラス図
+## パターンの構造
 
 ```plantuml
 @startuml
@@ -67,7 +36,27 @@ CA --> B : creates
 @enduml
 ```
 
-## テスト
+## Clojure イディオム: キーワード dispatch
+
+```clojure
+(defmulti create-animal :type)
+
+(defmethod create-animal :dog [{:keys [name]}]
+  {:type :dog :name name :sound "Woof!" :legs 4})
+
+(defmethod create-animal :cat [{:keys [name]}]
+  {:type :cat :name name :sound "Meow!" :legs 4})
+
+(defmethod create-animal :bird [{:keys [name]}]
+  {:type :bird :name name :sound "Tweet!" :legs 2})
+
+(defmethod create-animal :default [{:keys [type name]}]
+  {:type type :name (or name "Unknown") :sound "..." :legs 0})
+```
+
+## TDD で作る
+
+### Red: 失敗するテストを書く
 
 ```clojure
 (deftest speak-test
@@ -75,6 +64,19 @@ CA --> B : creates
     (let [dog (create-animal {:type :dog :name "Rex"})]
       (is (= "Rex says: Woof!" (speak dog))))))
 ```
+
+### Green: 最小限の実装
+
+```clojure
+(defmulti create-animal :type)
+
+(defmethod create-animal :dog [{:keys [name]}]
+  {:type :dog :name name :sound "Woof!" :legs 4})
+```
+
+### Refactor
+
+`defmethod` を追加するだけで新しい生成対象を拡張できるので、Factory と開放閉鎖原則の相性が良くなります。
 
 ## まとめ
 

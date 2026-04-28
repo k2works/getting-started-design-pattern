@@ -1,33 +1,10 @@
 # 第 7 章 Command -- マップとクロージャで操作を具体化
 
-## パターンの意図
+## はじめに
 
-Command パターンは、リクエストをオブジェクトとしてカプセル化し、パラメータ化、キューイング、ログ記録、undo を可能にするパターンです。
+Command パターンは、操作をオブジェクト化して実行や取り消しを統一的に扱うパターンです。Clojure ではコマンドをマップとクロージャで表現できるため、軽量な実装に向いています。
 
-## Clojure での解釈
-
-コマンドをマップ `{:execute fn, :undo fn, :description str}` で表現します。クロージャが状態をキャプチャするため、コマンドオブジェクトの代わりにマップと関数で十分です。
-
-## 実装
-
-```clojure
-(defn make-command [description execute-fn undo-fn]
-  {:description description
-   :execute     execute-fn
-   :undo        undo-fn})
-
-(defn execute [cmd] ((:execute cmd)))
-(defn undo [cmd] ((:undo cmd)))
-
-;; コンポジットコマンド
-(defn composite-command [description commands]
-  (make-command
-    description
-    (fn [] (doseq [cmd commands] (execute cmd)))
-    (fn [] (doseq [cmd (reverse commands)] (undo cmd)))))
-```
-
-## クラス図
+## パターンの構造
 
 ```plantuml
 @startuml
@@ -52,7 +29,27 @@ H --> "*" C : tracks
 @enduml
 ```
 
-## テスト
+## Clojure イディオム: マップに操作を閉じ込める
+
+```clojure
+(defn make-command [description execute-fn undo-fn]
+  {:description description
+   :execute     execute-fn
+   :undo        undo-fn})
+
+(defn execute [cmd] ((:execute cmd)))
+(defn undo [cmd] ((:undo cmd)))
+
+(defn composite-command [description commands]
+  (make-command
+    description
+    (fn [] (doseq [cmd commands] (execute cmd)))
+    (fn [] (doseq [cmd (reverse commands)] (undo cmd)))))
+```
+
+## TDD で作る
+
+### Red: 失敗するテストを書く
 
 ```clojure
 (deftest command-history-test
@@ -65,6 +62,22 @@ H --> "*" C : tracks
       (undo-last! history)
       (is (= {"x.txt" "xxx"} @fs)))))
 ```
+
+### Green: 最小限の実装
+
+```clojure
+(defn make-command [description execute-fn undo-fn]
+  {:description description
+   :execute     execute-fn
+   :undo        undo-fn})
+
+(defn execute [cmd] ((:execute cmd)))
+(defn undo [cmd] ((:undo cmd)))
+```
+
+### Refactor
+
+複数コマンドの一括実行は `composite-command` に、履歴管理は `history` に分離すると責務が明確になります。
 
 ## まとめ
 

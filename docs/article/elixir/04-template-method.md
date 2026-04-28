@@ -1,10 +1,10 @@
 # 第 4 章 高階関数でアルゴリズムの骨格を定める — Template Method
 
-## パターンの目的
+## はじめに
 
 Template Method パターンは、アルゴリズムの骨格を定義し、一部のステップをサブクラスに委ねるパターンです。Elixir では高階関数と関数マップで同じことを実現します。
 
-## 構造
+## パターンの構造
 
 ```plantuml
 @startuml
@@ -39,7 +39,7 @@ TM --> MS : markdown_steps()
 @enduml
 ```
 
-## 実装
+## Elixir イディオム: 高階関数と関数マップ
 
 テンプレートメソッドは `generate_report/2` 関数で、各ステップを関数マップから取得します。
 
@@ -62,7 +62,9 @@ TemplateMethod.generate_report(data, TemplateMethod.html_steps())
 TemplateMethod.generate_report(data, TemplateMethod.markdown_steps())
 ```
 
-## テスト
+## TDD で作る
+
+### Red: 失敗するテストを書く
 
 ```elixir
 test "デフォルトのテンプレートでレポートを生成する" do
@@ -76,6 +78,14 @@ test "HTML 形式のテンプレートでレポートを生成する" do
   assert result =~ "<li>Alice</li>"
 end
 ```
+
+### Green: 最小限の実装
+
+`generate_report/2` を先に通し、`header`、`body`、`footer` の各ステップはデフォルト関数や差し替えマップへ委譲します。最初はデフォルトテンプレートだけを通し、HTML 形式は後から足して十分です。
+
+### Refactor
+
+ステップ関数をマップに閉じ込めておくと、一部だけ差し替えるテンプレートやフォーマット追加がしやすくなります。
 
 ## Elixir らしさ
 

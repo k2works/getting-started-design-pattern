@@ -71,7 +71,48 @@ it('And は両方の条件に一致するファイルを返す', () => {
 
 ### Green: 式の評価
 
-各 `Expression` サブクラスは `evaluate(dir)` でファイル名の配列を返します。`And` は左右の結果の交差、`Or` は和集合を返します。
+```typescript
+abstract class Expression {
+  abstract evaluate(dir: string): string[];
+
+  and(other: Expression): Expression {
+    return new And(this, other);
+  }
+
+  or(other: Expression): Expression {
+    return new Or(this, other);
+  }
+}
+
+class And extends Expression {
+  constructor(
+    private readonly left: Expression,
+    private readonly right: Expression
+  ) {
+    super();
+  }
+
+  evaluate(dir: string): string[] {
+    const left = new Set(this.left.evaluate(dir));
+    return this.right.evaluate(dir).filter(file => left.has(file));
+  }
+}
+
+class Or extends Expression {
+  constructor(
+    private readonly left: Expression,
+    private readonly right: Expression
+  ) {
+    super();
+  }
+
+  evaluate(dir: string): string[] {
+    return [...new Set([...this.left.evaluate(dir), ...this.right.evaluate(dir)])];
+  }
+}
+```
+
+最初は集合演算の核になる `And` / `Or` を実装し、個別条件はそこへ結果を返すだけの構造にします。
 
 ### Refactor
 
