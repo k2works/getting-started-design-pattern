@@ -149,6 +149,114 @@ import { tmpdir } from 'os';
 
 ---
 
+## 静的コード解析: ESLint
+
+### ESLint とは
+
+ESLint は JavaScript の静的解析ツールです。コーディングスタイルの違反やバグの可能性を検出し、一部は自動修正できます。本プロジェクトでは flat config 形式で設定します。
+
+### eslint.config.js の設定
+
+```javascript
+// eslint.config.js
+export default [
+  {
+    files: ["**/*.js"],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: "module",
+    },
+    rules: {
+      "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+      "no-undef": "error",
+      complexity: ["error", 7],
+      "no-var": "error",
+      "prefer-const": "error",
+      eqeqeq: ["error", "always"],
+    },
+  },
+  {
+    files: ["tests/**/*.js"],
+    languageOptions: {
+      globals: {
+        describe: "readonly",
+        it: "readonly",
+        expect: "readonly",
+        // ... Jest グローバル
+      },
+    },
+  },
+];
+```
+
+### 主要なルールの解説
+
+| ルール | 設定 | 説明 |
+|--------|------|------|
+| `no-unused-vars` | error | 未使用変数の検出（`_` 開始は除外） |
+| `no-undef` | error | 未定義変数の使用を禁止 |
+| `complexity` | Max: 7 | 循環的複雑度の上限 |
+| `prefer-const` | error | 再代入しない変数は `const` を使用 |
+| `eqeqeq` | always | `===` / `!==` の使用を強制 |
+
+### ESLint の実行
+
+```bash
+# 解析の実行
+npx eslint .
+
+# 自動修正
+npx eslint . --fix
+```
+
+---
+
+## コード複雑度のチェック
+
+### 循環的複雑度（Cyclomatic Complexity）
+
+循環的複雑度とは、コードがどれぐらい複雑であるかを関数単位で数値にして表す指標です。本プロジェクトでは **7 以下** に制限しています。
+
+| 複雑度の範囲 | 意味 |
+|-------------|------|
+| 1〜10 | 低複雑度: 管理しやすく、問題なし |
+| 11〜20 | 中程度の複雑度: リファクタリングを検討 |
+| 21〜50 | 高複雑度: リファクタリングが強く推奨される |
+| 51 以上 | 非常に高い複雑度: コードを分割する必要がある |
+
+---
+
+## 品質チェックの一括実行
+
+package.json に `check` スクリプトを追加して、ESLint + Jest を一括実行できます。
+
+```json
+{
+  "scripts": {
+    "lint": "eslint .",
+    "check": "eslint . && node --experimental-vm-modules node_modules/.bin/jest --verbose"
+  }
+}
+```
+
+```bash
+# 静的解析 + テストを一括実行
+npm run check
+```
+
+### 各言語の品質ツール比較
+
+| 用途 | Ruby | Java | TypeScript | Python |
+|------|------|------|-----------|--------|
+| パッケージ管理 | Bundler | Gradle | npm | uv |
+| テスト | minitest | JUnit 5 | Jest | pytest |
+| 静的解析 | RuboCop | Checkstyle + PMD | ESLint | Ruff |
+| フォーマッター | RuboCop | Checkstyle | Prettier | Ruff |
+| カバレッジ | SimpleCov | JaCoCo | @vitest/coverage-v8 | pytest-cov |
+| 複雑度チェック | RuboCop Metrics | Checkstyle CyclomaticComplexity | ESLint complexity | Ruff McCabe |
+
+---
+
 ## Ruby / Java / Python との比較
 
 | 観点 | Ruby | Java | Python | JavaScript |
@@ -169,4 +277,6 @@ import { tmpdir } from 'os';
 | **TDD サイクル** | Red → Green → Refactor を数分以内で回す |
 | **テスト構成** | `describe` / `it` / `expect` で意図を明確に |
 | **ES モジュール** | `"type": "module"` + `--experimental-vm-modules` |
+| **静的解析** | ESLint で静的解析・コード複雑度（循環的複雑度 7 以下）を自動チェックする |
+| **一括実行** | `npm run check` で静的解析 + テストを一括実行できる |
 | **次章から** | Template Method パターンを TDD で実装する |

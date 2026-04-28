@@ -4,7 +4,6 @@ import {
   DesktopBuilder,
   LaptopBuilder,
   Drive,
-  Motherboard,
 } from '../src/builder.js';
 
 describe('Builder パターン', () => {

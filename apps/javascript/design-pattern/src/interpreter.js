@@ -2,12 +2,12 @@
 // 文法規則をクラス階層で表現し、文を解釈・評価する
 
 import { statSync, readdirSync } from 'fs';
-import { join, basename } from 'path';
+import { join } from 'path';
 
 // --- 式の基底クラス ---
 
 export class Expression {
-  evaluate(dir) {
+  evaluate(_dir) {
     throw new Error('サブクラスで evaluate を実装してください');
   }
 }
