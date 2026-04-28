@@ -130,6 +130,115 @@ package "委譲（Strategy）" {
 | 結合度 | 高い | 低い |
 | 適用場面 | 骨格が固定、詳細が変化 | アルゴリズム全体が差し替え |
 
+---
+
+## 静的コード解析: ESLint + @typescript-eslint
+
+### ESLint + @typescript-eslint とは
+
+ESLint は JavaScript / TypeScript の静的解析ツールです。`@typescript-eslint` プラグインを組み合わせることで、TypeScript の型情報を活用した高度な解析が可能になります。
+
+### eslint.config.mjs の設定
+
+```javascript
+// eslint.config.mjs
+import tseslint from "@typescript-eslint/eslint-plugin";
+import tsparser from "@typescript-eslint/parser";
+
+export default [
+  {
+    files: ["**/*.ts"],
+    languageOptions: {
+      parser: tsparser,
+      parserOptions: {
+        ecmaVersion: 2022,
+        sourceType: "module",
+      },
+    },
+    plugins: {
+      "@typescript-eslint": tseslint,
+    },
+    rules: {
+      "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+      "@typescript-eslint/no-explicit-any": "warn",
+      complexity: ["error", 7],
+      "prefer-const": "error",
+      eqeqeq: ["error", "always"],
+    },
+  },
+];
+```
+
+### 主要なルールの解説
+
+| ルール | 設定 | 説明 |
+|--------|------|------|
+| `@typescript-eslint/no-unused-vars` | error | 未使用変数の検出（TypeScript 対応版） |
+| `@typescript-eslint/no-explicit-any` | warn | `any` 型の使用を警告 |
+| `complexity` | Max: 7 | 循環的複雑度の上限 |
+| `prefer-const` | error | 再代入しない変数は `const` を使用 |
+
+### ESLint の実行
+
+```bash
+# 解析の実行
+npx eslint .
+
+# 自動修正
+npx eslint . --fix
+```
+
+---
+
+## コード複雑度のチェック
+
+### 循環的複雑度（Cyclomatic Complexity）
+
+循環的複雑度とは、コードがどれぐらい複雑であるかを関数単位で数値にして表す指標です。本プロジェクトでは **7 以下** に制限しています。
+
+| 複雑度の範囲 | 意味 |
+|-------------|------|
+| 1〜10 | 低複雑度: 管理しやすく、問題なし |
+| 11〜20 | 中程度の複雑度: リファクタリングを検討 |
+| 21〜50 | 高複雑度: リファクタリングが強く推奨される |
+| 51 以上 | 非常に高い複雑度: コードを分割する必要がある |
+
+---
+
+## 品質チェックの一括実行
+
+package.json に `check` スクリプトを追加して、ESLint + Jest を一括実行できます。
+
+```json
+{
+  "scripts": {
+    "lint": "eslint .",
+    "check": "eslint . && jest --verbose"
+  }
+}
+```
+
+```bash
+# 静的解析 + テストを一括実行
+npm run check
+```
+
+### 各言語の品質ツール比較
+
+| 用途 | Ruby | Java | TypeScript | Python |
+|------|------|------|-----------|--------|
+| パッケージ管理 | Bundler | Gradle | npm | uv |
+| テスト | minitest | JUnit 5 | Jest | pytest |
+| 静的解析 | RuboCop | Checkstyle + PMD | ESLint + @typescript-eslint | Ruff |
+| フォーマッター | RuboCop | Checkstyle | Prettier | Ruff |
+| カバレッジ | SimpleCov | JaCoCo | @vitest/coverage-v8 | pytest-cov |
+| 複雑度チェック | RuboCop Metrics | Checkstyle CyclomaticComplexity | ESLint complexity | Ruff McCabe |
+
+---
+
 ## まとめ
 
 デザインパターンの本質は、変化する部分を見極め、それを安全にカプセル化することです。TypeScript では、`interface`、`abstract class`、Generics、関数型を使い分けることで、「変わるもの」と「変わらないもの」の境界を型レベルで明確に定義できます。この明確さが、保守性の高い設計につながります。
+
+- ESLint + @typescript-eslint で静的解析・コード複雑度（循環的複雑度 7 以下）を自動チェックする
+- `npm run check` で静的解析 + テストを一括実行できる

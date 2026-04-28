@@ -3,7 +3,6 @@ import {
   Frog,
   Tiger,
   WaterLily,
-  Tree,
   Pond,
   PondFactory,
   JungleFactory,
