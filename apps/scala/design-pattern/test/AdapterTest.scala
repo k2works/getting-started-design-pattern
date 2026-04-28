@@ -1,6 +1,7 @@
 package designpattern.adapter
 
 class AdapterSuite extends munit.FunSuite:
+
   test("BritishTextObjectAdapter が TextObject インターフェースを提供する") {
     val british = BritishTextObject()
     val adapter = BritishTextObjectAdapter(british)
@@ -28,7 +29,7 @@ class AdapterSuite extends munit.FunSuite:
   }
 
   test("TextObject trait を満たすことをコンパイル時に保証する") {
-    val british = BritishTextObject()
+    val british         = BritishTextObject()
     val obj: TextObject = BritishTextObjectAdapter(british)
 
     assert(obj.isInstanceOf[TextObject])

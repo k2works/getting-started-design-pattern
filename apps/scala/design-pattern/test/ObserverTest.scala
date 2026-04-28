@@ -1,9 +1,10 @@
 package designpattern.observer
 
 class ObserverSuite extends munit.FunSuite:
+
   test("給与変更時にオブザーバーに通知する") {
     val employee = Employee("田中", 50000)
-    val payroll = Payroll()
+    val payroll  = Payroll()
     employee.addObserver(payroll)
 
     employee.salary = 60000
@@ -15,8 +16,8 @@ class ObserverSuite extends munit.FunSuite:
 
   test("複数のオブザーバーに通知する") {
     val employee = Employee("佐藤", 40000)
-    val payroll = Payroll()
-    val taxMan = TaxMan()
+    val payroll  = Payroll()
+    val taxMan   = TaxMan()
     employee.addObserver(payroll)
     employee.addObserver(taxMan)
 
@@ -28,7 +29,7 @@ class ObserverSuite extends munit.FunSuite:
 
   test("オブザーバーを削除できる") {
     val employee = Employee("鈴木", 30000)
-    val payroll = Payroll()
+    val payroll  = Payroll()
     employee.addObserver(payroll)
     employee.removeObserver(payroll)
 

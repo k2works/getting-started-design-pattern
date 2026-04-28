@@ -10,6 +10,7 @@ case class Computer(
   gpu: Option[String] = None,
   display: Option[String] = None
 ):
+
   def describe: String =
     val parts = List(
       s"CPU: $cpu",
@@ -46,6 +47,7 @@ class ComputerBuilder:
 
 // ディレクタ: 定型構成を提供する
 object ComputerDirector:
+
   def gamingComputer: Computer =
     ComputerBuilder()
       .setCpu("Intel i9")

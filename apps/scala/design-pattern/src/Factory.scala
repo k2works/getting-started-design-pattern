@@ -14,19 +14,19 @@ trait Animal:
   def speak: String
 
 case class Tiger(name: String) extends Animal:
-  val legs: Int = 4
+  val legs: Int                = 4
   val habitatType: HabitatType = HabitatType.Land
-  val speak: String = "ガオー"
+  val speak: String            = "ガオー"
 
 case class Frog(name: String) extends Animal:
-  val legs: Int = 4
+  val legs: Int                = 4
   val habitatType: HabitatType = HabitatType.Amphibian
-  val speak: String = "ケロケロ"
+  val speak: String            = "ケロケロ"
 
 case class Duck(name: String) extends Animal:
-  val legs: Int = 2
+  val legs: Int                = 2
   val habitatType: HabitatType = HabitatType.Amphibian
-  val speak: String = "ガーガー"
+  val speak: String            = "ガーガー"
 
 // 植物の階層
 trait Plant:
@@ -46,16 +46,16 @@ trait OrganismFactory:
 
 object PondFactory extends OrganismFactory:
   def createAnimal(name: String): Animal = Frog(name)
-  def createPlant(name: String): Plant = Algae(name)
+  def createPlant(name: String): Plant   = Algae(name)
 
 object JungleFactory extends OrganismFactory:
   def createAnimal(name: String): Animal = Tiger(name)
-  def createPlant(name: String): Plant = WaterLily(name)
+  def createPlant(name: String): Plant   = WaterLily(name)
 
 // 環境クラス
 class Environment(factory: OrganismFactory):
   val animal: Animal = factory.createAnimal("生き物1")
-  val plant: Plant = factory.createPlant("植物1")
+  val plant: Plant   = factory.createPlant("植物1")
 
   def describe: String =
     s"${animal.name}が${animal.speak}と鳴き、${plant.name}が生えている"

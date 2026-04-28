@@ -1,6 +1,7 @@
 package designpattern.decorator
 
 class DecoratorSuite extends munit.FunSuite:
+
   test("SimpleWriter はそのまま出力する") {
     val writer = SimpleWriter()
     assertEquals(writer.writeLine("Hello"), "Hello")
@@ -33,6 +34,6 @@ class DecoratorSuite extends munit.FunSuite:
 
   test("writeLines で複数行を処理する") {
     val writer = NumberingWriter(SimpleWriter())
-    val lines = writer.writeLines(Seq("A", "B", "C"))
+    val lines  = writer.writeLines(Seq("A", "B", "C"))
     assertEquals(lines, Seq("1: A", "2: B", "3: C"))
   }

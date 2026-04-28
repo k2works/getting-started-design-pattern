@@ -1,6 +1,7 @@
 package designpattern.proxy
 
 class ProxySuite extends munit.FunSuite:
+
   test("RealBankAccount で預入・引出できる") {
     val account = RealBankAccount("田中")
     account.deposit(1000)
@@ -17,7 +18,7 @@ class ProxySuite extends munit.FunSuite:
   }
 
   test("ProtectionProxy は認証なしでアクセスを拒否する") {
-    val real = RealBankAccount("田中")
+    val real  = RealBankAccount("田中")
     val proxy = ProtectionProxy(real, "secret123")
 
     intercept[SecurityException] {
@@ -26,7 +27,7 @@ class ProxySuite extends munit.FunSuite:
   }
 
   test("ProtectionProxy は認証後にアクセスを許可する") {
-    val real = RealBankAccount("田中")
+    val real  = RealBankAccount("田中")
     val proxy = ProtectionProxy(real, "secret123")
 
     assert(proxy.authenticate("secret123"))
@@ -35,7 +36,7 @@ class ProxySuite extends munit.FunSuite:
   }
 
   test("ProtectionProxy は誤ったパスワードで認証に失敗する") {
-    val real = RealBankAccount("田中")
+    val real  = RealBankAccount("田中")
     val proxy = ProtectionProxy(real, "secret123")
 
     assert(!proxy.authenticate("wrong"))

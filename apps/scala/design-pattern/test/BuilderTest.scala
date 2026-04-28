@@ -1,6 +1,7 @@
 package designpattern.builder
 
 class BuilderSuite extends munit.FunSuite:
+
   test("Builder でコンピュータを構築する") {
     val computer = ComputerBuilder()
       .setCpu("Intel i7")
@@ -44,14 +45,14 @@ class BuilderSuite extends munit.FunSuite:
 
   test("describe でスペックを表示する") {
     val laptop = ComputerDirector.laptopComputer
-    val desc = laptop.describe
+    val desc   = laptop.describe
 
     assert(desc.contains("CPU: Apple M3"))
     assert(desc.contains("ディスプレイ: 14インチ Retina"))
   }
 
   test("case class の copy でイミュータブルに変更する") {
-    val base = ComputerDirector.officeComputer
+    val base     = ComputerDirector.officeComputer
     val upgraded = base.copy(memory = 32, gpu = Some("RTX 3060"))
 
     assertEquals(base.memory, 16)

@@ -155,6 +155,87 @@ def area(shape: Shape): Double = shape match
 
 ---
 
+## 静的コード解析: Scalafmt
+
+### Scalafmt とは
+
+Scalafmt は Scala のコードフォーマッターです。Scala CLI に組み込まれており、`scala-cli fmt` コマンドで実行できます。コーディングスタイルを統一し、レビューでのフォーマット議論を排除します。
+
+### .scalafmt.conf の設定
+
+```hocon
+# .scalafmt.conf
+version = "3.10.2"
+runner.dialect = scala3
+maxColumn = 120
+indent.main = 2
+indent.callSite = 2
+indent.defnSite = 2
+align.preset = more
+rewrite.rules = [SortModifiers, PreferCurlyFors]
+newlines.topLevelStatementBlankLines = [
+  { blanks = 1 }
+]
+```
+
+### 主要な設定の解説
+
+| 設定 | 値 | 説明 |
+|------|------|------|
+| `runner.dialect` | scala3 | Scala 3 構文に対応 |
+| `maxColumn` | 120 | 1 行の最大文字数 |
+| `indent.main` | 2 | インデント幅 |
+| `align.preset` | more | 代入・矢印の整列 |
+| `rewrite.rules` | SortModifiers, PreferCurlyFors | 修飾子の並び替え、for 式の波括弧化 |
+
+### Scalafmt の実行
+
+```bash
+# フォーマットの実行
+scala-cli fmt .
+
+# フォーマット違反のチェック（CI 向け）
+scala-cli fmt --check .
+```
+
+---
+
+## コード複雑度のチェック
+
+Scala では Scalafmt がフォーマットを担当し、コンパイラの型チェックが多くの品質問題を検出します。追加の静的解析として、以下の方法があります。
+
+| 手法 | 説明 |
+|------|------|
+| コンパイラ警告 | `-Wunused`, `-deprecation` 等で潜在的問題を検出 |
+| Scalafmt | コードスタイルの一貫性を保証 |
+| 型システム | コンパイル時に型安全性を保証 |
+
+Scala 3 の型システムは非常に強力で、多くの実行時エラーをコンパイル時に検出できます。これは他の動的型付け言語における静的解析ツールの役割を、言語自体が担っていることを意味します。
+
+---
+
+## 品質チェックの一括実行
+
+フォーマットチェックとテストを一括で実行するコマンドです。
+
+```bash
+# フォーマットチェック + テスト
+scala-cli fmt --check . && scala-cli test .
+```
+
+### 各言語の品質ツール比較
+
+| 用途 | Scala | Ruby | Java | TypeScript | Python |
+|------|-------|------|------|-----------|--------|
+| パッケージ管理 | Scala CLI | Bundler | Gradle | npm | uv |
+| テスト | munit | minitest | JUnit 5 | Jest | pytest |
+| 静的解析 | Scalafmt + コンパイラ | RuboCop | Checkstyle + PMD | ESLint | Ruff |
+| フォーマッター | Scalafmt | RuboCop | Checkstyle | Prettier | Ruff |
+| カバレッジ | scoverage | SimpleCov | JaCoCo | @vitest/coverage-v8 | pytest-cov |
+| 複雑度チェック | コンパイラ + WartRemover | RuboCop Metrics | PMD | ESLint complexity | Ruff McCabe |
+
+---
+
 ## まとめ
 
 | 観点 | 内容 |
@@ -162,4 +243,6 @@ def area(shape: Shape): Double = shape match
 | **ビルドツール** | Scala CLI（軽量、設定最小限） |
 | **テストフレームワーク** | munit（シンプル、Scala 3 対応） |
 | **TDD サイクル** | Red → Green → Refactor を数分以内で回す |
+| **静的解析** | Scalafmt でフォーマット統一、コンパイラの型チェックで安全性保証 |
+| **品質チェック** | `scala-cli fmt --check . && scala-cli test .` で一括実行 |
 | **Scala 3 の武器** | trait, enum, 拡張メソッド, given/using, パターンマッチ |

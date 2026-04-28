@@ -3,6 +3,7 @@ package designpattern.interpreter
 import Expression.*
 
 class InterpreterSuite extends munit.FunSuite:
+
   val files = List(
     FileEntry("report.txt", 1000),
     FileEntry("photo.jpg", 5000),
@@ -33,13 +34,13 @@ class InterpreterSuite extends munit.FunSuite:
   }
 
   test("And で条件を組み合わせる") {
-    val expr = And(FileName("*.txt"), Bigger(3000))
+    val expr   = And(FileName("*.txt"), Bigger(3000))
     val result = Expression.evaluate(expr, files)
     assertEquals(result.map(_.name), List("backup.txt"))
   }
 
   test("Or で条件を結合する") {
-    val expr = Or(FileName("*.jpg"), FileName("*.md"))
+    val expr   = Or(FileName("*.jpg"), FileName("*.md"))
     val result = Expression.evaluate(expr, files)
     assertEquals(result.map(_.name), List("photo.jpg", "readme.md"))
   }

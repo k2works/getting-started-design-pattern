@@ -1,11 +1,13 @@
 package designpattern.iterator
 
 class IteratorSuite extends munit.FunSuite:
+
   val accounts = List(
     Account("普通預金", 1000.0),
     Account("定期預金", 5000.0),
     Account("投資信託", 3000.0)
   )
+
   val portfolio = Portfolio(accounts)
 
   test("for 式でイテレーションできる") {

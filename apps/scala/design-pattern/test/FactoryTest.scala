@@ -1,9 +1,10 @@
 package designpattern.factory
 
 class FactorySuite extends munit.FunSuite:
+
   test("PondFactory がカエルと藻を生成する") {
     val animal = PondFactory.createAnimal("カエル太郎")
-    val plant = PondFactory.createPlant("池の藻")
+    val plant  = PondFactory.createPlant("池の藻")
 
     assert(animal.isInstanceOf[Frog])
     assertEquals(animal.name, "カエル太郎")
@@ -15,7 +16,7 @@ class FactorySuite extends munit.FunSuite:
 
   test("JungleFactory がトラとスイレンを生成する") {
     val animal = JungleFactory.createAnimal("虎之助")
-    val plant = JungleFactory.createPlant("森のスイレン")
+    val plant  = JungleFactory.createPlant("森のスイレン")
 
     assert(animal.isInstanceOf[Tiger])
     assertEquals(animal.name, "虎之助")

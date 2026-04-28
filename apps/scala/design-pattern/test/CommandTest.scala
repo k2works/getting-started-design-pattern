@@ -1,6 +1,7 @@
 package designpattern.command
 
 class CommandSuite extends munit.FunSuite:
+
   test("InsertCommand でテキストを挿入する") {
     val doc = SliderDocument()
     val cmd = InsertCommand(doc, 0, "Hello")
@@ -33,7 +34,7 @@ class CommandSuite extends munit.FunSuite:
   }
 
   test("CompositeCommand で複数のコマンドを一括実行する") {
-    val doc = SliderDocument()
+    val doc      = SliderDocument()
     val commands = List(
       InsertCommand(doc, 0, "A"),
       InsertCommand(doc, 1, "B"),
@@ -46,7 +47,7 @@ class CommandSuite extends munit.FunSuite:
   }
 
   test("CommandHistory で undo を管理する") {
-    val doc = SliderDocument()
+    val doc     = SliderDocument()
     val history = CommandHistory()
 
     history.executeCommand(InsertCommand(doc, 0, "A"))

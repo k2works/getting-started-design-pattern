@@ -22,8 +22,7 @@ class RealBankAccount(owner: String, private var _balance: Double = 0.0) extends
     if _balance >= amount then
       _balance -= amount
       true
-    else
-      false
+    else false
 
 // 保護プロキシ（アクセス制御）
 class ProtectionProxy(realAccount: BankAccount, password: String) extends BankAccount:
@@ -46,21 +45,19 @@ class ProtectionProxy(realAccount: BankAccount, password: String) extends BankAc
     realAccount.balance
 
   private def requireAuth(): Unit =
-    if !authenticated then
-      throw SecurityException("認証が必要です")
+    if !authenticated then throw SecurityException("認証が必要です")
 
 // バーチャルプロキシ（遅延初期化）
 class VirtualProxy(owner: String) extends BankAccount:
   lazy val realAccount: RealBankAccount = RealBankAccount(owner)
 
-  override def deposit(amount: Double): Unit = realAccount.deposit(amount)
+  override def deposit(amount: Double): Unit     = realAccount.deposit(amount)
   override def withdraw(amount: Double): Boolean = realAccount.withdraw(amount)
-  override def balance: Double = realAccount.balance
+  override def balance: Double                   = realAccount.balance
 
   def isInitialized: Boolean =
     // lazy val が初期化済みかどうかを反映
     try
       realAccount
       true
-    catch
-      case _: Exception => false
+    catch case _: Exception => false

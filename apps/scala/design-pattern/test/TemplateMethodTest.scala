@@ -1,6 +1,7 @@
 package designpattern.templatemethod
 
 class TemplateMethodSuite extends munit.FunSuite:
+
   test("HtmlReport が HTML 形式で出力する") {
     val report = HtmlReport()
     val output = report.outputReport()

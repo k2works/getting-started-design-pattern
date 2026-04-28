@@ -20,6 +20,7 @@ object Logger:
 
 // object でシングルトンが保証されることを示すクラス
 object AppConfig:
+
   private var _settings: Map[String, String] = Map(
     "appName" -> "DesignPatterns",
     "version" -> "1.0.0",

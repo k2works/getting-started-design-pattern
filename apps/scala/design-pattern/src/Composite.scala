@@ -8,8 +8,10 @@ enum Task:
   case Composite(name: String, children: List[Task])
 
 object Task:
+
   // 拡張メソッド
   extension (task: Task)
+
     def getTimeRequired: Double = task match
       case Task.Leaf(_, duration)      => duration
       case Task.Composite(_, children) => children.map(_.getTimeRequired).sum
@@ -24,4 +26,4 @@ object Task:
 
     def addChild(child: Task): Task = task match
       case Task.Composite(name, children) => Task.Composite(name, children :+ child)
-      case leaf: Task.Leaf => throw IllegalArgumentException("Leaf にはサブタスクを追加できません")
+      case leaf: Task.Leaf                => throw IllegalArgumentException("Leaf にはサブタスクを追加できません")

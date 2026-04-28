@@ -1,6 +1,7 @@
 package designpattern.singleton
 
 class SingletonSuite extends munit.FunSuite:
+
   override def beforeEach(context: BeforeEach): Unit =
     Logger.clear()
     AppConfig.reset()

@@ -1,6 +1,7 @@
 package designpattern.strategy
 
 class StrategySuite extends munit.FunSuite:
+
   test("HTML フォーマッタでレポートを出力する") {
     val report = Report()
     val output = report.outputReport()
@@ -20,8 +21,7 @@ class StrategySuite extends munit.FunSuite:
   }
 
   test("ラムダ式でカスタムフォーマッタを渡す") {
-    val csvFormatter: Formatter = (title, text) =>
-      (title +: text).mkString(",")
+    val csvFormatter: Formatter = (title, text) => (title +: text).mkString(",")
 
     val report = Report(formatter = csvFormatter)
     val output = report.outputReport()

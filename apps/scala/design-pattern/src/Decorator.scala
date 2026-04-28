@@ -6,6 +6,7 @@ package designpattern.decorator
 // コンポーネントインターフェース
 trait Writer:
   def writeLine(line: String): String
+
   def writeLines(lines: Seq[String]): Seq[String] =
     lines.map(writeLine)
 
@@ -28,12 +29,14 @@ class NumberingWriter(protected val wrapped: Writer) extends WriterDecorator:
 
 // タイムスタンプ付与デコレータ
 class TimestampWriter(protected val wrapped: Writer, timestamp: String = "2024-01-01") extends WriterDecorator:
+
   override def writeLine(line: String): String =
     s"[$timestamp] ${wrapped.writeLine(line)}"
 
 // チェックサム付与デコレータ
 class CheckSumWriter(protected val wrapped: Writer) extends WriterDecorator:
+
   override def writeLine(line: String): String =
-    val base = wrapped.writeLine(line)
+    val base     = wrapped.writeLine(line)
     val checksum = base.hashCode.toHexString
     s"$base [checksum: $checksum]"

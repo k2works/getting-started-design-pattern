@@ -15,10 +15,11 @@ enum Expression:
   case Or(left: Expression, right: Expression)
 
 object Expression:
+
   // 評価: ファイルリストをフィルタリングする
   def evaluate(expr: Expression, files: List[FileEntry]): List[FileEntry] =
     expr match
-      case All => files
+      case All               => files
       case FileName(pattern) =>
         files.filter(f => f.name.matches(pattern.replace("*", ".*")))
       case Bigger(size) =>
@@ -27,11 +28,11 @@ object Expression:
         val matched = evaluate(e, files).toSet
         files.filterNot(matched.contains)
       case And(left, right) =>
-        val leftResult = evaluate(left, files).toSet
+        val leftResult  = evaluate(left, files).toSet
         val rightResult = evaluate(right, files).toSet
         files.filter(f => leftResult.contains(f) && rightResult.contains(f))
       case Or(left, right) =>
-        val leftResult = evaluate(left, files).toSet
+        val leftResult  = evaluate(left, files).toSet
         val rightResult = evaluate(right, files).toSet
         files.filter(f => leftResult.contains(f) || rightResult.contains(f))
 
