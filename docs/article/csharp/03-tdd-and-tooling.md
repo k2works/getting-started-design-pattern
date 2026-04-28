@@ -132,8 +132,131 @@ dotnet test --verbosity normal
 
 ---
 
+## 静的コード解析: dotnet format
+
+.NET SDK には `dotnet format` というコード整形・解析ツールが標準搭載されています。外部パッケージのインストールは不要です。
+
+### dotnet format とは
+
+`dotnet format` は `.editorconfig` のルールに基づいてコードスタイルをチェック・修正します。
+
+```bash
+# フォーマット違反がないか検証（CI 向け）
+dotnet format --verify-no-changes
+
+# 自動修正
+dotnet format
+
+# 特定の診断のみチェック
+dotnet format --diagnostics IDE0005
+```
+
+### .editorconfig の設定
+
+プロジェクトルートに `.editorconfig` を配置します。
+
+```ini
+root = true
+
+[*.cs]
+# インデント
+indent_style = space
+indent_size = 4
+
+# 改行
+end_of_line = lf
+insert_final_newline = true
+charset = utf-8
+
+# C# コーディング規約
+dotnet_sort_system_directives_first = true
+csharp_new_line_before_open_brace = all
+csharp_new_line_before_else = true
+csharp_new_line_before_catch = true
+csharp_new_line_before_finally = true
+
+# var の使用
+csharp_style_var_for_built_in_types = false:suggestion
+csharp_style_var_when_type_is_apparent = true:suggestion
+
+# 不要な using の警告
+dotnet_diagnostic.IDE0005.severity = warning
+```
+
+### 主な診断ルール
+
+| 診断 ID | 説明 |
+|---------|------|
+| IDE0001 | 名前の簡略化 |
+| IDE0003 | `this.` の不要な修飾 |
+| IDE0005 | 不要な `using` ディレクティブ |
+| IDE0055 | フォーマットの修正 |
+| IDE0161 | ファイルスコープの名前空間 |
+
+---
+
+## コード複雑度のチェック
+
+.NET のコード解析には Roslyn アナライザーが利用できます。`dotnet format` と組み合わせることで、複雑度のチェックも可能です。
+
+主要な複雑度関連の診断:
+
+| 診断 | 説明 |
+|------|------|
+| CA1502 | 循環的複雑度が高すぎるメソッド |
+| CA1505 | 保守性の低いコード |
+| CA1506 | クラスの結合度が高すぎる |
+
+`.editorconfig` に以下を追加することで有効化できます:
+
+```ini
+dotnet_diagnostic.CA1502.severity = warning
+```
+
+---
+
+## 品質チェックの一括実行
+
+`dotnet format` と `dotnet test` を組み合わせて品質チェックを一括実行します。
+
+```bash
+# format チェック + テスト
+dotnet format --verify-no-changes && dotnet test
+```
+
+Makefile を使う場合:
+
+```makefile
+.PHONY: format test check
+
+format:
+	dotnet format --verify-no-changes
+
+test:
+	dotnet test
+
+check: format test
+```
+
+---
+
+## 各言語の品質ツール比較
+
+| 用途 | C# | Ruby | Java | TypeScript | Python |
+|------|-----|------|------|-----------|--------|
+| 静的解析 | dotnet format + Roslyn | RuboCop | Checkstyle + PMD | ESLint | Ruff |
+| フォーマッター | dotnet format | RuboCop | Checkstyle | Prettier | Ruff |
+| カバレッジ | dotnet test + coverlet | SimpleCov | JaCoCo | @vitest/coverage-v8 | pytest-cov |
+| 複雑度チェック | Roslyn CA1502 | RuboCop Metrics | PMD | ESLint complexity | Ruff McCabe |
+| 一括実行 | `dotnet format && dotnet test` | `rake check` | `./gradlew check` | `npm run lint && npm test` | `ruff check && pytest` |
+
+**C# の特徴**: `dotnet format` と Roslyn アナライザーが .NET SDK に統合されており、`.editorconfig` で一元的にルールを管理できます。
+
+---
+
 ## まとめ
 
 - xUnit を使い、`[Fact]` 属性でテストを記述する
 - Red-Green-Refactor の TDD サイクルに従ってパターンを実装する
 - `dotnet test` でテストを実行し、継続的にフィードバックを得る
+- `dotnet format` で `.editorconfig` に基づくコードスタイルをチェック・自動修正する
