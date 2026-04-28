@@ -1,7 +1,7 @@
-/// Interpreter pattern
-///
-/// A mini DSL for searching files in a directory.
-/// Expression trees are built and evaluated against a filesystem path.
+//! Interpreter pattern
+//!
+//! A mini DSL for searching files in a directory.
+//! Expression trees are built and evaluated against a filesystem path.
 
 use std::fs;
 use std::path::Path;
@@ -25,6 +25,7 @@ impl Expression {
         Expression::Or(Box::new(self), Box::new(other))
     }
 
+    #[allow(clippy::should_implement_trait)]
     pub fn not(self) -> Expression {
         Expression::Not(Box::new(self))
     }
@@ -40,11 +41,10 @@ pub fn evaluate(expr: &Expression, dir: &Path) -> Vec<String> {
 
     for entry in entries.flatten() {
         let path = entry.path();
-        if path.is_file() && matches_expr(expr, &path) {
-            if let Some(name) = path.file_name() {
+        if path.is_file() && matches_expr(expr, &path)
+            && let Some(name) = path.file_name() {
                 results.push(name.to_string_lossy().to_string());
             }
-        }
     }
 
     results.sort();

@@ -1,6 +1,6 @@
-/// Decorator pattern
-///
-/// Wraps a Writer to add numbering or timestamps to each line.
+//! Decorator pattern
+//!
+//! Wraps a Writer to add numbering or timestamps to each line.
 
 pub trait Writer {
     fn write_line(&mut self, line: &str);

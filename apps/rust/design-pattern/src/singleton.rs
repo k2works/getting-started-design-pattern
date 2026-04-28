@@ -1,6 +1,6 @@
-/// Singleton pattern
-///
-/// Uses std::sync::OnceLock to provide a globally shared Logger instance.
+//! Singleton pattern
+//!
+//! Uses std::sync::OnceLock to provide a globally shared Logger instance.
 
 use std::sync::{Mutex, OnceLock};
 

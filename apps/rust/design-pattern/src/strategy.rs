@@ -1,19 +1,22 @@
-/// Strategy pattern
-///
-/// Encapsulates formatting algorithms as closures,
-/// allowing them to be swapped at runtime.
+//! Strategy pattern
+//!
+//! Encapsulates formatting algorithms as closures,
+//! allowing them to be swapped at runtime.
+
+/// Type alias for the formatter closure.
+pub type Formatter = Box<dyn Fn(&str, &[String]) -> String>;
 
 pub struct Report {
     pub title: String,
     pub lines: Vec<String>,
-    pub formatter: Box<dyn Fn(&str, &[String]) -> String>,
+    pub formatter: Formatter,
 }
 
 impl Report {
     pub fn new(
         title: &str,
         lines: Vec<String>,
-        formatter: Box<dyn Fn(&str, &[String]) -> String>,
+        formatter: Formatter,
     ) -> Self {
         Self {
             title: title.to_string(),
@@ -26,12 +29,12 @@ impl Report {
         (self.formatter)(&self.title, &self.lines)
     }
 
-    pub fn set_formatter(&mut self, formatter: Box<dyn Fn(&str, &[String]) -> String>) {
+    pub fn set_formatter(&mut self, formatter: Formatter) {
         self.formatter = formatter;
     }
 }
 
-pub fn html_formatter() -> Box<dyn Fn(&str, &[String]) -> String> {
+pub fn html_formatter() -> Formatter {
     Box::new(|title, lines| {
         let mut result = String::from("<html>\n<body>\n");
         result.push_str(&format!("  <h1>{}</h1>\n", title));
@@ -43,7 +46,7 @@ pub fn html_formatter() -> Box<dyn Fn(&str, &[String]) -> String> {
     })
 }
 
-pub fn plain_text_formatter() -> Box<dyn Fn(&str, &[String]) -> String> {
+pub fn plain_text_formatter() -> Formatter {
     Box::new(|title, lines| {
         let mut result = format!("=== {} ===\n", title);
         for line in lines {

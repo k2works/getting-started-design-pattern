@@ -1,7 +1,7 @@
-/// Adapter pattern
-///
-/// Adapts a BritishTextObject (using centimetres and colour)
-/// to a TextObject interface (using inches and color).
+//! Adapter pattern
+//!
+//! Adapts a BritishTextObject (using centimetres and colour)
+//! to a TextObject interface (using inches and color).
 
 pub trait TextObject {
     fn text(&self) -> String;

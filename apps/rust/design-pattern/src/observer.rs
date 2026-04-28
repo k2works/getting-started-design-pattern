@@ -1,12 +1,15 @@
-/// Observer pattern
-///
-/// Employee notifies registered observers when salary changes.
-/// Observers are stored as boxed closures.
+//! Observer pattern
+//!
+//! Employee notifies registered observers when salary changes.
+//! Observers are stored as boxed closures.
+
+/// Type alias for observer callbacks.
+type Observer = Box<dyn FnMut(&str, i64)>;
 
 pub struct Employee {
     pub name: String,
     salary: i64,
-    observers: Vec<Box<dyn FnMut(&str, i64)>>,
+    observers: Vec<Observer>,
 }
 
 impl Employee {

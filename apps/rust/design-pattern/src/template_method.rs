@@ -1,7 +1,7 @@
-/// Template Method pattern
-///
-/// Defines the skeleton of an algorithm in a trait method,
-/// deferring some steps to implementors.
+//! Template Method pattern
+//!
+//! Defines the skeleton of an algorithm in a trait method,
+//! deferring some steps to implementors.
 
 pub trait ReportFormatter {
     fn title(&self) -> &str;

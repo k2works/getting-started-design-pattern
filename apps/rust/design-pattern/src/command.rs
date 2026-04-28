@@ -1,7 +1,7 @@
-/// Command pattern
-///
-/// Encapsulates operations as objects that can be executed and undone.
-/// Uses the filesystem for create/delete demonstrations in tests.
+//! Command pattern
+//!
+//! Encapsulates operations as objects that can be executed and undone.
+//! Uses the filesystem for create/delete demonstrations in tests.
 
 use std::fs;
 use std::path::{Path, PathBuf};

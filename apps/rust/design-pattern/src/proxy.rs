@@ -1,7 +1,7 @@
-/// Proxy pattern
-///
-/// Protection Proxy: restricts access based on owner identity.
-/// Virtual Proxy: delays creation of the real object until first use.
+//! Proxy pattern
+//!
+//! Protection Proxy: restricts access based on owner identity.
+//! Virtual Proxy: delays creation of the real object until first use.
 
 pub trait BankAccount {
     fn deposit(&mut self, amount: i64);
