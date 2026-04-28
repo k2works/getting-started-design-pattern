@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative "../../test/test_helper"
-require_relative "../lib/builder"
+require_relative '../../test/test_helper'
+require_relative '../lib/builder'
 
 class DesktopBuilderTest < Minitest::Test
   def test_build_desktop_with_turbo_cd_dvd_hard_disk
@@ -18,7 +18,7 @@ class DesktopBuilderTest < Minitest::Test
     assert_instance_of TurboCPU, computer.motherboard.cpu
     assert_equal 1024, computer.motherboard.memory_size
     assert_equal 3, computer.drives.size
-    assert_equal [:cd, :dvd, :hard_disk], computer.drives.map(&:type)
+    assert_equal %i[cd dvd hard_disk], computer.drives.map(&:type)
   end
 
   def test_build_basic_desktop

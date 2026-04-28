@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "observer"
+require 'observer'
 
 # 従業員クラス（Observer パターン - Subject）
 #

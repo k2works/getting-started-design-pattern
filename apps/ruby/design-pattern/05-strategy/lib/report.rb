@@ -11,7 +11,7 @@ module Strategy
 
     def initialize(&formatter)
       @title = "\u6708\u6b21\u5831\u544a"
-      @text = ["\u9806\u8abf", "\u6700\u9ad8\u306e\u8abf\u5b50"]
+      @text = %w[順調 最高の調子]
       @formatter = formatter
     end
 

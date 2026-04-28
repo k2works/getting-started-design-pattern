@@ -7,8 +7,8 @@ module TemplateMethod
   # サブクラスが各ステップ（フックメソッド）をオーバーライドする。
   class Report
     def initialize
-      @title = "月次報告"
-      @text = ["順調", "最高の調子"]
+      @title = '月次報告'
+      @text = %w[順調 最高の調子]
     end
 
     # テンプレートメソッド: レポート出力の骨格
@@ -38,7 +38,7 @@ module TemplateMethod
 
     # 抽象メソッド: サブクラスでオーバーライド必須
     def output_line(_line)
-      raise NotImplementedError, "サブクラスで output_line を実装してください"
+      raise NotImplementedError, 'サブクラスで output_line を実装してください'
     end
 
     def output_body_end; end

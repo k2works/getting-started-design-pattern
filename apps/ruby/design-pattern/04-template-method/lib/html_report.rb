@@ -1,22 +1,22 @@
 # frozen_string_literal: true
 
-require_relative "report"
+require_relative 'report'
 
 module TemplateMethod
   # HTML 形式のレポート出力
   class HtmlReport < Report
     def output_start
-      puts("<html>")
+      puts('<html>')
     end
 
     def output_head
-      puts(" <head>")
+      puts(' <head>')
       puts(" <title>#{@title}</title>")
-      puts(" </head>")
+      puts(' </head>')
     end
 
     def output_body_start
-      puts("<body>")
+      puts('<body>')
     end
 
     def output_line(line)
@@ -24,11 +24,11 @@ module TemplateMethod
     end
 
     def output_body_end
-      puts("</body>")
+      puts('</body>')
     end
 
     def output_end
-      puts("</html>")
+      puts('</html>')
     end
   end
 end

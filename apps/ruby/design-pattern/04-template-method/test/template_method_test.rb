@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require_relative "../../test/test_helper"
-require_relative "../lib/html_report"
-require_relative "../lib/plain_text_report"
+require_relative '../../test/test_helper'
+require_relative '../lib/html_report'
+require_relative '../lib/plain_text_report'
 
 class TemplateMethodTest < Minitest::Test
   def test_html_report_output

@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require "forwardable"
+require 'forwardable'
 
 # シンプルライター（Component）
 class SimpleWriter
   def initialize(path)
-    @file = File.open(path, "w")
+    @file = File.open(path, 'w')
   end
 
   def write_line(line)
@@ -40,7 +40,7 @@ end
 # 行番号付きデコレーター
 class NumberingWriter < WriterDecorator
   def initialize(real_writer)
-    super(real_writer)
+    super
     @line_number = 1
   end
 

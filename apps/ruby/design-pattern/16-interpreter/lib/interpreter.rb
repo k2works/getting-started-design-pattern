@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "find"
+require 'find'
 
 # 式の基底クラス
 class Expression
@@ -121,23 +121,23 @@ class Parser
   def parse_expression
     token = next_token
     case token
-    when "and"
+    when 'and'
       And.new(parse_expression, parse_expression)
-    when "or"
+    when 'or'
       Or.new(parse_expression, parse_expression)
-    when "not"
+    when 'not'
       Not.new(parse_expression)
-    when "bigger"
+    when 'bigger'
       Bigger.new(next_token.to_i)
-    when "filename"
+    when 'filename'
       FileName.new(next_token)
-    when "writable"
+    when 'writable'
       Writable.new
-    when "all"
+    when 'all'
       All.new
-    when "("
+    when '('
       expr = parse_expression
-      expect(")")
+      expect(')')
       expr
     else
       raise "Unexpected token: #{token}"

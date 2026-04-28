@@ -31,7 +31,7 @@ class CompositeCommand < Command
   end
 
   def description
-    @commands.map(&:description).join("\n") + "\n"
+    "#{@commands.map(&:description).join("\n")}\n"
   end
 end
 
@@ -48,7 +48,7 @@ class CreateFile < Command
   end
 
   def unexecute
-    File.delete(@path) if File.exist?(@path)
+    FileUtils.rm_f(@path)
   end
 end
 
@@ -61,7 +61,7 @@ class DeleteFile < Command
 
   def execute
     @contents = File.read(@path) if File.exist?(@path)
-    File.delete(@path) if File.exist?(@path)
+    FileUtils.rm_f(@path)
   end
 
   def unexecute

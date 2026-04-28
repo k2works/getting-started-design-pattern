@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative "../../test/test_helper"
-require_relative "../lib/proxy"
+require_relative '../../test/test_helper'
+require_relative '../lib/proxy'
 
 class ProxyTest < Minitest::Test
   def test_bank_account_operations
@@ -13,7 +13,7 @@ class ProxyTest < Minitest::Test
 
   def test_protection_proxy_blocks_unauthorized
     account = BankAccount.new(100)
-    proxy = AccountProtectionProxy.new(account, "unauthorized_user")
+    proxy = AccountProtectionProxy.new(account, 'unauthorized_user')
 
     assert_raises(RuntimeError) { proxy.deposit(50) }
   end

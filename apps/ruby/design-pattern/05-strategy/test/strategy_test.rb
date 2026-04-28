@@ -1,20 +1,20 @@
 # frozen_string_literal: true
 
-require_relative "../../test/test_helper"
-require_relative "../lib/report"
+require_relative '../../test/test_helper'
+require_relative '../lib/report'
 
 class StrategyTest < Minitest::Test
   HTML_FORMATTER = lambda { |context|
-    puts("<html>")
-    puts("  <head>")
+    puts('<html>')
+    puts('  <head>')
     puts("    <title>#{context.title}</title>")
-    puts("  </head>")
-    puts("  <body>")
+    puts('  </head>')
+    puts('  <body>')
     context.text.each do |line|
       puts("     <p>#{line}</p>")
     end
-    puts("  </body>")
-    puts("</html>")
+    puts('  </body>')
+    puts('</html>')
   }
 
   def test_html_report_with_lambda

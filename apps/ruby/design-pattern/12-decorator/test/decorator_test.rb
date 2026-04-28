@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative "../../test/test_helper"
-require_relative "../lib/decorator"
+require_relative '../../test/test_helper'
+require_relative '../lib/decorator'
 
 class DecoratorTest < Minitest::Test
   def setup
@@ -9,12 +9,12 @@ class DecoratorTest < Minitest::Test
   end
 
   def teardown
-    File.delete(@path) if File.exist?(@path)
+    FileUtils.rm_f(@path)
   end
 
   def test_simple_writer
     writer = SimpleWriter.new(@path)
-    writer.write_line("Hello")
+    writer.write_line('Hello')
     writer.close
 
     assert_equal "Hello\n", File.read(@path)
@@ -22,8 +22,8 @@ class DecoratorTest < Minitest::Test
 
   def test_numbering_writer
     writer = NumberingWriter.new(SimpleWriter.new(@path))
-    writer.write_line("Hello")
-    writer.write_line("World")
+    writer.write_line('Hello')
+    writer.write_line('World')
     writer.close
 
     assert_equal "1: Hello\n2: World\n", File.read(@path)
@@ -35,7 +35,7 @@ class DecoratorTest < Minitest::Test
         SimpleWriter.new(@path)
       )
     )
-    writer.write_line("Hello")
+    writer.write_line('Hello')
     writer.close
 
     content = File.read(@path)
@@ -45,8 +45,8 @@ class DecoratorTest < Minitest::Test
   def test_module_based_decorator
     writer = SimpleWriter.new(@path)
     writer.extend(NumberingWriterModule)
-    writer.write_line("Hello")
-    writer.write_line("World")
+    writer.write_line('Hello')
+    writer.write_line('World')
     writer.close
 
     assert_equal "1: Hello\n2: World\n", File.read(@path)

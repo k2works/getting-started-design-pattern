@@ -3,21 +3,21 @@
 # CPU 基底クラス
 class CPU
   def to_s
-    "CPU"
+    'CPU'
   end
 end
 
 # 基本 CPU
 class BasicCPU < CPU
   def to_s
-    "BasicCPU"
+    'BasicCPU'
   end
 end
 
 # ターボ CPU
 class TurboCPU < CPU
   def to_s
-    "TurboCPU"
+    'TurboCPU'
   end
 end
 
@@ -61,9 +61,7 @@ class ComputerBuilder
     @turbo = has_turbo
   end
 
-  def memory_size=(size)
-    @memory_size = size
-  end
+  attr_writer :memory_size
 
   def add_cd(writable = false)
     @drives << Drive.new(:cd, 760, writable)
@@ -89,7 +87,7 @@ class ComputerBuilder
   def validate!
     raise "Not enough memory: #{@memory_size}" if @memory_size < 250
     raise "Too many drives: #{@drives.size}" if @drives.size > 4
-    raise "Must have at least one hard disk" unless @drives.any? { |d| d.type == :hard_disk }
+    raise 'Must have at least one hard disk' unless @drives.any? { |d| d.type == :hard_disk }
   end
 end
 
@@ -113,7 +111,7 @@ class LaptopBuilder < ComputerBuilder
   end
 
   def computer
-    raise "Laptop display must be LCD" unless @display == :lcd
+    raise 'Laptop display must be LCD' unless @display == :lcd
 
     super
   end

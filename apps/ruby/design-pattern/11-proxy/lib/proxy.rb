@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "etc"
+require 'etc'
 
 # 銀行口座（Real Subject）
 class BankAccount
@@ -26,9 +26,9 @@ class AccountProtectionProxy
     @owner_name = owner_name
   end
 
-  def method_missing(name, *args)
+  def method_missing(name, *)
     check_access
-    @subject.send(name, *args)
+    @subject.send(name, *)
   end
 
   def respond_to_missing?(name, include_private = false)
@@ -38,9 +38,9 @@ class AccountProtectionProxy
   private
 
   def check_access
-    if Etc.getlogin != @owner_name
-      raise "Illegal access: #{Etc.getlogin} cannot access account."
-    end
+    return unless Etc.getlogin != @owner_name
+
+    raise "Illegal access: #{Etc.getlogin} cannot access account."
   end
 end
 
@@ -50,8 +50,8 @@ class VirtualAccountProxy
     @creation_block = creation_block
   end
 
-  def method_missing(name, *args)
-    subject.send(name, *args)
+  def method_missing(name, *)
+    subject.send(name, *)
   end
 
   def respond_to_missing?(name, include_private = false)

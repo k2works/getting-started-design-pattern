@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require "singleton"
-require "stringio"
+require 'singleton'
+require 'stringio'
 
 # シンプルなログクラス（テスト可能な StringIO ベース）
 class SimpleLogger

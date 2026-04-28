@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "report"
+require_relative 'report'
 
 module TemplateMethod
   # プレーンテキスト形式のレポート出力

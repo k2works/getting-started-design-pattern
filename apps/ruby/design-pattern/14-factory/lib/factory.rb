@@ -4,43 +4,43 @@
 
 class Duck
   def speak
-    "Quack!"
+    'Quack!'
   end
 
   def eat
-    "Duck is eating."
+    'Duck is eating.'
   end
 
   def sleep
-    "Duck is sleeping."
+    'Duck is sleeping.'
   end
 end
 
 class Frog
   def speak
-    "Croak!"
+    'Croak!'
   end
 
   def eat
-    "Frog is eating."
+    'Frog is eating.'
   end
 
   def sleep
-    "Frog is sleeping."
+    'Frog is sleeping.'
   end
 end
 
 class Tiger
   def speak
-    "Roar!"
+    'Roar!'
   end
 
   def eat
-    "Tiger is eating."
+    'Tiger is eating.'
   end
 
   def sleep
-    "Tiger is sleeping."
+    'Tiger is sleeping.'
   end
 end
 
@@ -48,19 +48,19 @@ end
 
 class WaterLily
   def grow
-    "WaterLily is growing."
+    'WaterLily is growing.'
   end
 end
 
 class Algae
   def grow
-    "Algae is growing."
+    'Algae is growing.'
   end
 end
 
 class Tree
   def grow
-    "Tree is growing."
+    'Tree is growing.'
   end
 end
 
@@ -74,8 +74,7 @@ class Pond
   end
 
   def simulate_one_day
-    output = []
-    @plants.each { |plant| output << plant.grow }
+    output = @plants.map(&:grow)
     @animals.each do |animal|
       output << animal.speak
       output << animal.eat
@@ -125,8 +124,7 @@ class Habitat
   end
 
   def simulate_one_day
-    output = []
-    @plants.each { |plant| output << plant.grow }
+    output = @plants.map(&:grow)
     @animals.each do |animal|
       output << animal.speak
       output << animal.eat

@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require_relative "task"
+require_relative 'task'
 
 # 複合タスククラス（Composite パターン - Composite）
 class CompositeTask < Task
   def initialize(name)
-    super(name)
+    super
     @sub_tasks = []
   end
 

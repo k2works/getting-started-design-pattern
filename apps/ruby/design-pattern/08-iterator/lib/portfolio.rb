@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "account"
+require_relative 'account'
 
 # ポートフォリオクラス（Iterator パターン - Enumerable を活用）
 #
@@ -17,7 +17,7 @@ class Portfolio
     @accounts << account
   end
 
-  def each(&block)
-    @accounts.each(&block)
+  def each(&)
+    @accounts.each(&)
   end
 end
