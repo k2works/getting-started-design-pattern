@@ -71,7 +71,7 @@ createFileCmd name content = Command
 deleteFileCmd :: String -> Command FileState
 deleteFileCmd name = Command
   { execute     = \fs -> fs { fsFiles = filter (\(n, _) -> n /= name) (fsFiles fs) }
-  , undo        = \fs -> fs  -- 簡易実装: 削除の undo は復元しない
+  , undo        = id  -- 簡易実装: 削除の undo は復元しない
   , description = "ファイル削除: " ++ name
   }
 

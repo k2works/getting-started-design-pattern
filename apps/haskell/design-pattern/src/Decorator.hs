@@ -28,7 +28,7 @@ withLineNumber base = zipWith (\n l -> show n ++ ": " ++ l) [1 :: Int ..] . base
 
 -- | チェックサム（文字数）を末尾に追加するデコレータ
 withChecksum :: Writer -> Writer
-withChecksum base = \ls ->
+withChecksum base ls =
   let result = base ls
       total  = sum (map length result)
   in result ++ ["[checksum: " ++ show total ++ "]"]
