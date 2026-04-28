@@ -1,4 +1,5 @@
-(ns design-pattern.adapter)
+(ns design-pattern.adapter
+  (:require [clojure.string :as str]))
 
 ;; Adapter パターン
 ;; プロトコルで共通インターフェースを定義し、既存のデータ構造を適合させる。
@@ -13,7 +14,7 @@
 (defn legacy-renderer
   "レガシーレンダラーのシミュレーション。大文字変換する。"
   [text]
-  (clojure.string/upper-case text))
+  (str/upper-case text))
 
 (defn modern-renderer
   "モダンレンダラー。Markdown 形式で出力する。"
@@ -33,12 +34,12 @@
 (defn csv->maps
   "CSV 文字列（ヘッダー付き）をマップのシーケンスに変換する。"
   [csv-string]
-  (let [lines  (clojure.string/split-lines csv-string)
-        header (mapv clojure.string/trim (clojure.string/split (first lines) #","))
+  (let [lines  (str/split-lines csv-string)
+        header (mapv str/trim (str/split (first lines) #","))
         rows   (rest lines)]
     (mapv (fn [row]
             (zipmap (map keyword header)
-                    (mapv clojure.string/trim (clojure.string/split row #","))))
+                    (mapv str/trim (str/split row #","))))
           rows)))
 
 (defn maps->csv
@@ -46,6 +47,6 @@
   [maps]
   (when (seq maps)
     (let [ks     (keys (first maps))
-          header (clojure.string/join "," (map name ks))
-          rows   (map (fn [m] (clojure.string/join "," (map #(get m %) ks))) maps)]
-      (clojure.string/join "\n" (cons header rows)))))
+          header (str/join "," (map name ks))
+          rows   (map (fn [m] (str/join "," (map #(get m %) ks))) maps)]
+      (str/join "\n" (cons header rows)))))

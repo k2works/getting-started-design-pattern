@@ -3,4 +3,6 @@
   :dependencies [[org.clojure/clojure "1.12.0"]]
   :main ^:skip-aot design-pattern.core
   :target-path "target/%s"
-  :profiles {:uberjar {:aot :all}})
+  :plugins [[jonase/eastwood "1.4.3"]]
+  :profiles {:uberjar {:aot :all}}
+  :aliases {"check" ["do" ["eastwood"] ["test"]]})

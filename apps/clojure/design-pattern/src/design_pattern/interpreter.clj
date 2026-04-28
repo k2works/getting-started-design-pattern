@@ -1,4 +1,5 @@
-(ns design-pattern.interpreter)
+(ns design-pattern.interpreter
+  (:require [clojure.string :as str]))
 
 ;; Interpreter パターン
 ;; AST をマップで表現し、マルチメソッドで evaluate する。
@@ -85,7 +86,7 @@
 (defn parse-rpn
   "逆ポーランド記法の文字列を AST に変換する。"
   [expression]
-  (let [tokens (clojure.string/split expression #"\s+")
+  (let [tokens (str/split expression #"\s+")
         ops    {"+" add "-" subtract "*" multiply "/" divide}]
     (reduce (fn [stack token]
               (if-let [op (get ops token)]

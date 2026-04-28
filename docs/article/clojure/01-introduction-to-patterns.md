@@ -51,3 +51,66 @@ apps/clojure/design-pattern/
 ```bash
 lein test
 ```
+
+## 静的コード解析: Eastwood
+
+### Eastwood とは
+
+Eastwood は Clojure の静的コード解析（Lint）ツールです。暗黙の依存関係、未使用の変数、間違った引数の数などを検出します。
+
+### インストール
+
+```clojure
+;; project.clj に追加
+:plugins [[jonase/eastwood "1.4.3"]]
+:aliases {"check" ["do" ["eastwood"] ["test"]]}
+```
+
+### Eastwood の実行
+
+```bash
+# 静的解析の実行
+lein eastwood
+
+# 静的解析 + テストの一括実行
+lein check
+```
+
+### Eastwood の主要なルール
+
+| ルール | 説明 |
+|--------|------|
+| `implicit-dependencies` | 明示的に require されていない名前空間の使用 |
+| `unused-ret-vals` | 戻り値が使われていない関数呼び出し |
+| `wrong-arity` | 引数の数が間違っている関数呼び出し |
+| `suspicious-expression` | 疑わしい式（常に true になる条件など） |
+| `unused-namespaces` | 使用されていない require |
+
+### コード複雑度のチェック
+
+Clojure の関数型スタイルと不変データ構造は、自然にコードの複雑度を低く保ちます。
+
+| 手法 | 説明 |
+|------|------|
+| Eastwood | 暗黙の依存関係、未使用変数の検出 |
+| `lein check` | コンパイル時チェック |
+| 不変データ | 状態の変化を atom に限定し、予測可能性を向上 |
+| REPL | 対話的な開発で即座にフィードバックを得る |
+
+### 品質チェックの一括実行
+
+```bash
+# 静的解析 + テスト
+lein check
+```
+
+### 各言語の品質ツール比較
+
+| 用途 | Clojure | Ruby | Java | TypeScript | Python |
+|------|---------|------|------|-----------|--------|
+| パッケージ管理 | Leiningen | Bundler | Gradle | npm | uv |
+| テスト | clojure.test | minitest | JUnit 5 | Jest | pytest |
+| 静的解析 | Eastwood | RuboCop | Checkstyle + PMD | ESLint | Ruff |
+| フォーマッター | cljfmt | RuboCop | Checkstyle | Prettier | Ruff |
+| カバレッジ | cloverage | SimpleCov | JaCoCo | @vitest/coverage-v8 | pytest-cov |
+| 複雑度チェック | Eastwood | RuboCop Metrics | PMD | ESLint complexity | Ruff McCabe |

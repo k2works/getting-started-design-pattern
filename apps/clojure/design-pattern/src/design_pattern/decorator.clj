@@ -1,4 +1,5 @@
-(ns design-pattern.decorator)
+(ns design-pattern.decorator
+  (:require [clojure.string :as str]))
 
 ;; Decorator パターン
 ;; 関数合成 (comp) でデコレータを実現する。
@@ -18,8 +19,8 @@
   [writer-fn]
   (fn [text]
     (let [result (writer-fn text)
-          lines  (clojure.string/split-lines result)]
-      (clojure.string/join
+          lines  (str/split-lines result)]
+      (str/join
         "\n"
         (map-indexed (fn [i line] (str (inc i) ": " line)) lines)))))
 
@@ -44,7 +45,7 @@
   [writer-fn]
   (fn [text]
     (let [result (writer-fn text)]
-      (clojure.string/upper-case result))))
+      (str/upper-case result))))
 
 ;; --- 合成例 ---
 
