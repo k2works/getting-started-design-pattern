@@ -6,6 +6,7 @@ open DesignPattern.Factory.Factory
 [<Fact>]
 let ``文字列から Dog を生成できる`` () =
     let result = createAnimal "dog" "ポチ"
+
     match result with
     | Ok(Dog name) -> Assert.Equal("ポチ", name)
     | _ -> Assert.Fail("Dog が期待される")
@@ -13,6 +14,7 @@ let ``文字列から Dog を生成できる`` () =
 [<Fact>]
 let ``文字列から Cat を生成できる`` () =
     let result = createAnimal "cat" "タマ"
+
     match result with
     | Ok(Cat name) -> Assert.Equal("タマ", name)
     | _ -> Assert.Fail("Cat が期待される")
@@ -20,6 +22,7 @@ let ``文字列から Cat を生成できる`` () =
 [<Fact>]
 let ``不明な動物タイプはエラーを返す`` () =
     let result = createAnimal "unicorn" "ユニ"
+
     match result with
     | Error msg -> Assert.Contains("不明な動物タイプ", msg)
     | Ok _ -> Assert.Fail("エラーが期待される")

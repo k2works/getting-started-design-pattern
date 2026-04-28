@@ -24,6 +24,7 @@ let ``カスタムフォーマットを定義できる`` () =
           OutputHead = fun title -> sprintf "[%s]" title
           OutputBody = fun items -> items |> List.map (fun item -> sprintf "  * %s" item)
           OutputEnd = fun _ -> "=== END ===" }
+
     let result = generateReport customFormat "カスタム" [ "A"; "B" ]
     Assert.Equal("=== BEGIN ===", result.[0])
     Assert.Equal("[カスタム]", result.[1])

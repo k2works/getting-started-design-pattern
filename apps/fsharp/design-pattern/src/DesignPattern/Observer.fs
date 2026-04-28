@@ -9,10 +9,9 @@ module Observer =
 
     /// Subject はオブザーバーのリストを保持し、通知を行う
     type Subject<'T>() =
-        let mutable observers : Observer<'T> list = []
+        let mutable observers: Observer<'T> list = []
 
-        member _.AddObserver(observer: Observer<'T>) =
-            observers <- observer :: observers
+        member _.AddObserver(observer: Observer<'T>) = observers <- observer :: observers
 
         member _.RemoveObserver(observer: Observer<'T>) =
             observers <- observers |> List.filter (fun o -> not (obj.ReferenceEquals(o, observer)))
@@ -23,9 +22,7 @@ module Observer =
         member _.ObserverCount = observers.Length
 
     /// 給与を管理する従業員
-    type Employee =
-        { Name: string
-          mutable Salary: float }
+    type Employee = { Name: string; mutable Salary: float }
 
     /// 従業員の給与変更を監視する Subject
     type EmployeeSubject() =
@@ -38,5 +35,8 @@ module Observer =
         member _.UpdateSalary(employee: Employee, newSalary: float) =
             let oldSalary = employee.Salary
             employee.Salary <- newSalary
-            let message = sprintf "%s の給与が %.0f から %.0f に変更されました" employee.Name oldSalary newSalary
+
+            let message =
+                sprintf "%s の給与が %.0f から %.0f に変更されました" employee.Name oldSalary newSalary
+
             subject.NotifyObservers(message)

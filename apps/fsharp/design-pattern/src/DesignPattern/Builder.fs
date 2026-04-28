@@ -15,7 +15,7 @@ module Builder =
           Os: string option }
 
     /// デフォルトのコンピュータ構成
-    let defaultComputer : Computer =
+    let defaultComputer: Computer =
         { Cpu = "Unknown"
           Ram = 0
           Storage = "None"
@@ -33,21 +33,25 @@ module Builder =
     let describe (computer: Computer) : string =
         let gpu = computer.Gpu |> Option.defaultValue "なし"
         let os = computer.Os |> Option.defaultValue "なし"
-        sprintf "CPU: %s, RAM: %dGB, Storage: %s, GPU: %s, OS: %s"
-            computer.Cpu computer.Ram computer.Storage gpu os
+        sprintf "CPU: %s, RAM: %dGB, Storage: %s, GPU: %s, OS: %s" computer.Cpu computer.Ram computer.Storage gpu os
 
     // --- コンピュテーション式 Builder ---
 
     type ComputerBuilder() =
         member _.Yield(_) = defaultComputer
+
         [<CustomOperation("cpu")>]
         member _.Cpu(computer, cpu) = { computer with Cpu = cpu }
+
         [<CustomOperation("ram")>]
         member _.Ram(computer, ram) = { computer with Ram = ram }
+
         [<CustomOperation("storage")>]
         member _.Storage(computer, storage) = { computer with Storage = storage }
+
         [<CustomOperation("gpu")>]
         member _.Gpu(computer, gpu) = { computer with Gpu = Some gpu }
+
         [<CustomOperation("os")>]
         member _.Os(computer, os) = { computer with Os = Some os }
 

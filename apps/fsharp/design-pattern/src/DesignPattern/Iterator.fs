@@ -19,6 +19,7 @@ module Iterator =
                 yield a
                 yield! fib b (a + b)
             }
+
         fib 0 1
 
     /// ツリー構造の深さ優先走査
@@ -26,11 +27,13 @@ module Iterator =
         | Leaf of 'T
         | Node of 'T * Tree<'T> list
 
-    let rec depthFirst = function
+    let rec depthFirst =
+        function
         | Leaf value -> seq { yield value }
         | Node(value, children) ->
             seq {
                 yield value
+
                 for child in children do
                     yield! depthFirst child
             }
@@ -50,10 +53,9 @@ module Iterator =
                         yield value
                         yield! bfs (rest @ children)
             }
+
         bfs [ tree ]
 
     /// フィルタリング付きイテレーション
     let filterMap (predicate: 'T -> bool) (mapper: 'T -> 'U) (source: 'T seq) =
-        source
-        |> Seq.filter predicate
-        |> Seq.map mapper
+        source |> Seq.filter predicate |> Seq.map mapper

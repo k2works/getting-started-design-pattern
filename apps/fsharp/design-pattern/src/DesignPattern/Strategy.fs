@@ -9,9 +9,7 @@ module Strategy =
     type FormatStrategy = string -> string
 
     /// レポートのコンテキスト
-    type Report =
-        { Title: string
-          Items: string list }
+    type Report = { Title: string; Items: string list }
 
     /// レポートを指定された戦略でフォーマットする
     let formatReport (strategy: FormatStrategy) (report: Report) : string =
@@ -20,13 +18,10 @@ module Strategy =
         sprintf "%s\n%s" header body
 
     /// HTML 戦略
-    let htmlStrategy : FormatStrategy =
-        fun text -> sprintf "<p>%s</p>" text
+    let htmlStrategy: FormatStrategy = fun text -> sprintf "<p>%s</p>" text
 
     /// プレーンテキスト戦略
-    let plainTextStrategy : FormatStrategy =
-        fun text -> sprintf "** %s **" text
+    let plainTextStrategy: FormatStrategy = fun text -> sprintf "** %s **" text
 
     /// Markdown 戦略
-    let markdownStrategy : FormatStrategy =
-        fun text -> sprintf "- %s" text
+    let markdownStrategy: FormatStrategy = fun text -> sprintf "- %s" text

@@ -12,9 +12,8 @@ let ``コマンドを実行してテキストを追加できる`` () =
 [<Fact>]
 let ``複数のコマンドを順番に実行できる`` () =
     let history =
-        create ""
-        |> execute (appendText "Hello")
-        |> execute (appendText " World")
+        create "" |> execute (appendText "Hello") |> execute (appendText " World")
+
     Assert.Equal("Hello World", history.State)
 
 [<Fact>]
@@ -24,6 +23,7 @@ let ``コマンドを取り消せる`` () =
         |> execute (appendText "Hello")
         |> execute (appendText " World")
         |> undo
+
     Assert.Equal("Hello", history.State)
 
 [<Fact>]
@@ -34,13 +34,12 @@ let ``取り消したコマンドをやり直せる`` () =
         |> execute (appendText " World")
         |> undo
         |> redo
+
     Assert.Equal("Hello World", history.State)
 
 [<Fact>]
 let ``大文字変換コマンドを実行して取り消せる`` () =
-    let history =
-        create ""
-        |> execute (appendText "hello")
+    let history = create "" |> execute (appendText "hello")
     let history = execute (toUpperCase history.State) history
     Assert.Equal("HELLO", history.State)
     let history = undo history

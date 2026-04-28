@@ -12,20 +12,17 @@ module Singleton =
           LogLevel: string }
 
     /// デフォルト設定（モジュールレベルで一度だけ初期化される）
-    let defaultConfig : AppConfig =
+    let defaultConfig: AppConfig =
         { DatabaseUrl = "localhost:5432"
           MaxConnections = 10
           LogLevel = "INFO" }
 
     /// 設定の変更（イミュータブルなので新しいインスタンスを返す）
-    let withDatabaseUrl url config =
-        { config with DatabaseUrl = url }
+    let withDatabaseUrl url config = { config with DatabaseUrl = url }
 
-    let withMaxConnections count config =
-        { config with MaxConnections = count }
+    let withMaxConnections count config = { config with MaxConnections = count }
 
-    let withLogLevel level config =
-        { config with LogLevel = level }
+    let withLogLevel level config = { config with LogLevel = level }
 
     // --- スレッドセーフなシングルトン（Lazy を使用） ---
 
@@ -42,5 +39,4 @@ module Singleton =
 
         member _.Value = count
 
-        member _.Reset() =
-            count <- 0
+        member _.Reset() = count <- 0

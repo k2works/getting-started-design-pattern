@@ -22,6 +22,7 @@ let ``パイプラインで複数の設定を変更できる`` () =
         |> withDatabaseUrl "db.example.com:5432"
         |> withMaxConnections 50
         |> withLogLevel "DEBUG"
+
     Assert.Equal("db.example.com:5432", config.DatabaseUrl)
     Assert.Equal(50, config.MaxConnections)
     Assert.Equal("DEBUG", config.LogLevel)

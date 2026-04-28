@@ -11,32 +11,34 @@ module Composite =
         | CompositeTask of name: string * children: Task list
 
     /// タスクの名前を取得する
-    let getName = function
+    let getName =
+        function
         | LeafTask(name, _) -> name
         | CompositeTask(name, _) -> name
 
     /// タスクの合計所要時間を再帰的に計算する
-    let rec getTotalDuration = function
+    let rec getTotalDuration =
+        function
         | LeafTask(_, duration) -> duration
-        | CompositeTask(_, children) ->
-            children |> List.sumBy getTotalDuration
+        | CompositeTask(_, children) -> children |> List.sumBy getTotalDuration
 
     /// タスクの数を再帰的にカウントする（リーフのみ）
-    let rec getLeafCount = function
+    let rec getLeafCount =
+        function
         | LeafTask _ -> 1
-        | CompositeTask(_, children) ->
-            children |> List.sumBy getLeafCount
+        | CompositeTask(_, children) -> children |> List.sumBy getLeafCount
 
     /// タスクツリーを文字列に変換する（インデント付き）
-    let rec toStringWithIndent (indent: int) = function
-        | LeafTask(name, duration) ->
-            sprintf "%s%s (%.1f h)" (String.replicate indent "  ") name duration
+    let rec toStringWithIndent (indent: int) =
+        function
+        | LeafTask(name, duration) -> sprintf "%s%s (%.1f h)" (String.replicate indent "  ") name duration
         | CompositeTask(name, children) ->
             let header = sprintf "%s%s:" (String.replicate indent "  ") name
             let childStrings = children |> List.map (toStringWithIndent (indent + 1))
             header :: childStrings |> String.concat "\n"
 
     /// CompositeTask に子タスクを追加する
-    let addChild (child: Task) = function
+    let addChild (child: Task) =
+        function
         | CompositeTask(name, children) -> CompositeTask(name, children @ [ child ])
         | leaf -> CompositeTask(getName leaf, [ leaf; child ])

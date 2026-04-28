@@ -21,14 +21,14 @@ module TemplateMethod =
         [ startLine; headLine ] @ bodyLines @ [ endLine ]
 
     /// HTML フォーマット
-    let htmlFormat : ReportFormat =
+    let htmlFormat: ReportFormat =
         { OutputStart = fun _ -> "<html>"
           OutputHead = fun title -> sprintf "  <head><title>%s</title></head>" title
           OutputBody = fun items -> items |> List.map (fun item -> sprintf "  <body>%s</body>" item)
           OutputEnd = fun _ -> "</html>" }
 
     /// プレーンテキストフォーマット
-    let plainTextFormat : ReportFormat =
+    let plainTextFormat: ReportFormat =
         { OutputStart = fun _ -> "***** Start *****"
           OutputHead = fun title -> title
           OutputBody = fun items -> items |> List.map id

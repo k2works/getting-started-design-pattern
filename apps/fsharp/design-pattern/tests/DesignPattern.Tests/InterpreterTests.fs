@@ -36,6 +36,7 @@ let ``除算を評価できる`` () =
 let ``ゼロ除算はエラーを返す`` () =
     let expr = div (num 10.0) (num 0.0)
     let result = evaluate Map.empty expr
+
     match result with
     | Error msg -> Assert.Contains("ゼロ除算", msg)
     | Ok _ -> Assert.Fail("エラーが期待される")
@@ -50,6 +51,7 @@ let ``変数を評価できる`` () =
 [<Fact>]
 let ``未定義の変数はエラーを返す`` () =
     let result = evaluate Map.empty (var "z")
+
     match result with
     | Error msg -> Assert.Contains("未定義の変数", msg)
     | Ok _ -> Assert.Fail("エラーが期待される")

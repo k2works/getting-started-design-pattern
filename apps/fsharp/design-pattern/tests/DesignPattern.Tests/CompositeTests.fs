@@ -12,38 +12,30 @@ let ``LeafTask の名前と所要時間を取得できる`` () =
 [<Fact>]
 let ``CompositeTask の合計所要時間を計算できる`` () =
     let project =
-        CompositeTask("プロジェクト", [
-            LeafTask("設計", 2.0)
-            LeafTask("実装", 5.0)
-            LeafTask("テスト", 3.0)
-        ])
+        CompositeTask("プロジェクト", [ LeafTask("設計", 2.0); LeafTask("実装", 5.0); LeafTask("テスト", 3.0) ])
+
     Assert.Equal(10.0, getTotalDuration project)
 
 [<Fact>]
 let ``ネストされた CompositeTask の合計所要時間を計算できる`` () =
     let project =
-        CompositeTask("プロジェクト", [
-            CompositeTask("フェーズ1", [
-                LeafTask("設計", 2.0)
-                LeafTask("実装", 5.0)
-            ])
-            CompositeTask("フェーズ2", [
-                LeafTask("テスト", 3.0)
-                LeafTask("デプロイ", 1.0)
-            ])
-        ])
+        CompositeTask(
+            "プロジェクト",
+            [ CompositeTask("フェーズ1", [ LeafTask("設計", 2.0); LeafTask("実装", 5.0) ])
+              CompositeTask("フェーズ2", [ LeafTask("テスト", 3.0); LeafTask("デプロイ", 1.0) ]) ]
+        )
+
     Assert.Equal(11.0, getTotalDuration project)
 
 [<Fact>]
 let ``リーフタスクの数をカウントできる`` () =
     let project =
-        CompositeTask("プロジェクト", [
-            CompositeTask("フェーズ1", [
-                LeafTask("設計", 2.0)
-                LeafTask("実装", 5.0)
-            ])
-            LeafTask("レビュー", 1.0)
-        ])
+        CompositeTask(
+            "プロジェクト",
+            [ CompositeTask("フェーズ1", [ LeafTask("設計", 2.0); LeafTask("実装", 5.0) ])
+              LeafTask("レビュー", 1.0) ]
+        )
+
     Assert.Equal(3, getLeafCount project)
 
 [<Fact>]

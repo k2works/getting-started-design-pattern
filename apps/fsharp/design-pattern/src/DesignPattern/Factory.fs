@@ -7,7 +7,10 @@ module Factory =
 
     // --- 動物の判別共用体 ---
 
-    type Habitat = Land | Water | Air
+    type Habitat =
+        | Land
+        | Water
+        | Air
 
     type Animal =
         | Dog of name: string
@@ -16,19 +19,26 @@ module Factory =
         | Frog of name: string
 
     /// 動物の名前を取得する
-    let animalName = function
-        | Dog name | Cat name | Duck name | Frog name -> name
+    let animalName =
+        function
+        | Dog name
+        | Cat name
+        | Duck name
+        | Frog name -> name
 
     /// 動物の鳴き声を取得する
-    let animalSound = function
+    let animalSound =
+        function
         | Dog _ -> "ワンワン"
         | Cat _ -> "ニャー"
         | Duck _ -> "ガーガー"
         | Frog _ -> "ケロケロ"
 
     /// 動物の生息地を取得する
-    let animalHabitat = function
-        | Dog _ | Cat _ -> Land
+    let animalHabitat =
+        function
+        | Dog _
+        | Cat _ -> Land
         | Duck _ -> Air
         | Frog _ -> Water
 
@@ -40,13 +50,15 @@ module Factory =
         | Flower of name: string * color: string
 
     /// 植物の名前を取得する
-    let plantName = function
+    let plantName =
+        function
         | Algae name -> name
         | Tree(name, _) -> name
         | Flower(name, _) -> name
 
     /// 植物の説明を取得する
-    let plantDescription = function
+    let plantDescription =
+        function
         | Algae name -> sprintf "%s は藻類です" name
         | Tree(name, height) -> sprintf "%s は高さ %.1f m の木です" name height
         | Flower(name, color) -> sprintf "%s は %s 色の花です" name color
