@@ -205,9 +205,132 @@ apps/php/design-pattern/
 
 ---
 
+## 静的コード解析: PHP_CodeSniffer
+
+PHP_CodeSniffer（phpcs）はコーディング規約への準拠をチェックする静的解析ツールです。
+
+### インストール
+
+```json
+{
+    "require-dev": {
+        "phpunit/phpunit": "^11.0",
+        "squizlabs/php_codesniffer": "^3.10"
+    }
+}
+```
+
+```bash
+composer update
+```
+
+### phpcs.xml の設定
+
+プロジェクトルートに `phpcs.xml` を配置します。
+
+```xml
+<?xml version="1.0"?>
+<ruleset name="DesignPattern">
+    <description>PSR-12 with exceptions for design pattern examples</description>
+
+    <file>src/</file>
+
+    <rule ref="PSR12"/>
+
+    <!-- パターン実装では関連クラス・インターフェースを1ファイルにまとめる -->
+    <rule ref="PSR1.Classes.ClassDeclaration.MultipleClasses">
+        <severity>0</severity>
+    </rule>
+</ruleset>
+```
+
+### 実行
+
+```bash
+# コーディング規約チェック
+./vendor/bin/phpcs
+
+# 自動修正
+./vendor/bin/phpcbf
+```
+
+### 主な PSR-12 ルール
+
+| ルール | 説明 |
+|--------|------|
+| インデント | スペース 4 つ |
+| 行の長さ | 120 文字以下（推奨） |
+| 名前空間 | `namespace` 宣言の後に空行 |
+| `use` 宣言 | `namespace` の後にまとめる |
+| クラス定義 | 開き波括弧は次の行 |
+| メソッド定義 | 開き波括弧は次の行 |
+
+### 意図的なルール除外
+
+デザインパターンの教材では、関連するクラスやインターフェースを 1 ファイルにまとめて解説するため、PSR-1 の「1 ファイル 1 クラス」ルールを除外しています。
+
+---
+
+## コード複雑度のチェック
+
+PHP_CodeSniffer は循環的複雑度（Cyclomatic Complexity）のチェックも提供しています。`phpcs.xml` に以下を追加することで有効化できます:
+
+```xml
+<rule ref="Generic.Metrics.CyclomaticComplexity">
+    <properties>
+        <property name="complexity" value="7"/>
+        <property name="absoluteComplexity" value="10"/>
+    </properties>
+</rule>
+```
+
+---
+
+## 品質チェックの一括実行
+
+`composer.json` の `scripts` セクションに一括実行コマンドを定義します。
+
+### composer.json scripts
+
+```json
+{
+    "scripts": {
+        "test": "./vendor/bin/phpunit",
+        "phpcs": "./vendor/bin/phpcs",
+        "phpcbf": "./vendor/bin/phpcbf",
+        "check": ["@phpcs", "@test"]
+    }
+}
+```
+
+### 実行
+
+```bash
+composer check
+```
+
+`composer check` は `phpcs`（静的解析）と `phpunit`（テスト）を順番に実行します。phpcs で違反が見つかった場合、テストは実行されません。
+
+---
+
+## 各言語の品質ツール比較
+
+| 用途 | PHP | Ruby | Java | TypeScript | Python |
+|------|-----|------|------|-----------|--------|
+| 静的解析 | PHP_CodeSniffer | RuboCop | Checkstyle + PMD | ESLint | Ruff |
+| フォーマッター | phpcbf | RuboCop | Checkstyle | Prettier | Ruff |
+| カバレッジ | phpunit --coverage | SimpleCov | JaCoCo | @vitest/coverage-v8 | pytest-cov |
+| 複雑度チェック | phpcs Generic.Metrics | RuboCop Metrics | PMD | ESLint complexity | Ruff McCabe |
+| 一括実行 | `composer check` | `rake check` | `./gradlew check` | `npm run lint && npm test` | `ruff check && pytest` |
+
+**PHP の特徴**: PSR-12 という公式のコーディング規約があり、PHP_CodeSniffer で自動チェック・自動修正が可能です。
+
+---
+
 ## まとめ
 
 - PHP 8.x + PHPUnit 11 + Composer で TDD 環境を構築した
 - Red-Green-Refactor サイクルを厳守してパターンを実装する
 - PHP 8.x の型宣言、Constructor Promotion、match 式を積極活用する
+- PHP_CodeSniffer で PSR-12 準拠をチェックし、`composer check` で一括実行する
 - 次章から、最初のパターン「Template Method」を TDD で実装する
