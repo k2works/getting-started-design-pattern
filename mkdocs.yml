@@ -318,6 +318,24 @@ nav:
               - 第 14 章 Factory: article/scala/14-factory.md
               - 第 15 章 Builder: article/scala/15-builder.md
               - 第 16 章 Interpreter: article/scala/16-interpreter.md
+          - Elixir:
+              - 概要: article/elixir/index.md
+              - 第 1 章 デザインパターンとパターン思考: article/elixir/01-introduction-to-patterns.md
+              - 第 2 章 パターンを支える基本原則: article/elixir/02-principles-and-patterns.md
+              - 第 3 章 開発環境と TDD 基盤: article/elixir/03-tdd-and-tooling.md
+              - 第 4 章 Template Method: article/elixir/04-template-method.md
+              - 第 5 章 Strategy: article/elixir/05-strategy.md
+              - 第 6 章 Observer: article/elixir/06-observer.md
+              - 第 7 章 Composite: article/elixir/07-composite.md
+              - 第 8 章 Iterator: article/elixir/08-iterator.md
+              - 第 9 章 Command: article/elixir/09-command.md
+              - 第 10 章 Adapter: article/elixir/10-adapter.md
+              - 第 11 章 Proxy: article/elixir/11-proxy.md
+              - 第 12 章 Decorator: article/elixir/12-decorator.md
+              - 第 13 章 Singleton: article/elixir/13-singleton.md
+              - 第 14 章 Factory: article/elixir/14-factory.md
+              - 第 15 章 Builder: article/elixir/15-builder.md
+              - 第 16 章 Interpreter: article/elixir/16-interpreter.md
   - リファレンス:
       - 概要: reference/index.md
       - よいソフトウェアとは: reference/よいソフトウェアとは.md
