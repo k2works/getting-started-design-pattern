@@ -1,5 +1,7 @@
 """Adapter パターンのテスト"""
 
+import pytest
+
 from src.adapter import BritishTextObject, BritishTextObjectAdapter, Renderer
 
 
@@ -36,6 +38,3 @@ class TestRenderer:
         renderer = Renderer()
         result = renderer.render(adapter)
         assert result == "text:Test size:1.0 color:green"
-
-
-import pytest

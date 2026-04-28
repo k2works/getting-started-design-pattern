@@ -156,6 +156,85 @@ $ pytest --cov=src --cov-report=term-missing
 
 ---
 
+## 静的コード解析: Ruff
+
+### Ruff とは
+
+Ruff は Rust 製の高速な Python リンター・フォーマッターです。Flake8、isort、pycodestyle などの機能を 1 つのツールに統合し、非常に高速に動作します。
+
+### pyproject.toml の設定
+
+```toml
+# pyproject.toml（Ruff セクション）
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "C90"]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 7
+```
+
+### 主要なルールカテゴリ
+
+| カテゴリ | 説明 |
+|---------|------|
+| `E` | pycodestyle エラー（スタイル違反） |
+| `F` | Pyflakes（未使用 import、未定義変数など） |
+| `W` | pycodestyle 警告 |
+| `C90` | McCabe 複雑度チェック |
+
+### Ruff の実行
+
+```bash
+# 解析の実行
+uv run ruff check .
+
+# 自動修正
+uv run ruff check . --fix
+```
+
+---
+
+## コード複雑度のチェック
+
+### 循環的複雑度（McCabe Complexity）
+
+循環的複雑度とは、コードがどれぐらい複雑であるかをメソッド単位で数値にして表す指標です。本プロジェクトでは **7 以下** に制限しています。
+
+| 複雑度の範囲 | 意味 |
+|-------------|------|
+| 1〜10 | 低複雑度: 管理しやすく、問題なし |
+| 11〜20 | 中程度の複雑度: リファクタリングを検討 |
+| 21〜50 | 高複雑度: リファクタリングが強く推奨される |
+| 51 以上 | 非常に高い複雑度: コードを分割する必要がある |
+
+---
+
+## 品質チェックの一括実行
+
+Ruff + pytest を順番に実行することで、静的解析とテストを一括チェックできます。
+
+```bash
+# 静的解析 + テストを一括実行
+uv run ruff check . && uv run pytest
+```
+
+### 各言語の品質ツール比較
+
+| 用途 | Ruby | Java | TypeScript | Python |
+|------|------|------|-----------|--------|
+| パッケージ管理 | Bundler | Gradle | npm | uv |
+| テスト | minitest | JUnit 5 | Jest | pytest |
+| 静的解析 | RuboCop | Checkstyle + PMD | ESLint | Ruff |
+| フォーマッター | RuboCop | Checkstyle | Prettier | Ruff |
+| カバレッジ | SimpleCov | JaCoCo | @vitest/coverage-v8 | pytest-cov |
+| 複雑度チェック | RuboCop Metrics | Checkstyle CyclomaticComplexity | ESLint complexity | Ruff McCabe |
+
+---
+
 ## Ruby / Java との比較
 
 | 観点 | Python (pytest) | Ruby (Minitest) | Java (JUnit 5) |
@@ -178,4 +257,6 @@ $ pytest --cov=src --cov-report=term-missing
 | **テストフレームワーク** | pytest --- `assert` 文だけでシンプルにテストを書ける |
 | **Python の強み** | 日本語テスト名、豊富なフィクスチャ、`tmp_path` による一時ファイル管理 |
 | **カバレッジ** | pytest-cov で計測。TDD なら自然と高カバレッジになる |
+| **静的解析** | Ruff で静的解析・コード複雑度（McCabe 複雑度 7 以下）を自動チェックする |
+| **一括実行** | `uv run ruff check . && uv run pytest` で静的解析 + テストを一括実行できる |
 | **次章** | Template Method パターンで最初のパターンを TDD で実装する |

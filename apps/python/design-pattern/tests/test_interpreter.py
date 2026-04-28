@@ -3,7 +3,7 @@
 import os
 import tempfile
 
-from src.interpreter import All, And, Bigger, FileName, Not, Or
+from src.interpreter import All, Bigger, FileName, Not
 
 
 class TestInterpreter:

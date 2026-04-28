@@ -6,7 +6,7 @@ BankAccount への保護プロキシと仮想（遅延初期化）プロキシ�
 from __future__ import annotations
 
 import getpass
-from typing import Any, Callable
+from typing import Callable
 
 
 class BankAccount:

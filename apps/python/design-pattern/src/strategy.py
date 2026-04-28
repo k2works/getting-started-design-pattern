@@ -4,7 +4,7 @@
 出力処理を委譲する。
 """
 
-from typing import Protocol
+from typing import Callable, Protocol
 
 
 class ReportData(Protocol):
@@ -38,8 +38,6 @@ class Report:
 
 
 # 型エイリアス
-from typing import Callable
-
 Formatter = Callable[["Report"], str]
 
 

@@ -5,7 +5,6 @@ from src.composite import (
     CompositeTask,
     MakeBatterTask,
     MakeCakeTask,
-    Task,
 )
 
 

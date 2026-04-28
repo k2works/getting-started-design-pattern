@@ -2,10 +2,8 @@
 
 import pytest
 from src.builder import (
-    ComputerBuilder,
     DesktopBuilder,
     DisplayType,
-    DriveType,
     LaptopBuilder,
 )
 

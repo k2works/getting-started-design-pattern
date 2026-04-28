@@ -1,9 +1,7 @@
 """Command パターンのテスト"""
 
 import os
-import tempfile
 
-import pytest
 from src.command import CompositeCommand, CreateFileCommand, DeleteFileCommand
 
 
