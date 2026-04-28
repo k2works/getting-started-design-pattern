@@ -251,21 +251,21 @@ nav:
           - Clojure:
               - 概要: article/clojure/index.md
               - 第 1 章 デザインパターンとパターン思考: article/clojure/01-introduction-to-patterns.md
-              - 第 2 章 Template Method: article/clojure/02-template-method.md
-              - 第 3 章 Strategy: article/clojure/03-strategy.md
-              - 第 4 章 Observer: article/clojure/04-observer.md
-              - 第 5 章 Composite: article/clojure/05-composite.md
-              - 第 6 章 Iterator: article/clojure/06-iterator.md
-              - 第 7 章 Command: article/clojure/07-command.md
-              - 第 8 章 Adapter: article/clojure/08-adapter.md
-              - 第 9 章 Proxy: article/clojure/09-proxy.md
-              - 第 10 章 Decorator: article/clojure/10-decorator.md
-              - 第 11 章 Singleton: article/clojure/11-singleton.md
-              - 第 12 章 Factory: article/clojure/12-factory.md
-              - 第 13 章 Builder: article/clojure/13-builder.md
-              - 第 14 章 Interpreter: article/clojure/14-interpreter.md
-              - 第 15 章 まとめ: article/clojure/15-and-beyond.md
-              - 第 16 章 Interpreter 応用: article/clojure/16-interpreter.md
+              - 第 2 章 パターンを支える基本原則: article/clojure/02-principles-and-patterns.md
+              - 第 3 章 開発環境と TDD 基盤: article/clojure/03-tdd-and-tooling.md
+              - 第 4 章 Template Method: article/clojure/04-template-method.md
+              - 第 5 章 Strategy: article/clojure/05-strategy.md
+              - 第 6 章 Observer: article/clojure/06-observer.md
+              - 第 7 章 Composite: article/clojure/07-composite.md
+              - 第 8 章 Iterator: article/clojure/08-iterator.md
+              - 第 9 章 Command: article/clojure/09-command.md
+              - 第 10 章 Adapter: article/clojure/10-adapter.md
+              - 第 11 章 Proxy: article/clojure/11-proxy.md
+              - 第 12 章 Decorator: article/clojure/12-decorator.md
+              - 第 13 章 Singleton: article/clojure/13-singleton.md
+              - 第 14 章 Factory: article/clojure/14-factory.md
+              - 第 15 章 Builder: article/clojure/15-builder.md
+              - 第 16 章 Interpreter: article/clojure/16-interpreter.md
           - Scala:
               - 概要: article/scala/index.md
               - 第 1 章 デザインパターンとパターン思考: article/scala/01-introduction-to-patterns.md

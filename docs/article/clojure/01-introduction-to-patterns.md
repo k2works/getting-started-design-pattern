@@ -4,11 +4,15 @@
 
 デザインパターンとは、ソフトウェア設計で繰り返し現れる問題に対する再利用可能な解決策のカタログです。1994 年に GoF（Gang of Four）が体系化した 23 のパターンは、オブジェクト指向プログラミングの文脈で生まれました。
 
-## Clojure と デザインパターン
+---
 
-Clojure は関数型プログラミング言語であり、JVM 上で動作します。不変データ、第一級関数、マルチメソッド、プロトコルといった言語機能を持ち、オブジェクト指向言語とは異なるアプローチで問題を解決します。
+## Clojure とデザインパター��
+
+Clojure は関数型プログラミング言語であり、JVM 上で動作��ます。不変データ、第一級関数、マルチメソッド、プロトコルといった言語機能を持ち、オブジェクト指向言語とは異なるアプローチで問題を解決します。
 
 多くの GoF パターンは、オブジェクト指向言語の制約を回避するための工夫でした。Clojure ではそれらの制約がそもそも存在しないため、パターンが言語機能に吸収されることが多くあります。
+
+---
 
 ## パターンの Clojure 的解釈
 
@@ -28,9 +32,29 @@ Clojure は関数型プログラミング言語であり、JVM 上で動作し�
 | Builder | スレッディングマクロ（->） |
 | Interpreter | データとしての AST + マルチメソッド |
 
+---
+
 ## 本シリーズの構成
 
 4 部 16 章で構成し、各章ではパターンの意図、Clojure での実装、テストコードを示します。
+
+### 第 1 部: パターンとは何か（第 1〜3 章）
+
+デザインパターンの基礎、設計原則、開発環境のセットアップを扱います。
+
+### 第 2 部: 振る舞いの取り扱い（第 4〜8 章）
+
+Template Method、Strategy、Observer、Composite、Iterator の 5 パター���を扱います。
+
+### 第 3 部: 操作と関係の表現（第 9〜12 章）
+
+Command、Adapter、Proxy、Decorator の 4 パターンを扱います。
+
+### 第 4 部: オブジェクトの作成と解釈（第 13〜16 章）
+
+Singleton、Factory、Builder、Interpreter の 4 パターンを扱います。
+
+---
 
 ## Clojure プロジェクトの構成
 
@@ -52,65 +76,11 @@ apps/clojure/design-pattern/
 lein test
 ```
 
-## 静的コード解析: Eastwood
+---
 
-### Eastwood とは
+## まとめ
 
-Eastwood は Clojure の静的コード解析（Lint）ツールです。暗黙の依存関係、未使用の変数、間違った引数の数などを検出します。
-
-### インストール
-
-```clojure
-;; project.clj に追加
-:plugins [[jonase/eastwood "1.4.3"]]
-:aliases {"check" ["do" ["eastwood"] ["test"]]}
-```
-
-### Eastwood の実行
-
-```bash
-# 静的解析の実行
-lein eastwood
-
-# 静的解析 + テストの一括実行
-lein check
-```
-
-### Eastwood の主要なルール
-
-| ルール | 説明 |
-|--------|------|
-| `implicit-dependencies` | 明示的に require されていない名前空間の使用 |
-| `unused-ret-vals` | 戻り値が使われていない関数呼び出し |
-| `wrong-arity` | 引数の数が間違っている関数呼び出し |
-| `suspicious-expression` | 疑わしい式（常に true になる条件など） |
-| `unused-namespaces` | 使用されていない require |
-
-### コード複雑度のチェック
-
-Clojure の関数型スタイルと不変データ構造は、自然にコードの複雑度を低く保ちます。
-
-| 手法 | 説明 |
-|------|------|
-| Eastwood | 暗黙の依存関係、未使用変数の検出 |
-| `lein check` | コンパイル時チェック |
-| 不変データ | 状態の変化を atom に限定し、予測可能性を向上 |
-| REPL | 対話的な開発で即座にフィードバックを得る |
-
-### 品質チェックの一括実行
-
-```bash
-# 静的解析 + テスト
-lein check
-```
-
-### 各言語の品質ツール比較
-
-| 用途 | Clojure | Ruby | Java | TypeScript | Python |
-|------|---------|------|------|-----------|--------|
-| パッケージ管理 | Leiningen | Bundler | Gradle | npm | uv |
-| テスト | clojure.test | minitest | JUnit 5 | Jest | pytest |
-| 静的解析 | Eastwood | RuboCop | Checkstyle + PMD | ESLint | Ruff |
-| フォーマッター | cljfmt | RuboCop | Checkstyle | Prettier | Ruff |
-| カバレッジ | cloverage | SimpleCov | JaCoCo | @vitest/coverage-v8 | pytest-cov |
-| 複雑度チェック | Eastwood | RuboCop Metrics | PMD | ESLint complexity | Ruff McCabe |
+- デザインパターンはソフトウェア設計の問題に対する再利用可能な解決策である
+- Clojure の関数型特性により、多くのパターンが言語機能に吸収される
+- 本シリーズでは 4 部 16 章で 13 のパターンを TDD で実装する
+- 次章ではパターンを支える基本原則を Clojure の視点から解説する
