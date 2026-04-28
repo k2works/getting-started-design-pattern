@@ -33,7 +33,12 @@ defmodule DesignPattern.InterpreterTest do
   end
 
   test "式を文字列に変換する" do
-    expr = Interpreter.add(Interpreter.literal(1), Interpreter.multiply(Interpreter.literal(2), Interpreter.literal(3)))
+    expr =
+      Interpreter.add(
+        Interpreter.literal(1),
+        Interpreter.multiply(Interpreter.literal(2), Interpreter.literal(3))
+      )
+
     assert Interpreter.to_string_expr(expr) == "(1 + (2 * 3))"
   end
 end
