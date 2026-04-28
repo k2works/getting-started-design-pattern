@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'jacoco'
+    id 'checkstyle'
 }
 
 group = 'com.example'
@@ -44,5 +45,18 @@ jacocoTestCoverageVerification {
                 minimum = 0.80
             }
         }
+    }
+}
+
+checkstyle {
+    toolVersion = '10.21.4'
+    configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
+    maxWarnings = 0
+}
+
+tasks.withType(Checkstyle) {
+    reports {
+        xml.required = true
+        html.required = true
     }
 }
