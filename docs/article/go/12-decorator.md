@@ -19,21 +19,21 @@ interface Writer {
   + Output() : string
 }
 
-class <<struct>> SimpleWriter {
+class SimpleWriter <<struct>> {
   - lines : []string
 }
 
-class <<struct>> NumberingWriter {
+class NumberingWriter <<struct>> {
   - wrapped : Writer
   - count : int
 }
 
-class <<struct>> TimeStampingWriter {
+class TimeStampingWriter <<struct>> {
   - wrapped : Writer
   - clock : func() time.Time
 }
 
-class <<struct>> CheckingWriter {
+class CheckingWriter <<struct>> {
   - wrapped : Writer
   - maxLen : int
   + RejectedLines() : []string
@@ -123,3 +123,4 @@ func (ts *TimeStampingWriter) WriteLine(line string) {
 | **メリット** | デコレータの積み重ねで柔軟な機能合成が可能 |
 | **注意点** | ラッピングが深くなるとデバッグが難しくなる |
 | **関連パターン** | Proxy（アクセス制御）、Strategy（アルゴリズム差し替え） |
+

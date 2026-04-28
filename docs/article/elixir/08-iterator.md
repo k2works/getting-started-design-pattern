@@ -17,13 +17,13 @@ class "Iterator" as I {
   + take_until(collection, predicate)
 }
 
-class "<<module>> Enum" as E {
+class "Enum" as E <<module>> {
   + filter(enum, fn)
   + map(enum, fn)
   + reduce(enum, acc, fn)
 }
 
-class "<<module>> Stream" as S {
+class "Stream" as S <<module>> {
   + filter(enum, fn)
   + map(enum, fn)
   + unfold(acc, fn)

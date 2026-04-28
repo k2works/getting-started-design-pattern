@@ -18,13 +18,13 @@ class "Command" as C {
   + macro(name, commands)
 }
 
-class "<<map>> CommandData" as CD {
+class "CommandData" as CD <<map>> {
   + name: String
   + execute: fn
   + undo: fn
 }
 
-class "<<map>> History" as H {
+class "History" as H <<map>> {
   + executed: list
   + state: any
 }

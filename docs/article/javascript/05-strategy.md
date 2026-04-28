@@ -21,11 +21,11 @@ class Report {
   + outputReport() : String
 }
 
-class <<module>> "htmlFormatter" as HF {
+class "htmlFormatter" as HF <<module>> {
   + (report) : String
 }
 
-class <<module>> "plainTextFormatter" as PF {
+class "plainTextFormatter" as PF <<module>> {
   + (report) : String
 }
 

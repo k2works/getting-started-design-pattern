@@ -16,12 +16,12 @@ class Report {
   + outputReport(): string
 }
 
-class "<<function type>>\nFormatter" as Formatter {
+class "Formatter" as Formatter <<function type>> {
   (title: string, text: string[]) => string
 }
 
-class "<<function>>\nhtmlFormatter" as HF
-class "<<function>>\nplainTextFormatter" as PF
+class "htmlFormatter" as HF <<function>>
+class "plainTextFormatter" as PF <<function>>
 
 Report --> Formatter
 Formatter <|.. HF

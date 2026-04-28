@@ -18,11 +18,11 @@ class "Composite" as C {
   + to_string_tree(node, indent)
 }
 
-class "<<tuple>> Leaf" as L {
+class "Leaf" as L <<tuple>> {
   + {:leaf, name, value}
 }
 
-class "<<tuple>> CompositeNode" as CN {
+class "CompositeNode" as CN <<tuple>> {
   + {:composite, name, children}
 }
 

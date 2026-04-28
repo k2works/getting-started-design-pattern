@@ -41,11 +41,11 @@ note bottom of NumberingWriter
   クラスベース Decorator
 end note
 
-class <<module>> "withNumbering" as WN {
+class "withNumbering" as WN <<module>> {
   + (writer) : writer
 }
 
-class <<module>> "withTimeStamping" as WT {
+class "withTimeStamping" as WT <<module>> {
   + (writer, timeProvider) : writer
 }
 

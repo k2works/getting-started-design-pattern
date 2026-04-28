@@ -16,7 +16,7 @@ Go には継承がないため、関数フィールドを持つ struct でテン
 @startuml
 title Template Method パターン（Go 版）
 
-class <<struct>> ReportFormat {
+class ReportFormat <<struct>> {
   + OutputStart : func() []string
   + OutputHead : func(title string) []string
   + OutputBodyStart : func() []string
@@ -25,15 +25,15 @@ class <<struct>> ReportFormat {
   + OutputEnd : func() []string
 }
 
-class <<function>> GenerateReport {
+class GenerateReport <<function>> {
   + GenerateReport(format, title, text) : string
 }
 
-class <<function>> HtmlFormat {
+class HtmlFormat <<function>> {
   + HtmlFormat() : ReportFormat
 }
 
-class <<function>> PlainTextFormat {
+class PlainTextFormat <<function>> {
   + PlainTextFormat() : ReportFormat
 }
 

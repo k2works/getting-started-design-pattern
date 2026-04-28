@@ -1,6 +1,6 @@
 # 第 6 章: Observer
 
-## は���めに
+## はじめに
 
 従業員の給与が変更されたとき、給与システムと税務署の両方に通知する必要があります。しかし Employee クラスが Payroll や TaxMan を直接知っていると密結合になります。
 
@@ -57,7 +57,7 @@ Observer <|.. TaxMan
 
 ## TDD で作る
 
-### Red: ���ストを書く
+### Red: テストを書く
 
 ```php
 public function testPayrollIsNotifiedOnSalaryChange(): void
@@ -123,7 +123,7 @@ PHP 標準の `SplObjectStorage` は Observer 管理に最適です。配列と�
 
 ### PHP 8.5 対応
 
-PHP 8.5 では `attach()` / `detach()` が非推奨になりました。代わりに `offsetSet()` / `offsetUnset()` を使用し���す。
+PHP 8.5 では `attach()` / `detach()` が非推奨になりました。代わりに `offsetSet()` / `offsetUnset()` を使用します。
 
 ---
 
@@ -139,7 +139,7 @@ PHP 8.5 では `attach()` / `detach()` が非推奨になりました。代わ�
 
 ---
 
-## まと��
+## まとめ
 
 | 観点 | 内容 |
 |------|------|

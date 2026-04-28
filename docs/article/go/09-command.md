@@ -4,7 +4,7 @@
 
 ファイルの作成と削除を行い、それを取り消し可能にしたいとします。Command パターンは、操作をオブジェクトとしてカプセル化し、実行と取り消しを統一的に扱えるようにするパターンです。
 
-Go ではインターフェースでコマンドを定義し、各操作を struct として���装します。
+Go ではインターフェースでコマンドを定義し、各操作を struct として実装します。
 
 ---
 
@@ -12,7 +12,7 @@ Go ではインターフェースでコマンドを定義し、各操作を stru
 
 ```plantuml
 @startuml
-title Command パターン���Go 版）
+title Command パターン（Go 版）
 
 interface Command {
   + Execute() : error
@@ -20,17 +20,17 @@ interface Command {
   + Description() : string
 }
 
-class <<struct>> CreateFileCommand {
+class CreateFileCommand <<struct>> {
   + Path : string
   + Content : string
 }
 
-class <<struct>> DeleteFileCommand {
+class DeleteFileCommand <<struct>> {
   + Path : string
   - savedContent : []byte
 }
 
-class <<struct>> CompositeCommand {
+class CompositeCommand <<struct>> {
   + Commands : []Command
   - executed : []Command
 }
@@ -57,7 +57,7 @@ func TestCreateFileCommand(t *testing.T) {
     }
     data, _ := os.ReadFile(path)
     if string(data) != "hello" {
-        t.Errorf("期��値 'hello', 実際 %q", string(data))
+        t.Errorf("期待値 'hello', 実際 %q", string(data))
     }
 }
 ```
@@ -85,7 +85,7 @@ func (c *CreateFileCommand) Undo() error {
 }
 ```
 
-### Refactor: 振り���り
+### Refactor: 振り返り
 
 - Go の `error` 返却パターンが、コマンドの成功/失敗を自然に表現します
 - `CompositeCommand` は失敗時に実行済みコマンドを逆順で Undo します
@@ -93,7 +93,7 @@ func (c *CreateFileCommand) Undo() error {
 
 ---
 
-## Ruby / Java / Python / JavaScript と��比較
+## Ruby / Java / Python / JavaScript との比較
 
 | 観点 | Ruby | Java | Python | JavaScript | Go |
 |------|------|------|--------|------------|-----|
@@ -113,3 +113,4 @@ func (c *CreateFileCommand) Undo() error {
 | **メリット** | error 返却で失敗処理が明示的、CompositeCommand でバッチ処理 |
 | **注意点** | Undo の状態保存が複雑になりうる |
 | **関連パターン** | Composite（複合コマンド）、Strategy（実行戦略） |
+

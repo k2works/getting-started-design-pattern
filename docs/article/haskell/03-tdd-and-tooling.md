@@ -124,7 +124,7 @@ Test suite tests: PASS
 
 ---
 
-## 静的コード���析: GHC -Wall + HLint
+## 静的コード解析: GHC -Wall + HLint
 
 ### GHC -Wall（コンパイラ警告）
 
@@ -141,7 +141,7 @@ test-suite tests
 | 警告 | 説明 |
 |------|------|
 | `-Wmissing-signatures` | 型シグネチャの欠如 |
-| `-Wunused-binds` | 未使用の束�� |
+| `-Wunused-binds` | 未使用の束縛 |
 | `-Wincomplete-patterns` | パターンマッチの網羅性不足 |
 | `-Wname-shadowing` | 変数のシャドーイング |
 
@@ -192,13 +192,13 @@ Haskell の型システムは非常に強力で、多くの実行時エラーを
 | 型システム | 代数的データ型とパターンマッチで網羅性を保証 |
 | 純粋関数 | 副作用の分離により、関数単位でのテストが容易 |
 
-Haskell では、型システムが他の言語における静的解析ツールの多くの役割を担います。例えば、`Maybe` 型による null 安全性、パターンマッチの網羅性チェックなどは、言語レベルで保証���れます。
+Haskell では、型システムが他の言語における静的解析ツールの多くの役割を担います。例えば、`Maybe` 型による null 安全性、パターンマッチの網羅性チェックなどは、言語レベルで保証されます。
 
 ---
 
 ## 品質チェックの一括実行
 
-コンパイラ警告チェック、静的解析、テストを一括で実行するコマンドです��
+コンパイラ警告チェック、静的解析、テストを一括で実行するコマンドです。
 
 ```bash
 # ビルド（-Wall で警告チェック）+ HLint + テスト
@@ -209,10 +209,10 @@ cabal build && hlint src/ test/ && cabal test
 
 | 用途 | Haskell | Ruby | Java | TypeScript | Python |
 |------|---------|------|------|-----------|--------|
-| パ��ケージ管理 | Cabal | Bundler | Gradle | npm | uv |
+| パッケージ管理 | Cabal | Bundler | Gradle | npm | uv |
 | テスト | HUnit | minitest | JUnit 5 | Jest | pytest |
 | 静的解析 | GHC -Wall + HLint | RuboCop | Checkstyle + PMD | ESLint | Ruff |
-| フォー���ッター | Ormolu / Fourmolu | RuboCop | Checkstyle | Prettier | Ruff |
+| フォーマッター | Ormolu / Fourmolu | RuboCop | Checkstyle | Prettier | Ruff |
 | カバレッジ | HPC | SimpleCov | JaCoCo | @vitest/coverage-v8 | pytest-cov |
 | 複雑度チェック | HLint + 型システム | RuboCop Metrics | PMD | ESLint complexity | Ruff McCabe |
 
@@ -220,8 +220,8 @@ cabal build && hlint src/ test/ && cabal test
 
 ## まとめ
 
-- Haskell の型システムはコンパイル時に多くのバグ��検出する
-- HUnit ��よる TDD と組み合わせることで、型では検出���きないビジネスロジックの正しさも保証できる
+- Haskell の型システムはコンパイル時に多くのバグを検出する
+- HUnit による TDD と組み合わせることで、型では検出できないビジネスロジックの正しさも保証できる
 - GHC `-Wall` で潜在的問題を検出し、HLint でイディオマティックな改善を行う
 - `cabal build && hlint src/ test/ && cabal test` で品質チェックを一括実行できる
 - 次章から、具体的なデザインパターンの実装に入る

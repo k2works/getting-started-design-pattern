@@ -19,18 +19,18 @@ class "Interpreter" as I {
   + to_string_expr(expr)
 }
 
-class "<<tuple>> Literal" as L {
+class "Literal" as L <<tuple>> {
   + {:literal, value}
 }
 
-class "<<tuple>> BinaryOp" as B {
+class "BinaryOp" as B <<tuple>> {
   + {:add, left, right}
   + {:subtract, left, right}
   + {:multiply, left, right}
   + {:divide, left, right}
 }
 
-class "<<tuple>> Variable" as V {
+class "Variable" as V <<tuple>> {
   + {:variable, name}
 }
 

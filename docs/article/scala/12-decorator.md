@@ -14,14 +14,14 @@
 @startuml
 title Decorator パターン（Scala: スタッカブル trait）
 
-trait Writer {
+interface Writer <<trait>> {
   + writeLine(line: String) : String
   + writeLines(lines: Seq[String]) : Seq[String]
 }
 
 class SimpleWriter
 
-trait WriterDecorator {
+abstract class WriterDecorator <<trait>> {
   # wrapped : Writer
 }
 

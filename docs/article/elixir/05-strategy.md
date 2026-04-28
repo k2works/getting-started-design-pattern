@@ -18,11 +18,11 @@ class "Strategy" as S {
   + discount_pricing(rate)
 }
 
-class "<<function>> SortStrategy" as SS {
+class "SortStrategy" as SS <<function>> {
   + (list) -> sorted_list
 }
 
-class "<<function>> PricingStrategy" as PS {
+class "PricingStrategy" as PS <<function>> {
   + (items) -> total
 }
 

@@ -15,19 +15,19 @@ class "TemplateMethod" as TM {
   - footer(body_result, steps)
 }
 
-class "<<map>> DefaultSteps" as DS {
+class "DefaultSteps" as DS <<map>> {
   + header: fn
   + body: fn
   + footer: fn
 }
 
-class "<<map>> HtmlSteps" as HS {
+class "HtmlSteps" as HS <<map>> {
   + header: fn
   + body: fn
   + footer: fn
 }
 
-class "<<map>> MarkdownSteps" as MS {
+class "MarkdownSteps" as MS <<map>> {
   + header: fn
   + body: fn
   + footer: fn

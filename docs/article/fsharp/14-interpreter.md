@@ -23,7 +23,7 @@ class "Environment" as Env <<type alias>> {
   Map~string, float~
 }
 
-class <<module>> "Interpreter" as I {
+class "Interpreter" as I <<module>> {
   + evaluate(env, expr): Result
   + toString(expr): string
   + num(n): Expression

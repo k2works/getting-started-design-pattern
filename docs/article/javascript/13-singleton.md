@@ -14,7 +14,7 @@
 @startuml
 title Singleton パターン
 
-class <<module>> "SingletonLogger" as SL {
+class "SingletonLogger" as SL <<module>> {
   - instance : Logger
   + getInstance() : Logger
   + _resetForTesting()
@@ -34,7 +34,7 @@ note right of SL
   IIFE で instance を閉じ込める
 end note
 
-class <<module>> "logger (ES module)" as ML {
+class "logger (ES module)" as ML <<module>> {
   - logs : Array
   + log(message)
   + getLog() : String

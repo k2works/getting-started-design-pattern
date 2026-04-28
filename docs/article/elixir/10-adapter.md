@@ -8,7 +8,7 @@ Adapter パターンは、互換性のないインターフェースを持つ既
 
 ```plantuml
 @startuml
-class "<<protocol>> Printable" as P {
+class "Printable" as P <<protocol>> {
   + format(data)
 }
 

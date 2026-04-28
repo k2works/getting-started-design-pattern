@@ -16,7 +16,7 @@ class "Observer" as O {
   + notify(subject)
 }
 
-class "<<map>> Subject" as S {
+class "Subject" as S <<map>> {
   + name: String
   + observers: list
   + state: any

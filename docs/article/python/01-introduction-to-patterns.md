@@ -78,12 +78,12 @@ class Duck:
 @startuml
 title Python のデザインパターンを支える言語機能
 
-class <<module>> "abc" as abc {
+class "abc" as abc <<module>> {
   + ABC
   + abstractmethod()
 }
 
-class <<module>> "typing" as typing {
+class "typing" as typing <<module>> {
   + Protocol
   + Callable
 }

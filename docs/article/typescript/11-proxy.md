@@ -21,11 +21,11 @@ class RealBankAccount {
   + balance: number
 }
 
-class "<<function>>\ncreateProtectionProxy" as PP {
+class "createProtectionProxy" as PP <<function>> {
   (account: BankAccount, isOwner: boolean): BankAccount
 }
 
-class "<<function>>\ncreateVirtualProxy" as VP {
+class "createVirtualProxy" as VP <<function>> {
   (factory: () => BankAccount): BankAccount
 }
 

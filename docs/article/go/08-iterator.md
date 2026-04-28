@@ -14,13 +14,13 @@ Go では `range` キーワードとスライスが組み込みの反復メカ�
 @startuml
 title Iterator パターン（Go 版）
 
-class <<struct>> Account {
+class Account <<struct>> {
   + Name : string
   + Balance : float64
   + String() : string
 }
 
-class <<struct>> Portfolio {
+class Portfolio <<struct>> {
   + Accounts : []Account
   + Add(account Account)
   + TotalBalance() : float64
@@ -106,3 +106,4 @@ func (p *Portfolio) Filter(pred func(Account) bool) *Portfolio {
 | **メリット** | 組み込みの `range` でシンプルに実現 |
 | **注意点** | 大きなコレクションではチャネルやジェネレータで遅延評価を検討 |
 | **関連パターン** | Composite（木構造の走査）、Visitor（操作の分離） |
+

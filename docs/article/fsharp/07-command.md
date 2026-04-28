@@ -22,7 +22,7 @@ class "CommandHistory~TState~" as CH {
   + RedoStack: Command list
 }
 
-class <<module>> "CommandModule" as CM {
+class "CommandModule" as CM <<module>> {
   + create(initialState)
   + execute(command, history)
   + undo(history)

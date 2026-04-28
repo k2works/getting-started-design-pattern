@@ -14,19 +14,19 @@ Go では関数が第一級の値であるため、Strategy パターンは関�
 @startuml
 title Strategy パターン（Go 版）
 
-class <<type>> "Formatter" as Formatter {
+class "Formatter" as Formatter <<type>> {
   func(title string, text []string) string
 }
 
-class <<struct>> Report {
+class Report <<struct>> {
   + Title : string
   + Text : []string
   + Formatter : Formatter
   + Output() : string
 }
 
-class <<function>> HtmlFormatter
-class <<function>> PlainTextFormatter
+class HtmlFormatter <<function>>
+class PlainTextFormatter <<function>>
 
 Report --> Formatter : uses
 HtmlFormatter ..|> Formatter
@@ -128,3 +128,4 @@ func PlainTextFormatter(title string, text []string) string {
 | **メリット** | interface 定義不要、関数がそのまま戦略になる |
 | **注意点** | 状態を持つ戦略が必要な場合はクロージャか struct + メソッドを使う |
 | **関連パターン** | Template Method（骨格 + フック）、Command（操作のカプセル化） |
+

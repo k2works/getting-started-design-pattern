@@ -16,7 +16,7 @@ Go 言語でデザインパターンを学ぶことには特別な意味があ�
 @startuml
 title パターンの 3 要素
 
-class <<stereotype>> Pattern {
+class Pattern <<stereotype>> {
   + context : String
   + problem : String
   + solution : String
@@ -47,25 +47,25 @@ end note
 title GoF パターンの分類（本シリーズで扱う 13 パターン）
 
 package "振る舞い（Behavioral）" {
-  class <<stereotype>> TemplateMethod
-  class <<stereotype>> Strategy
-  class <<stereotype>> Observer
-  class <<stereotype>> Composite
-  class <<stereotype>> Iterator
-  class <<stereotype>> Command
-  class <<stereotype>> Interpreter
+  class TemplateMethod <<stereotype>>
+  class Strategy <<stereotype>>
+  class Observer <<stereotype>>
+  class Composite <<stereotype>>
+  class Iterator <<stereotype>>
+  class Command <<stereotype>>
+  class Interpreter <<stereotype>>
 }
 
 package "構造（Structural）" {
-  class <<stereotype>> Adapter
-  class <<stereotype>> Proxy
-  class <<stereotype>> Decorator
+  class Adapter <<stereotype>>
+  class Proxy <<stereotype>>
+  class Decorator <<stereotype>>
 }
 
 package "生成（Creational）" {
-  class <<stereotype>> Singleton
-  class <<stereotype>> Factory
-  class <<stereotype>> Builder
+  class Singleton <<stereotype>>
+  class Factory <<stereotype>>
+  class Builder <<stereotype>>
 }
 @enduml
 ```

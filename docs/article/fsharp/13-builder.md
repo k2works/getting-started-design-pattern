@@ -18,7 +18,7 @@ class "Computer" as C {
   + Os: string option
 }
 
-class <<module>> "Builder" as B {
+class "Builder" as B <<module>> {
   + defaultComputer: Computer
   + withCpu(cpu, computer)
   + withRam(ram, computer)

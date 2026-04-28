@@ -29,7 +29,7 @@ class "Habitat" as H <<discriminated union>> {
   + Air
 }
 
-class <<module>> "Factory" as F {
+class "Factory" as F <<module>> {
   + createAnimal(type, name): Result
   + createAnimalByHabitat(habitat, name)
   + animalSound(animal)

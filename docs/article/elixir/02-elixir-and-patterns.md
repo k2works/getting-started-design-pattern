@@ -39,7 +39,7 @@ Protocol は型に応じた振る舞いを定義する仕組みで、オブジ�
 
 ```plantuml
 @startuml
-class "<<protocol>> Printable" as P {
+class "Printable" as P <<protocol>> {
   + format(data)
 }
 

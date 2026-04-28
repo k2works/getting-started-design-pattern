@@ -14,7 +14,7 @@
 @startuml
 title Adapter パターン
 
-trait TextObject {
+interface TextObject <<trait>> {
   + text : String
   + sizeInBytes : Int
 }

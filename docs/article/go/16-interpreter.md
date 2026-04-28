@@ -18,26 +18,26 @@ interface Expression {
   + Evaluate(dir string) : []string
 }
 
-class <<struct>> All
-class <<struct>> FileName {
+class All <<struct>>
+class FileName <<struct>> {
   + Pattern : string
 }
-class <<struct>> Bigger {
+class Bigger <<struct>> {
   + Size : int64
   + Inner : Expression
 }
-class <<struct>> Not {
+class Not <<struct>> {
   + Inner : Expression
 }
-class <<struct>> And {
+class And <<struct>> {
   + Left : Expression
   + Right : Expression
 }
-class <<struct>> Or {
+class Or <<struct>> {
   + Left : Expression
   + Right : Expression
 }
-class <<struct>> WithExtension {
+class WithExtension <<struct>> {
   + Ext : string
 }
 
@@ -146,7 +146,7 @@ func (a *And) Evaluate(dir string) []string {
 | **Go での実現** | interface + 再帰的な struct で AST を構築 |
 | **メリット** | 新しい Expression を追加するだけで文法を拡張できる |
 | **注意点** | 複雑な文法にはパーサジェネレータを検討する |
-| **関連パターン** | Composite（再帰構造���、Visitor（操作の追加） |
+| **関連パターン** | Composite（再帰構造）、Visitor（操作の追加） |
 
 ---
 
@@ -161,3 +161,5 @@ func (a *And) Evaluate(dir string) []string {
 | sync.Once + error | Singleton, Builder |
 
 継承のない Go で GoF パターンを実現する過程で、パターンの「本質」が見えてきたはずです。パターンとは特定の言語機能ではなく、設計上の問題に対する普遍的な解決策なのです。
+
+

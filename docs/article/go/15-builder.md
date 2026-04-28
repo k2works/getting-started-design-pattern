@@ -14,7 +14,7 @@ Go ではメソッドチェーン + `Build() (T, error)` のパターンで実�
 @startuml
 title Builder パターン（Go 版）
 
-class <<struct>> Computer {
+class Computer <<struct>> {
   + Display : string
   + Motherboard : Motherboard
   + Drives : []Drive
@@ -22,16 +22,16 @@ class <<struct>> Computer {
   + Describe() : string
 }
 
-class <<struct>> Motherboard {
+class Motherboard <<struct>> {
   + Manufacturer : string
 }
 
-class <<struct>> Drive {
+class Drive <<struct>> {
   + Type : string
   + Capacity : int
 }
 
-class <<struct>> ComputerBuilder {
+class ComputerBuilder <<struct>> {
   - display : string
   - motherboard : Motherboard
   - drives : []Drive
@@ -74,7 +74,7 @@ func TestBuildValidationMissingDisplay(t *testing.T) {
 }
 ```
 
-### Green: 実��する
+### Green: 実装する
 
 ```go
 func (b *ComputerBuilder) SetDisplay(display string) *ComputerBuilder {
@@ -93,7 +93,7 @@ func (b *ComputerBuilder) Build() (*Computer, error) {
 
 ### Refactor: 振り返り
 
-- メソッドチェーンで流暢な API を提供しま���
+- メソッドチェーンで流暢な API を提供します
 - `Build()` が `(value, error)` を返す Go らしいエラーハンドリングです
 - `DesktopBuilder()` / `LaptopBuilder()` のようなプリセットで利便性を高めています
 
@@ -121,3 +121,4 @@ func (b *ComputerBuilder) Build() (*Computer, error) {
 | **メリット** | 流暢な API、エラー返却でバリデーション、プリセット |
 | **注意点** | Builder 自体が mutable なので並行利用には注意 |
 | **関連パターン** | Factory（生成の分離）、Composite（構造の構築） |
+

@@ -15,7 +15,7 @@ class Logger {
   +clear()
 }
 
-class <<module>> singleton {
+class singleton <<module>> {
   -INSTANCE: OnceLock<Logger>
   +get_instance(): &'static Logger
 }

@@ -20,19 +20,19 @@ interface Task {
   + TotalBasicTasks() : int
 }
 
-class <<struct>> AddMixins {
+class AddMixins <<struct>> {
   + TaskName : string
 }
 
-class <<struct>> MixTask {
+class MixTask <<struct>> {
   + TaskName : string
 }
 
-class <<struct>> BakeTask {
+class BakeTask <<struct>> {
   + TaskName : string
 }
 
-class <<struct>> CompositeTask {
+class CompositeTask <<struct>> {
   + TaskName : string
   + SubTasks : []Task
   + AddSubTask(t Task)
@@ -113,3 +113,4 @@ func (c *CompositeTask) GetTimeRequired() float64 {
 | **メリット** | 再帰的な構造を統一的に操作できる |
 | **注意点** | 循環参照に注意 |
 | **関連パターン** | Iterator（子の列挙）、Visitor（操作の追加） |
+

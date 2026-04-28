@@ -10,7 +10,7 @@ Decorator パターンは、オブジェクトに動的に機能を追加しま�
 @startuml
 title Decorator（F# 版）
 
-class <<module>> "Decorator" as D {
+class "Decorator" as D <<module>> {
   + baseWriter: Writer
   + withLineNumbers: Writer -> Writer
   + withTimestamp: string -> Writer -> Writer

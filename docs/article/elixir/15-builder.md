@@ -23,7 +23,7 @@ class "Builder" as B {
   + to_html(element)
 }
 
-class "<<map>> Query" as Q {
+class "Query" as Q <<map>> {
   + select: String
   + from: String
   + where: list
@@ -31,7 +31,7 @@ class "<<map>> Query" as Q {
   + limit: integer
 }
 
-class "<<map>> Element" as E {
+class "Element" as E <<map>> {
   + tag: String
   + attributes: map
   + children: list

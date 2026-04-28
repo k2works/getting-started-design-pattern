@@ -14,7 +14,7 @@ Go では `sync.Once` を使うことで、スレッドセーフな Singleton �
 @startuml
 title Singleton パターン（Go 版）
 
-class <<struct>> Logger {
+class Logger <<struct>> {
   - messages : []string
   - mu : sync.Mutex
   + Log(message string)
@@ -23,7 +23,7 @@ class <<struct>> Logger {
   + Clear()
 }
 
-class <<package>> "singleton" {
+class "singleton" <<package>> {
   - instance : *Logger
   - once : sync.Once
   + GetInstance() : *Logger
@@ -109,3 +109,4 @@ func GetInstance() *Logger {
 | **メリット** | goroutine セーフ、簡潔な実装 |
 | **注意点** | テスト時のリセットが必要、グローバル状態は結合度を高める |
 | **関連パターン** | Factory（インスタンス生成の制御）、Abstract Factory |
+

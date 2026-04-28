@@ -17,7 +17,7 @@ enum Expression {
   Not(Box<Expression>)
 }
 
-class <<module>> interpreter {
+class interpreter <<module>> {
   +evaluate(expr, dir): Vec<String>
   -matches_expr(expr, path): bool
 }

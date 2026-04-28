@@ -21,11 +21,11 @@ class Report {
   + OutputReport() : string
 }
 
-class "<<static>> HtmlFormatter" as HF {
+class "HtmlFormatter" as HF <<static>> {
   + {static} Format(report: Report) : string
 }
 
-class "<<static>> PlainTextFormatter" as PTF {
+class "PlainTextFormatter" as PTF <<static>> {
   + {static} Format(report: Report) : string
 }
 

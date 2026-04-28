@@ -2,13 +2,13 @@
 
 ## はじめに
 
-既存のシステムがインチ単位の `TextObject` インターフェースを期待しているところに、ミリメートル単位の英国式テキ���トオブジェクトを接続したいとします。Adapter パターンは、互換性のないインターフェースを変換するパターンです。
+既存のシステムがインチ単位の `TextObject` インターフェースを期待しているところに、ミリメートル単位の英国式テキストオブジェクトを接続したいとします。Adapter パターンは、互換性のないインターフェースを変換するパターンです。
 
 Go のインターフェースは暗黙的に実装されるため、アダプタの作成が特にスムーズです。
 
 ---
 
-## パターンの���造
+## パターンの構造
 
 ```plantuml
 @startuml
@@ -20,23 +20,23 @@ interface TextObject {
   + Color() : string
 }
 
-class <<struct>> SimpleTextObject {
+class SimpleTextObject <<struct>> {
   + TextContent : string
   + Size : float64
   + ColorValue : string
 }
 
-class <<struct>> BritishTextObject {
+class BritishTextObject <<struct>> {
   + BritishText : string
   + SizeMillimeter : float64
   + Colour : string
 }
 
-class <<struct>> BritishTextObjectAdapter {
+class BritishTextObjectAdapter <<struct>> {
   + Object : *BritishTextObject
 }
 
-class <<struct>> Renderer {
+class Renderer <<struct>> {
   + Render(obj TextObject) : string
 }
 
@@ -51,7 +51,7 @@ Renderer --> TextObject : uses
 
 ## TDD で作る
 
-### Red: テストを���く
+### Red: テストを書く
 
 ```go
 func TestMillimeterToInchConversion(t *testing.T) {
@@ -100,7 +100,8 @@ func (a *BritishTextObjectAdapter) Color() string       { return a.Object.Colour
 | 観点 | 内容 |
 |------|------|
 | **意図** | 互換性のないインターフェースを変換する |
-| **Go での実現** | ラッパー struct で変換メソ��ドを提供 |
+| **Go での実現** | ラッパー struct で変換メソッドを提供 |
 | **メリット** | 暗黙的インターフェースで宣言不要、コンパイル時型安全 |
 | **注意点** | 変換ロジックが複雑な場合はアダプタが肥大化しうる |
 | **関連パターン** | Proxy（同一インターフェースの制御）、Decorator（機能追加） |
+

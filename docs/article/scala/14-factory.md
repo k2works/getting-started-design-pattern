@@ -14,7 +14,7 @@
 @startuml
 title Factory パターン
 
-trait OrganismFactory {
+interface OrganismFactory <<trait>> {
   + createAnimal(name: String) : Animal
   + createPlant(name: String) : Plant
 }
@@ -22,12 +22,12 @@ trait OrganismFactory {
 object PondFactory
 object JungleFactory
 
-trait Animal {
+interface Animal <<trait>> {
   + name : String
   + speak : String
 }
 
-trait Plant {
+interface Plant <<trait>> {
   + name : String
   + edible : Boolean
 }

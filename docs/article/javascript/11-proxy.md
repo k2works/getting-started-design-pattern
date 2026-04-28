@@ -22,11 +22,11 @@ class BankAccount {
   + balance : Number <<get>>
 }
 
-class <<module>> "protectionProxy" as PP {
+class "protectionProxy" as PP <<module>> {
   + (account, currentUser) : Proxy
 }
 
-class <<module>> "virtualProxy" as VP {
+class "virtualProxy" as VP <<module>> {
   + (factory) : Proxy
 }
 

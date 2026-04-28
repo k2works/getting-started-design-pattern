@@ -138,7 +138,7 @@ Checkstyle は Java のソースコードが規約に準拠しているかをチ
 ### build.gradle への追加
 
 ```groovy
-// build.gradle���Checkstyle プラグインの追加）
+// build.gradle（Checkstyle プラグインの追加）
 plugins {
     id 'java'
     id 'jacoco'
@@ -239,4 +239,4 @@ Gradle の `check` タスクは、Checkstyle プラグインを追加すると�
 - カバレッジ目標は行・ブランチとも 80% 以上
 - Checkstyle で静的解析・コード複雑度（循環的複雑度 7 以下）を自動チェックする
 - `./gradlew check` で静的解析 + テスト + カバレッジを一括実行できる
-- 次章からは、この���境を使って最初のパターン **Template Method** を実装��る
+- 次章からは、この環境を使って最初のパターン **Template Method** を実装する

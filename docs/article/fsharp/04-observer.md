@@ -17,7 +17,7 @@ class "Subject~T~" as S {
   + NotifyObservers(value)
 }
 
-class <<module>> "Observer~T~" as O {
+class "Observer~T~" as O <<module>> {
   (T -> unit)
 }
 

@@ -17,15 +17,15 @@ class "Proxy" as P {
   + logging_proxy(target_fn, log_fn)
 }
 
-class "<<tuple>> LazyProxy" as LP {
+class "LazyProxy" as LP <<tuple>> {
   + {:lazy, compute_fn}
 }
 
-class "<<tuple>> LoadedProxy" as LDP {
+class "LoadedProxy" as LDP <<tuple>> {
   + {:loaded, value}
 }
 
-class "<<map>> ProtectedProxy" as PP {
+class "ProtectedProxy" as PP <<map>> {
   + resource: any
   + allowed_roles: list
 }

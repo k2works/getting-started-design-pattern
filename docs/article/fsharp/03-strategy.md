@@ -10,7 +10,7 @@ Strategy パターンは、アルゴリズムをカプセル化して交換可�
 @startuml
 title Strategy（F# 版）
 
-class <<module>> "Strategy" as S {
+class "Strategy" as S <<module>> {
   + formatReport(strategy, report)
 }
 
@@ -19,13 +19,13 @@ class "Report" as R {
   + Items: string list
 }
 
-class <<module>> "htmlStrategy" as HS {
+class "htmlStrategy" as HS <<module>> {
   (string -> string)
 }
-class <<module>> "plainTextStrategy" as PS {
+class "plainTextStrategy" as PS <<module>> {
   (string -> string)
 }
-class <<module>> "markdownStrategy" as MS {
+class "markdownStrategy" as MS <<module>> {
   (string -> string)
 }
 

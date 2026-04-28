@@ -21,7 +21,7 @@ class "Registry" as R {
   + unregister(name)
 }
 
-class "<<module>> Application" as A {
+class "Application" as A <<module>> {
   + put_env(app, key, value)
   + get_env(app, key, default)
 }

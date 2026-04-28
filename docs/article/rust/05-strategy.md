@@ -16,7 +16,7 @@ class Report {
   +set_formatter(formatter)
 }
 
-class <<module>> Formatters {
+class Formatters <<module>> {
   +html_formatter(): Box<dyn Fn>
   +plain_text_formatter(): Box<dyn Fn>
 }

@@ -25,20 +25,20 @@ interface Plant {
   + Grow() : string
 }
 
-class <<struct>> Duck
-class <<struct>> Frog
-class <<struct>> Tiger
+class Duck <<struct>>
+class Frog <<struct>>
+class Tiger <<struct>>
 
-class <<struct>> WaterLily
-class <<struct>> Algae
-class <<struct>> Tree
+class WaterLily <<struct>>
+class Algae <<struct>>
+class Tree <<struct>>
 
-class <<struct>> OrganismFactory {
+class OrganismFactory <<struct>> {
   + NewAnimal : func(name string) Animal
   + NewPlant : func(name string) Plant
 }
 
-class <<struct>> Habitat {
+class Habitat <<struct>> {
   + Animals : []Animal
   + Plants : []Plant
   + Describe() : string
@@ -123,3 +123,5 @@ func PondFactory() *OrganismFactory {
 | **メリット** | 継承なしで拡張可能、型安全 |
 | **注意点** | ファクトリの種類が増えると管理が必要 |
 | **関連パターン** | Builder（複雑な生成）、Singleton（単一インスタンス） |
+
+

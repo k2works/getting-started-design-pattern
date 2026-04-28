@@ -10,7 +10,7 @@ Iterator パターンは、コレクションの内部構造を公開せずに�
 @startuml
 title Iterator（F# 版）
 
-class <<module>> "Iterator" as I {
+class "Iterator" as I <<module>> {
   + rangeSequence(start, stop)
   + fibonacci
   + depthFirst(tree)
@@ -23,7 +23,7 @@ class "Tree~T~" as T <<discriminated union>> {
   + Node(T, Tree~T~ list)
 }
 
-class <<module>> "Seq" as S {
+class "Seq" as S <<module>> {
   + filter()
   + map()
   + take()

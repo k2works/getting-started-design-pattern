@@ -10,7 +10,7 @@ Singleton パターンは、クラスのインスタンスが 1 つだけであ�
 @startuml
 title Singleton（F# 版）
 
-class <<module>> "Singleton" as S {
+class "Singleton" as S <<module>> {
   + defaultConfig: AppConfig
   + withDatabaseUrl(url, config)
   + withMaxConnections(count, config)

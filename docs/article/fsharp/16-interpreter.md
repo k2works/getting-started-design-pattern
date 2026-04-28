@@ -89,39 +89,39 @@ F# のモジュールは、名前空間と関数のグルーピングを提供�
 title F# デザインパターンの全体像
 
 package "振る舞いパターン" {
-  class <<module>> "高階関数" as HOF {
+  class "高階関数" as HOF <<module>> {
     Template Method
     Strategy
     Command
   }
-  class <<module>> "コールバック" as CB {
+  class "コールバック" as CB <<module>> {
     Observer
   }
 }
 
 package "構造パターン" {
-  class <<module>> "判別共用体" as DU {
+  class "判別共用体" as DU <<module>> {
     Composite
     Factory
     Interpreter
   }
-  class <<module>> "関数合成" as FC {
+  class "関数合成" as FC <<module>> {
     Decorator
   }
-  class <<module>> "関数ラッパー" as FW {
+  class "関数ラッパー" as FW <<module>> {
     Adapter
     Proxy
   }
 }
 
 package "生成パターン" {
-  class <<module>> "モジュール" as Mod {
+  class "モジュール" as Mod <<module>> {
     Singleton
   }
-  class <<module>> "パイプライン / CE" as PL {
+  class "パイプライン / CE" as PL <<module>> {
     Builder
   }
-  class <<module>> "シーケンス式" as Seq {
+  class "シーケンス式" as Seq <<module>> {
     Iterator
   }
 }

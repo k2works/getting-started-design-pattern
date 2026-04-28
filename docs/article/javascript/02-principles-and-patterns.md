@@ -109,13 +109,13 @@ JavaScript では関数をオブジェクトとして扱えます。これによ
 @startuml
 title 関数オブジェクトによるパターンの軽量化
 
-class <<module>> "GoF 的実装" as GOF {
+class "GoF 的実装" as GOF <<module>> {
   + Strategy インターフェース
   + ConcreteStrategy クラス
   + Context クラス
 }
 
-class <<module>> "JavaScript 的実装" as JS {
+class "JavaScript 的実装" as JS <<module>> {
   + 関数（formatter）
   + Context クラス
 }

@@ -14,18 +14,18 @@
 @startuml
 title Builder パターン
 
-class "Computer <<record>>" as Computer {
+class "Computer" as Computer <<record>> {
   + display() : String
   + motherboard() : Motherboard
   + drives() : List<Drive>
 }
 
-class "Motherboard <<record>>" as Motherboard {
+class "Motherboard" as Motherboard <<record>> {
   + cpu() : String
   + memorySize() : int
 }
 
-class "Drive <<record>>" as Drive {
+class "Drive" as Drive <<record>> {
   + type() : String
   + size() : int
   + writable() : boolean

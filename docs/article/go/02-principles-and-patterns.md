@@ -17,14 +17,14 @@ Go ではパッケージ単位で責務を分離します。1 つのパッケー
 title 単一責任の原則
 
 package "templatemethod" {
-  class <<struct>> ReportFormat {
+class ReportFormat <<struct>> {
     + OutputStart : func
     + OutputLine : func
   }
 }
 
 package "strategy" {
-  class <<struct>> Report {
+  class Report <<struct>> {
     + Formatter : func
   }
 }
@@ -59,7 +59,7 @@ Kent Beck が提唱した 4 つのルールを Go に当てはめます。
 @startuml
 title シンプルな設計の 4 つのルール（優先度順）
 
-class <<stereotype>> SimpleDesign {
+class SimpleDesign <<stereotype>> {
   + 1. すべてのテストが通る
   + 2. 意図が明確に表現されている
   + 3. 重複がない
@@ -96,3 +96,4 @@ Go のことわざ（Go Proverbs）には設計原則に通じるものがあり
 | **シンプルな設計** | テスト + 明確な命名 + 最小要素 |
 | **Go の哲学** | 小さなインターフェース、暗黙的実装、ゼロ値の活用 |
 | **次章** | 開発環境と TDD 基盤のセットアップ |
+

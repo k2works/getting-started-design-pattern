@@ -14,7 +14,7 @@
 @startuml
 title Proxy パターン
 
-trait BankAccount {
+interface BankAccount <<trait>> {
   + deposit(amount: Double) : Unit
   + withdraw(amount: Double) : Boolean
   + balance : Double

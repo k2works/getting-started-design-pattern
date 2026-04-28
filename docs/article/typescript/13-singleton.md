@@ -20,7 +20,7 @@ class SingletonLogger {
   + clear(): void
 }
 
-class "<<module>>\nlogger" as ModuleLogger {
+class "logger" as ModuleLogger <<module>> {
   SingletonLogger.getInstance()
 }
 

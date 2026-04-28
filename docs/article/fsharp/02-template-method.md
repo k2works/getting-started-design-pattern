@@ -10,7 +10,7 @@ Template Method パターンは、アルゴリズムの骨格を定義し、一�
 @startuml
 title Template Method（F# 版）
 
-class <<module>> "TemplateMethod" as TM {
+class "TemplateMethod" as TM <<module>> {
   + generateReport()
 }
 
@@ -21,8 +21,8 @@ class "ReportFormat" as RF {
   + OutputEnd: string -> string
 }
 
-class <<module>> "htmlFormat" as HF
-class <<module>> "plainTextFormat" as PF
+class "htmlFormat" as HF <<module>>
+class "plainTextFormat" as PF <<module>>
 
 TM --> RF : uses
 RF <|.. HF : implements

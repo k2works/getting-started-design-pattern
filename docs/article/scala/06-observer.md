@@ -14,7 +14,7 @@
 @startuml
 title Observer パターン
 
-trait Observer {
+interface Observer <<trait>> {
   + update(employee: Employee) : Unit
 }
 

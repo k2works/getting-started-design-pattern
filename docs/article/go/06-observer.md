@@ -14,11 +14,11 @@ Go ではコールバック関数のスライスを使って、シンプルか�
 @startuml
 title Observer パターン（Go 版）
 
-class <<type>> "Observer" as Obs {
+class "Observer" as Obs <<type>> {
   func(e *Employee)
 }
 
-class <<struct>> Employee {
+class Employee <<struct>> {
   + Name : string
   + Title : string
   + Salary : float64
@@ -97,3 +97,4 @@ func (e *Employee) SetSalary(newSalary float64) {
 | **メリット** | interface 定義不要、関数がそのまま Observer になる |
 | **注意点** | 循環通知に注意、goroutine で非同期化も可能 |
 | **関連パターン** | Strategy（関数の差し替え）、Mediator（調停者） |
+

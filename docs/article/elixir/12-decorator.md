@@ -20,7 +20,7 @@ class "Decorator" as D {
   + wrap_brackets(text)
 }
 
-class "<<map>> Beverage" as B {
+class "Beverage" as B <<map>> {
   + description: String
   + cost: integer
 }

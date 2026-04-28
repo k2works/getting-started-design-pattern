@@ -14,7 +14,7 @@
 @startuml
 title Builder パターン
 
-class "<<record>> Computer" as Computer {
+class "Computer" as Computer <<record>> {
   + Display : string
   + Motherboard : string
   + Drives : List<string>

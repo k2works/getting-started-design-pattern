@@ -17,19 +17,19 @@ Rust でデザインパターンを学ぶ意義は、所有権システムとト
 ```plantuml
 @startuml
 package "振る舞いパターン" {
-  class <<module>> TemplateMethod {
+  class TemplateMethod <<module>> {
     +トレイトのデフォルト実装
   }
-  class <<module>> Strategy {
+  class Strategy <<module>> {
     +クロージャの差し替え
   }
-  class <<module>> Observer {
+  class Observer <<module>> {
     +通知メカニズム
   }
-  class <<module>> Command {
+  class Command <<module>> {
     +操作のオブジェクト化
   }
-  class <<module>> Iterator {
+  class Iterator <<module>> {
     +コレクション走査
   }
 }
@@ -43,16 +43,16 @@ package "振る舞いパターン" {
 ```plantuml
 @startuml
 package "構造パターン" {
-  class <<module>> Composite {
+  class Composite <<module>> {
     +列挙型で木構造
   }
-  class <<module>> Adapter {
+  class Adapter <<module>> {
     +インターフェース変換
   }
-  class <<module>> Proxy {
+  class Proxy <<module>> {
     +アクセス制御
   }
-  class <<module>> Decorator {
+  class Decorator <<module>> {
     +機能の動的追加
   }
 }
@@ -66,16 +66,16 @@ package "構造パターン" {
 ```plantuml
 @startuml
 package "生成パターン" {
-  class <<module>> Singleton {
+  class Singleton <<module>> {
     +OnceLock による唯一性
   }
-  class <<module>> Factory {
+  class Factory <<module>> {
     +生成の抽象化
   }
-  class <<module>> Builder {
+  class Builder <<module>> {
     +段階的な構築
   }
-  class <<module>> Interpreter {
+  class Interpreter <<module>> {
     +AST の構築と評価
   }
 }

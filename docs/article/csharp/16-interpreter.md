@@ -14,7 +14,7 @@
 @startuml
 title Interpreter パターン
 
-class "<<record>> FileEntry" as FE {
+class "FileEntry" as FE <<record>> {
   + Name : string
   + Size : long
   + Writable : bool

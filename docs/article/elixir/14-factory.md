@@ -15,18 +15,18 @@ class "Factory" as F {
   + create_connection(config)
 }
 
-class "<<map>> Circle" as C {
+class "Circle" as C <<map>> {
   + type: :circle
   + radius: number
 }
 
-class "<<map>> Rectangle" as R {
+class "Rectangle" as R <<map>> {
   + type: :rectangle
   + width: number
   + height: number
 }
 
-class "<<map>> Triangle" as T {
+class "Triangle" as T <<map>> {
   + type: :triangle
   + base: number
   + height: number

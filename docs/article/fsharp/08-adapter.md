@@ -22,7 +22,7 @@ class "LegacyJsonRenderer" as LJ {
   + RenderJson: string -> string
 }
 
-class <<module>> "Adapter" as A {
+class "Adapter" as A <<module>> {
   + adaptHtmlRenderer(legacy)
   + adaptJsonRenderer(legacy)
   + renderContent(renderer, content)

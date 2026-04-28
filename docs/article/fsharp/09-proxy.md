@@ -15,7 +15,7 @@ class "VirtualProxy~T~" as VP {
   + Description: string
 }
 
-class <<module>> "ProxyModule" as PM {
+class "ProxyModule" as PM <<module>> {
   + createVirtualProxy(desc, factory)
   + getValue(proxy)
   + isValueCreated(proxy)

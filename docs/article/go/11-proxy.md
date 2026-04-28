@@ -20,17 +20,17 @@ interface BankAccount {
   + Balance() : int
 }
 
-class <<struct>> RealBankAccount {
+class RealBankAccount <<struct>> {
   - balance : int
 }
 
-class <<struct>> ProtectionProxy {
+class ProtectionProxy <<struct>> {
   - account : BankAccount
   - owner : string
   + WithdrawAs(user string, amount int) : error
 }
 
-class <<struct>> VirtualProxy {
+class VirtualProxy <<struct>> {
   - balance : int
   - account : *RealBankAccount
   + IsInitialized() : bool
@@ -124,3 +124,4 @@ func (v *VirtualProxy) ensureAccount() {
 | **メリット** | 型安全、error 返却でアクセス制御が明示的 |
 | **注意点** | Proxy のメソッドが増えるとボイラープレートが多くなる |
 | **関連パターン** | Adapter（インターフェース変換）、Decorator（機能追加） |
+

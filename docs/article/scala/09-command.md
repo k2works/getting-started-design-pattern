@@ -14,7 +14,7 @@
 @startuml
 title Command パターン
 
-trait Command {
+interface Command <<trait>> {
   + execute() : Unit
   + undo() : Unit
   + description : String

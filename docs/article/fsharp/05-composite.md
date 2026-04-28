@@ -10,7 +10,7 @@ Composite パターンは、個々のオブジェクトとオブジェクトの�
 @startuml
 title Composite（F# 版）
 
-class <<module>> "Composite" as C {
+class "Composite" as C <<module>> {
   + getName(task)
   + getTotalDuration(task)
   + getLeafCount(task)

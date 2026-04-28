@@ -27,43 +27,43 @@ let result = format html "Hello"
 @startuml
 title GoF パターンと F# の対応
 
-class <<module>> "高階関数" as HOF {
+class "高階関数" as HOF <<module>> {
   Strategy
   Template Method
   Command
 }
 
-class <<module>> "判別共用体" as DU {
+class "判別共用体" as DU <<module>> {
   Composite
   Factory
   Interpreter
 }
 
-class <<module>> "関数合成" as FC {
+class "関数合成" as FC <<module>> {
   Decorator
 }
 
-class <<module>> "モジュール" as Mod {
+class "モジュール" as Mod <<module>> {
   Singleton
 }
 
-class <<module>> "Lazy / ラッパー" as Lazy {
+class "Lazy / ラッパー" as Lazy <<module>> {
   Proxy
 }
 
-class <<module>> "コンピュテーション式" as CE {
+class "コンピュテーション式" as CE <<module>> {
   Builder
 }
 
-class <<module>> "シーケンス式" as Seq {
+class "シーケンス式" as Seq <<module>> {
   Iterator
 }
 
-class <<module>> "コールバック" as CB {
+class "コールバック" as CB <<module>> {
   Observer
 }
 
-class <<module>> "レコード型" as Rec {
+class "レコード型" as Rec <<module>> {
   Adapter
 }
 
