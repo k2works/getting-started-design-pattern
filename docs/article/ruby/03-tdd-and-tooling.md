@@ -161,6 +161,122 @@ open coverage/index.html
 
 ---
 
+## 静的コード解析: RuboCop
+
+### RuboCop とは
+
+RuboCop は Ruby の静的コード解析ツールです。コーディングスタイルの違反を検出し、一部は自動修正できます。解析とフォーマットの両方の機能を持っています。
+
+### .rubocop.yml の設定
+
+```yaml
+# .rubocop.yml
+AllCops:
+  TargetRubyVersion: 3.3
+  NewCops: enable
+  SuggestExtensions: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: true
+
+Metrics/MethodLength:
+  Max: 20
+
+Metrics/CyclomaticComplexity:
+  Max: 7
+
+Metrics/PerceivedComplexity:
+  Max: 7
+
+Metrics/BlockLength:
+  Exclude:
+    - 'test/**/*'
+    - 'Rakefile'
+
+Naming/MethodName:
+  Enabled: false
+
+Naming/AsciiIdentifiers:
+  Exclude:
+    - 'test/**/*'
+```
+
+### 主要なルールの解説
+
+| ルール | 設定 | 説明 |
+|--------|------|------|
+| `TargetRubyVersion` | 3.3 | 対象 Ruby バージョン |
+| `NewCops: enable` | - | 新しいルールを自動有効化 |
+| `Style/FrozenStringLiteralComment` | true | `frozen_string_literal: true` を必須に |
+| `Metrics/MethodLength` | Max: 20 | メソッドの最大行数 |
+| `Metrics/CyclomaticComplexity` | Max: 7 | 循環的複雑度の上限 |
+| `Metrics/PerceivedComplexity` | Max: 7 | 認知的複雑度の上限 |
+
+### RuboCop の実行
+
+```bash
+# 解析の実行
+bundle exec rubocop
+
+# 自動修正
+bundle exec rubocop --auto-correct
+```
+
+---
+
+## コード複雑度のチェック
+
+### 循環的複雑度（Cyclomatic Complexity）
+
+循環的複雑度とは、コードがどれぐらい複雑であるかをメソッド単位で数値にして表す指標です。本プロジェクトでは **7 以下** に制限しています。
+
+| 複雑度の範囲 | 意味 |
+|-------------|------|
+| 1〜10 | 低複雑度: 管理しやすく、問題なし |
+| 11〜20 | 中程度の複雑度: リファクタリングを検討 |
+| 21〜50 | 高複雑度: リファクタリングが強く推奨される |
+| 51 以上 | 非常に高い複雑度: コードを分割する必要がある |
+
+### 認知的複雑度（Perceived Complexity）
+
+RuboCop では `Metrics/PerceivedComplexity` が認知的複雑度に相当します。コードの構造が「どれだけ頭を使う必要があるか」を定量的に評価します。本プロジェクトでは **7 以下** に制限しています。
+
+---
+
+## 品質チェックの一括実行
+
+すべての品質チェックを一括で実行するには、Rakefile に `check` タスクを定義します。
+
+```ruby
+# Rakefile（check タスクの追加）
+task :rubocop do
+  sh "bundle exec rubocop"
+end
+
+task check: [:rubocop, :test]
+```
+
+```bash
+# 静的解析 + テスト + カバレッジを一括実行
+bundle exec rake check
+```
+
+### 各言語の品質ツール比較
+
+| 用途 | Ruby | Java | TypeScript | Python |
+|------|------|------|-----------|--------|
+| パッケージ管理 | Bundler | Gradle | npm | uv |
+| テスト | minitest | JUnit 5 | Jest | pytest |
+| 静的解析 | RuboCop | Checkstyle + PMD | ESLint | Ruff |
+| フォーマッター | RuboCop | Checkstyle | Prettier | Ruff |
+| カバレッジ | SimpleCov | JaCoCo | @vitest/coverage-v8 | pytest-cov |
+| 複雑度チェック | RuboCop Metrics | PMD | ESLint complexity | Ruff McCabe |
+
+---
+
 ## Rake タスク
 
 ```ruby
@@ -183,8 +299,10 @@ task default: :test
 
 ## まとめ
 
-- Ruby 3.3 + minitest + simplecov の環境を構築した
+- Ruby 3.3 + minitest + simplecov + RuboCop の環境を構築した
 - テストは `*_test.rb` の命名規則で、`test/` ディレクトリに配置する
 - TDD の Red-Green-Refactor サイクルでパターンを段階的に実装する
 - カバレッジ目標は行・ブランチとも 80% 以上
+- RuboCop で静的解析・コード複雑度（循環的複雑度 7 以下）を自動チェックする
+- `bundle exec rake check` で静的解析 + テスト + カバレッジを一括実行できる
 - 次章からは、この環境を使って最初のパターン **Template Method** を実装する
