@@ -100,6 +100,16 @@ class BuilderTest {
     }
 
     @Test
+    void laptopBuilderCreatesComputerWithLcdDisplay() {
+        LaptopBuilder builder = new LaptopBuilder();
+        builder.addHardDisk(5000);
+
+        Computer computer = builder.getComputer();
+
+        assertEquals("LCD", computer.display());
+    }
+
+    @Test
     void builderValidatesMemorySize() {
         DesktopBuilder builder = new DesktopBuilder();
         builder.setMemorySize(100);
@@ -146,6 +156,10 @@ public abstract class ComputerBuilder {
         drives.add(new Drive("cd", 760, writable));
     }
 
+    public void addDvd(boolean writable) {
+        drives.add(new Drive("dvd", 4700, writable));
+    }
+
     public void addHardDisk(int size) {
         drives.add(new Drive("hard_disk", size, true));
     }
@@ -170,7 +184,7 @@ public abstract class ComputerBuilder {
 }
 ```
 
-**ConcreteBuilder** --- デフォルト構成を設定します。
+**ConcreteBuilder** --- デフォルト構成を設定します。`DesktopBuilder` は CRT ディスプレイ、`LaptopBuilder` は LCD ディスプレイをデフォルトとします。ラップトップは物理的な制約により LCD のみが選択されます。
 
 ```java
 public class DesktopBuilder extends ComputerBuilder {
@@ -181,6 +195,8 @@ public class LaptopBuilder extends ComputerBuilder {
     public LaptopBuilder() { this.display = "LCD"; }
 }
 ```
+
+`addDvd()` メソッドにより、DVD ドライブ（4700MB）を追加できます。ただし、ドライブは最大 4 台までの制約があります。
 
 ### Refactor: 振り返り
 

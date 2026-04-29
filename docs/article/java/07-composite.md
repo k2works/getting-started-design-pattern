@@ -35,7 +35,27 @@ class AddDryIngredientsTask {
   + getTimeRequired() : double
 }
 
+class AddLiquidsTask {
+  + getTimeRequired() : double
+}
+
 class MixTask {
+  + getTimeRequired() : double
+}
+
+class FillPanTask {
+  + getTimeRequired() : double
+}
+
+class BakeTask {
+  + getTimeRequired() : double
+}
+
+class FrostTask {
+  + getTimeRequired() : double
+}
+
+class LickSpoonTask {
   + getTimeRequired() : double
 }
 
@@ -44,7 +64,12 @@ class MakeCakeTask
 
 Task <|-- CompositeTask
 Task <|-- AddDryIngredientsTask
+Task <|-- AddLiquidsTask
 Task <|-- MixTask
+Task <|-- FillPanTask
+Task <|-- BakeTask
+Task <|-- FrostTask
+Task <|-- LickSpoonTask
 CompositeTask <|-- MakeBatterTask
 CompositeTask <|-- MakeCakeTask
 CompositeTask o--> "*" Task : subTasks
@@ -54,7 +79,17 @@ CompositeTask o--> "*" Task : subTasks
 **登場人物**:
 
 - **Component（Task）**: 共通インターフェースを定義する基底クラス
-- **Leaf（AddDryIngredientsTask / MixTask 等）**: 末端のタスク
+- **Leaf**: 末端のタスク（全 7 クラス）
+
+| クラス名 | タスク名 | 所要時間 |
+|----------|----------|----------|
+| `AddDryIngredientsTask` | 乾燥材料を加える | 1.0 |
+| `AddLiquidsTask` | 液体材料を加える | 1.0 |
+| `MixTask` | 混ぜる | 3.0 |
+| `FillPanTask` | 型に流し込む | 2.0 |
+| `BakeTask` | 焼く | 10.0 |
+| `FrostTask` | アイシングする | 4.0 |
+| `LickSpoonTask` | スプーンをなめる | 1.0 |
 - **Composite（CompositeTask）**: 子タスクを管理し、操作を再帰的に委譲する
 
 ---
@@ -90,6 +125,14 @@ class CompositeTest {
     void makeCakeTaskCountsAllBasicTasks() {
         CompositeTask makeCake = new MakeCakeTask();
         assertEquals(7, makeCake.getTotalBasicTasks());
+    }
+
+    @Test
+    void canAccessSubTaskByIndex() {
+        CompositeTask makeBatter = new MakeBatterTask();
+        assertEquals("乾燥材料を加える", makeBatter.getSubTask(0).getName());
+        assertEquals("液体材料を加える", makeBatter.getSubTask(1).getName());
+        assertEquals("混ぜる", makeBatter.getSubTask(2).getName());
     }
 }
 ```
@@ -134,6 +177,10 @@ public class CompositeTask extends Task {
         task.setParent(null);
     }
 
+    public Task getSubTask(int index) {
+        return subTasks.get(index);
+    }
+
     @Override
     public double getTimeRequired() {
         return subTasks.stream()
@@ -169,6 +216,7 @@ public class MakeCakeTask extends CompositeTask {
 
 - `Stream.mapToDouble().sum()` により、再帰的な集約処理が宣言的に書けます。
 - `parent` フィールドにより、木構造を双方向に辿ることができます。
+- `getSubTask(int index)` メソッドにより、インデックスで直接サブタスクにアクセスできます。
 
 ---
 

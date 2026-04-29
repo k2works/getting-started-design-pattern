@@ -109,6 +109,17 @@ class InterpreterTest {
     }
 
     @Test
+    void orExpressionUnitesTwoExpressions() {
+        Expression expr = new OrExpression(
+                new FileNameExpression("*.txt"),
+                new FileNameExpression("*.csv")
+        );
+        List<Path> results = expr.evaluate(tempDir);
+
+        assertEquals(3, results.size());
+    }
+
+    @Test
     void complexExpressionCombinesMultipleOperators() {
         // txt ファイルのうち大きくないものを検索
         Expression expr = new AndExpression(
@@ -181,6 +192,29 @@ public class AndExpression implements Expression {
 }
 ```
 
+**OrExpression** --- 2 つの式のいずれかに一致するファイルを返します。`LinkedHashSet` で重複を排除します。
+
+```java
+public class OrExpression implements Expression {
+    private final Expression left;
+    private final Expression right;
+
+    public OrExpression(Expression left, Expression right) {
+        this.left = left;
+        this.right = right;
+    }
+
+    @Override
+    public List<Path> evaluate(Path dir) {
+        Set<Path> result = new LinkedHashSet<>(left.evaluate(dir));
+        result.addAll(right.evaluate(dir));
+        return new ArrayList<>(result);
+    }
+}
+```
+
+**NotExpression** --- 全ファイルから一致するものを除外します。
+
 ```java
 public class NotExpression implements Expression {
     private final Expression expression;
@@ -205,6 +239,7 @@ public class NotExpression implements Expression {
 - `PathMatcher` は Java の `glob` パターンを使ってファイル名をマッチングします。正規表現よりもファイル検索に特化しています。
 - `Files.walk()` は `try-with-resources` で使用し、Stream のクローズを保証しています。
 - `retainAll()` と `removeAll()` で集合演算を行い、AND / NOT を簡潔に表現しています。
+- `OrExpression` では `LinkedHashSet` を使い、順序を保持しつつ重複を排除しています。
 
 ---
 

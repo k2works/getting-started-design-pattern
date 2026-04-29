@@ -20,6 +20,8 @@ class Report {
   - formatter : Formatter
   + outputReport() : String
   + setFormatter(formatter : Formatter)
+  + getTitle() : String
+  + getText() : List<String>
 }
 
 interface Formatter <<FunctionalInterface>> {
@@ -131,8 +133,14 @@ public class Report {
     public void setFormatter(Formatter formatter) {
         this.formatter = formatter;
     }
+
+    public String getTitle() { return title; }
+
+    public List<String> getText() { return text; }
 }
 ```
+
+`getTitle()` と `getText()` アクセサにより、`Report` が保持するデータに外部からアクセスできます。テストでレポートの初期状態を検証する際にも利用できます。
 
 **ConcreteStrategy** --- 具体的なフォーマッタを実装します。
 

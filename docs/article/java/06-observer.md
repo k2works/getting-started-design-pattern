@@ -74,6 +74,43 @@ class ObserverTest {
     }
 
     @Test
+    void taxManIsNotifiedOnSalaryChange() {
+        Employee employee = new Employee("田中太郎", "エンジニア", 300000);
+        TaxMan taxMan = new TaxMan();
+        employee.addObserver(taxMan);
+
+        employee.setSalary(350000);
+
+        assertEquals("田中太郎 に新しい税金の請求書を送付します",
+                     taxMan.getLastNotification());
+    }
+
+    @Test
+    void multipleObserversAreNotified() {
+        Employee employee = new Employee("田中太郎", "エンジニア", 300000);
+        Payroll payroll = new Payroll();
+        TaxMan taxMan = new TaxMan();
+        employee.addObserver(payroll);
+        employee.addObserver(taxMan);
+
+        employee.setSalary(400000);
+
+        assertNotNull(payroll.getLastNotification());
+        assertNotNull(taxMan.getLastNotification());
+    }
+
+    @Test
+    void observerIsNotifiedOnTitleChange() {
+        Employee employee = new Employee("田中太郎", "エンジニア", 300000);
+        Payroll payroll = new Payroll();
+        employee.addObserver(payroll);
+
+        employee.setTitle("シニアエンジニア");
+
+        assertNotNull(payroll.getLastNotification());
+    }
+
+    @Test
     void removedObserverIsNotNotified() {
         Employee employee = new Employee("田中太郎", "エンジニア", 300000);
         Payroll payroll = new Payroll();
@@ -121,6 +158,11 @@ public class Employee {
         notifyObservers();
     }
 
+    public void setTitle(String newTitle) {
+        this.title = newTitle;
+        notifyObservers();
+    }
+
     private void notifyObservers() {
         for (Observer observer : observers) {
             observer.update(this);
@@ -131,7 +173,7 @@ public class Employee {
 }
 ```
 
-**ConcreteObserver** --- 通知を受けて具体的な処理を行います。
+**ConcreteObserver（Payroll）** --- 給与変更の通知を受けて記録します。
 
 ```java
 public class Payroll implements Observer {
@@ -142,6 +184,22 @@ public class Payroll implements Observer {
     public void update(Employee employee) {
         lastNotification = employee.getName() + " の給与が "
                          + employee.getSalary() + " に変更されました";
+    }
+
+    public String getLastNotification() { return lastNotification; }
+}
+```
+
+**ConcreteObserver（TaxMan）** --- 税務担当として、従業員の変更通知を受けて税金の請求書送付を記録します。
+
+```java
+public class TaxMan implements Observer {
+
+    private String lastNotification;
+
+    @Override
+    public void update(Employee employee) {
+        lastNotification = employee.getName() + " に新しい税金の請求書を送付します";
     }
 
     public String getLastNotification() { return lastNotification; }
