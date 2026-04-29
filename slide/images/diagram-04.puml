@@ -1,0 +1,19 @@
+@startuml
+left to right direction
+
+rectangle "変更要求" as change #ffcccc
+rectangle "素朴な実装" as naive #ffeecc {
+  rectangle "条件分岐の\n爆発" as if_hell
+  rectangle "コピペ\nコード" as copypaste
+  rectangle "密結合" as coupling
+}
+rectangle "パターン適用後" as pattern #ccffcc {
+  rectangle "変化の分離" as separate
+  rectangle "インターフェース\n設計" as interface
+  rectangle "委譲" as delegate
+}
+
+change --> naive : 修正箇所が散らばる
+change --> pattern : 影響範囲が局所化
+naive --> pattern : リファクタリング
+@enduml

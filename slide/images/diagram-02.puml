@@ -1,0 +1,19 @@
+@startuml
+left to right direction
+
+rectangle "Part 1: TDD 入門" as p1 #lightyellow {
+  rectangle "FizzBuzz" as fz
+  rectangle "Red-Green-Refactor" as rgr
+  rectangle "第3部: OOP 設計" as oop
+}
+
+rectangle "Part 2: デザインパターン入門" as p2 #lightblue {
+  rectangle "GoF パターン" as gof
+  rectangle "TDD でパターン実装" as tdd_dp
+  rectangle "言語イディオム" as idiom
+}
+
+p1 --> p2 : 発展
+oop --> gof : Strategy / Template Method\nから拡張
+rgr --> tdd_dp : サイクルを継続
+@enduml

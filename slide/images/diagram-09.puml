@@ -1,0 +1,27 @@
+@startuml
+|学習者|
+:「Ruby で Template Method を学びたい」;
+
+|Claude Code|
+:SKILL 発動\npracticing-getting-start-design-pattern;
+:教材読み込み\n04-template-method.md;
+:一次資料参照\ndocs/reference/ruby-design-pattern/template_method/;
+
+|学習者|
+:Red: 受け入れテストを書く;
+
+|Claude Code|
+:失敗確認・問題の解説;
+
+|学習者|
+:Green: 素朴な実装;
+
+|Claude Code|
+:変更コストの問題を提示;
+
+|学習者|
+:Refactor: パターン適用;
+
+|Claude Code|
+:パターンの本質を解説;
+@enduml

@@ -1,0 +1,14 @@
+@startuml
+state Red #ffcccc
+state Green #ccffcc
+state Refactor #ccccff
+
+[*] --> Red
+Red : 受け入れテストを書く
+Red --> Green
+Green : 素朴な実装で通す
+Green --> Refactor
+Refactor : パターンを適用
+Refactor --> Red : 次のパターンへ
+Refactor --> [*]
+@enduml

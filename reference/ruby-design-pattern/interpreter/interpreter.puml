@@ -1,0 +1,19 @@
+@startuml
+
+Expression <|-- TerminalExpression
+Expression <|-- NonTerminalExpression
+Expression <-- NonTerminalExpression
+Expression <--R Client
+Context <--L Client
+
+class Expression {
+interpret(context)
+}
+class TerminalExpression {
++interpret(context)
+}
+class NonTerminalExpression {
++@sub_expressions[]
++interpret(context)
+}
+@enduml
