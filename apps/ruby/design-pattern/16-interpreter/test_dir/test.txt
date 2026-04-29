@@ -1,4 +1,0 @@
-This is a test file used for the interpreter pattern tests.
-It needs to have enough content to be over 100 bytes in size.
-Adding some more lines to ensure the file is large enough for size-based filtering tests.
-This should now be well over 100 bytes of content for testing purposes.
