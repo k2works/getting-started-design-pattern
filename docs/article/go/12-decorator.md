@@ -94,11 +94,48 @@ func (ts *TimeStampingWriter) WriteLine(line string) {
 }
 ```
 
+### Green: CheckingWriter デコレータ
+
+`CheckingWriter` は行の長さを検証するデコレータです。`maxLen` を超える行は書き込みを拒否し、拒否された行を記録します。
+
+```go
+type CheckingWriter struct {
+    wrapped  Writer
+    maxLen   int
+    rejected []string
+}
+
+func NewCheckingWriter(wrapped Writer, maxLen int) *CheckingWriter {
+    return &CheckingWriter{wrapped: wrapped, maxLen: maxLen}
+}
+
+func (c *CheckingWriter) WriteLine(line string) {
+    if len(line) > c.maxLen {
+        c.rejected = append(c.rejected, line)
+        return
+    }
+    c.wrapped.WriteLine(line)
+}
+
+func (c *CheckingWriter) Output() string {
+    return c.wrapped.Output()
+}
+```
+
+`RejectedLines()` は、長さ制限により拒否された行の一覧を返します。
+
+```go
+func (c *CheckingWriter) RejectedLines() []string {
+    return c.rejected
+}
+```
+
 ### Refactor: 振り返り
 
 - デコレータを積み重ねることで複合的な機能を実現します
 - `clock` を関数フィールドにすることで、テスト時にフェイク時計を注入できます
 - `CheckingWriter` のように、書き込みをフィルタリングするデコレータも実現できます
+- `RejectedLines()` は `Writer` インターフェースにない追加メソッドであり、具体的な型として使う場合にのみアクセスできます
 
 ---
 

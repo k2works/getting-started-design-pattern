@@ -70,10 +70,29 @@ func (e *Employee) SetSalary(newSalary float64) {
 }
 ```
 
+### Green: ユーティリティメソッド
+
+`ObserverCount()` は登録中の Observer 数を返します。テストや診断に便利です。
+
+```go
+func (e *Employee) ObserverCount() int {
+    return len(e.observers)
+}
+```
+
+`String()` は `Employee` の状態を人間が読める形式で返します。`fmt` パッケージとの統合に使えます。
+
+```go
+func (e *Employee) String() string {
+    return fmt.Sprintf("%s (%s): %.0f", e.Name, e.Title, e.Salary)
+}
+```
+
 ### Refactor: 振り返り
 
 - コールバック関数をスライスに格納するだけで Observer パターンが実現できます
 - Go のチャネルを使った実装も可能ですが、同期的な通知にはコールバックが適しています
+- `String()` を実装することで `fmt.Println(emp)` のように自然に出力できます
 
 ---
 

@@ -32,6 +32,14 @@ class BakeTask <<struct>> {
   + TaskName : string
 }
 
+class FrostTask <<struct>> {
+  + TaskName : string
+}
+
+class PackageTask <<struct>> {
+  + TaskName : string
+}
+
 class CompositeTask <<struct>> {
   + TaskName : string
   + SubTasks : []Task
@@ -42,6 +50,8 @@ class CompositeTask <<struct>> {
 Task <|.. AddMixins
 Task <|.. MixTask
 Task <|.. BakeTask
+Task <|.. FrostTask
+Task <|.. PackageTask
 Task <|.. CompositeTask
 CompositeTask o-- Task : SubTasks
 @enduml
@@ -86,10 +96,51 @@ func (c *CompositeTask) GetTimeRequired() float64 {
 }
 ```
 
+### Green: 具体タスクとファクトリ関数
+
+実装では `FrostTask`（フロスティング）と `PackageTask`（箱詰め）もリーフタスクとして定義しています。
+
+```go
+type FrostTask struct {
+    TaskName string
+}
+
+func (f *FrostTask) Name() string            { return f.TaskName }
+func (f *FrostTask) GetTimeRequired() float64 { return 4.0 }
+func (f *FrostTask) TotalBasicTasks() int     { return 1 }
+
+type PackageTask struct {
+    TaskName string
+}
+
+func (p *PackageTask) Name() string            { return p.TaskName }
+func (p *PackageTask) GetTimeRequired() float64 { return 1.5 }
+func (p *PackageTask) TotalBasicTasks() int     { return 1 }
+```
+
+`NewMakeCakeTask()` ファクトリ関数は、ケーキ作りの全工程をサブタスクとして事前に組み立てた `CompositeTask` を返します。
+
+```go
+func NewMakeCakeTask() *CompositeTask {
+    return &CompositeTask{
+        TaskName: "ケーキを作る",
+        SubTasks: []Task{
+            &AddMixins{TaskName: "材料を加える"},   // 1.0 時間
+            &MixTask{TaskName: "混ぜる"},           // 3.0 時間
+            &BakeTask{TaskName: "焼く"},            // 25.0 時間
+            &FrostTask{TaskName: "フロスティング"}, // 4.0 時間
+            &PackageTask{TaskName: "箱に詰める"},   // 1.5 時間
+        },
+    }
+}
+// 合計: 34.5 時間
+```
+
 ### Refactor: 振り返り
 
 - Go のインターフェースは暗黙的に実装されるため、`Task` を満たす新しい struct を追加するだけで拡張できます
 - `CompositeTask` は `[]Task` スライスで子を管理し、再帰的に集計します
+- `NewMakeCakeTask()` のようなファクトリ関数で、定型的な複合タスクを簡潔に生成できます
 
 ---
 

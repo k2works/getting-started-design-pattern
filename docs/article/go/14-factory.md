@@ -96,10 +96,62 @@ func PondFactory() *OrganismFactory {
 }
 ```
 
+### Green: 追加の具体プロダクトと Habitat
+
+`Frog` は `Animal` インターフェースを実装するもう 1 つの具体プロダクトです。
+
+```go
+type Frog struct{ FrogName string }
+
+func (f *Frog) Name() string  { return f.FrogName }
+func (f *Frog) Eat() string   { return f.FrogName + " は虫を食べる" }
+func (f *Frog) Speak() string { return "ケロケロ" }
+```
+
+`Algae` は `Plant` インターフェースを実装する具体プロダクトです。
+
+```go
+type Algae struct{ AlgaeName string }
+
+func (a *Algae) Name() string { return a.AlgaeName }
+func (a *Algae) Grow() string { return a.AlgaeName + " は水中で増殖する" }
+```
+
+`NewHabitat()` は、ファクトリと名前リストを受け取り、生物を一括生成して `Habitat` を組み立てるコンストラクタです。
+
+```go
+func NewHabitat(factory *OrganismFactory, animalNames, plantNames []string) *Habitat {
+    h := &Habitat{factory: factory}
+    for _, name := range animalNames {
+        h.Animals = append(h.Animals, factory.NewAnimal(name))
+    }
+    for _, name := range plantNames {
+        h.Plants = append(h.Plants, factory.NewPlant(name))
+    }
+    return h
+}
+```
+
+`Habitat.Describe()` は、生息地内の全生物の情報をまとめて返します。
+
+```go
+func (h *Habitat) Describe() string {
+    result := ""
+    for _, a := range h.Animals {
+        result += fmt.Sprintf("%s says %s\n", a.Name(), a.Speak())
+    }
+    for _, p := range h.Plants {
+        result += fmt.Sprintf("%s\n", p.Grow())
+    }
+    return result
+}
+```
+
 ### Refactor: 振り返り
 
 - ファクトリ関数フィールドを使うことで、abstract class なしにファクトリパターンを実現しています
 - 新しい生息地は `OrganismFactory` を返す関数を追加するだけで拡張できます
+- `NewHabitat()` がファクトリを引数として受け取ることで、生息地の種類と生物の生成ロジックが完全に分離されています
 
 ---
 

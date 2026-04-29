@@ -76,10 +76,39 @@ func (a *BritishTextObjectAdapter) SizeInches() float64 { return a.Object.SizeMi
 func (a *BritishTextObjectAdapter) Color() string       { return a.Object.Colour }
 ```
 
+### Green: SimpleTextObject と Renderer
+
+`SimpleTextObject` は `TextObject` インターフェースを直接実装する struct です。アダプタを介さずにそのまま利用できる標準的なテキストオブジェクトです。
+
+```go
+type SimpleTextObject struct {
+    TextContent string
+    Size        float64
+    ColorValue  string
+}
+
+func (s *SimpleTextObject) Text() string        { return s.TextContent }
+func (s *SimpleTextObject) SizeInches() float64  { return s.Size }
+func (s *SimpleTextObject) Color() string        { return s.ColorValue }
+```
+
+`Renderer` は `TextObject` インターフェースを受け取ってフォーマット済み文字列を生成します。`SimpleTextObject` でも `BritishTextObjectAdapter` でも、同じ `Render()` メソッドで処理できます。
+
+```go
+type Renderer struct{}
+
+func (r *Renderer) Render(obj TextObject) string {
+    return fmt.Sprintf("[%s] size=%.2fin color=%s", obj.Text(), obj.SizeInches(), obj.Color())
+}
+```
+
+これにより、`Renderer` はアダプタの存在を意識せずに、統一されたインターフェースでテキストオブジェクトを扱えます。
+
 ### Refactor: 振り返り
 
 - Go のインターフェースは暗黙的なので、`BritishTextObjectAdapter` は `TextObject` を明示的に宣言する必要がありません
 - コンパイル時の型チェック `var _ TextObject = &BritishTextObjectAdapter{}` で確認できます
+- `Renderer` は `TextObject` インターフェースだけに依存するため、新しいアダプタを追加しても変更不要です
 
 ---
 

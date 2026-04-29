@@ -116,12 +116,40 @@ func (a *And) Evaluate(dir string) []string {
 }
 ```
 
+### Green: WithExtension 式
+
+`WithExtension` は、指定した拡張子を持つファイルを検索する便利な Expression です。`FileName` でグロブパターンを書く代わりに、拡張子だけを指定できます。
+
+```go
+type WithExtension struct {
+    Ext string
+}
+
+func (w *WithExtension) Evaluate(dir string) []string {
+    all := (&All{}).Evaluate(dir)
+    var result []string
+    ext := w.Ext
+    if !strings.HasPrefix(ext, ".") {
+        ext = "." + ext
+    }
+    for _, name := range all {
+        if strings.HasSuffix(name, ext) {
+            result = append(result, name)
+        }
+    }
+    return result
+}
+```
+
+`Ext` フィールドにはドット付き（`.txt`）でもドットなし（`txt`）でも指定でき、内部で正規化されます。`FileName{Pattern: "*.txt"}` と `WithExtension{Ext: "txt"}` は同等の結果を返しますが、`WithExtension` のほうが意図が明確です。
+
 ### Refactor: 振り返り
 
 - 各 Expression は `Evaluate(dir string) []string` を実装するだけです
 - `And`, `Or`, `Not` で論理演算を表現し、再帰的に評価します
 - `t.TempDir()` でテスト用のファイルシステムを構築しています
 - `filepath.Match` を使ってグロブパターンマッチングを実現しています
+- `WithExtension` のように、よく使うパターンを専用の Expression として提供することで、利用者の意図がより明確になります
 
 ---
 

@@ -79,11 +79,32 @@ func GetInstance() *Logger {
 }
 ```
 
+### Green: 表示・説明メソッド
+
+`String()` は全ログメッセージを改行区切りの文字列として返します。`fmt` パッケージとの統合に活用できます。
+
+```go
+func (l *Logger) String() string {
+    l.mu.Lock()
+    defer l.mu.Unlock()
+    return strings.Join(l.messages, "\n")
+}
+```
+
+`Describe()` はロガーの現在の状態を要約した文字列を返します。
+
+```go
+func (l *Logger) Describe() string {
+    return fmt.Sprintf("Logger with %d messages", l.Count())
+}
+```
+
 ### Refactor: 振り返り
 
 - `sync.Once` は goroutine セーフな 1 回だけの初期化を保証します
 - `sync.Mutex` でログ操作もスレッドセーフにしています
 - テスト用に `ResetForTesting()` を提供し、テスト間の独立性を確保しています
+- `String()` と `Describe()` により、デバッグや診断時にロガーの状態を簡単に確認できます
 
 ---
 

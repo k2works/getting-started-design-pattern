@@ -91,11 +91,54 @@ func (b *ComputerBuilder) Build() (*Computer, error) {
 }
 ```
 
+### Green: Drive 構造体、Describe メソッド、LaptopBuilder プリセット
+
+`Drive` はストレージドライブを表す struct で、`String()` メソッドで人間が読める形式を返します。
+
+```go
+type Drive struct {
+    Type     string // "hdd" or "ssd"
+    Capacity int    // in GB
+}
+
+func (d Drive) String() string {
+    return fmt.Sprintf("%s %dGB", d.Type, d.Capacity)
+}
+```
+
+`Computer.Describe()` は、全パーツの情報をまとめた説明文字列を返します。
+
+```go
+func (c *Computer) Describe() string {
+    var parts []string
+    parts = append(parts, fmt.Sprintf("ディスプレイ: %s", c.Display))
+    parts = append(parts, fmt.Sprintf("マザーボード: %s", c.Motherboard))
+    parts = append(parts, fmt.Sprintf("メモリ: %dGB", c.Memory))
+    for _, d := range c.Drives {
+        parts = append(parts, fmt.Sprintf("ドライブ: %s", d))
+    }
+    return strings.Join(parts, "\n")
+}
+```
+
+`LaptopBuilder()` は、ノート PC 向けのプリセットを適用した Builder を返すファクトリ関数です。
+
+```go
+func LaptopBuilder() *ComputerBuilder {
+    return NewComputerBuilder().
+        SetDisplay("15インチ FHD").
+        SetMotherboard("Intel").
+        AddDrive("ssd", 256).
+        SetMemory(16)
+}
+```
+
 ### Refactor: 振り返り
 
 - メソッドチェーンで流暢な API を提供します
 - `Build()` が `(value, error)` を返す Go らしいエラーハンドリングです
 - `DesktopBuilder()` / `LaptopBuilder()` のようなプリセットで利便性を高めています
+- `Drive` や `Motherboard` が `String()` を実装することで、`Describe()` 内の `fmt.Sprintf` で自然にフォーマットされます
 
 ---
 
