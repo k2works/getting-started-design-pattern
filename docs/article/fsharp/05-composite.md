@@ -72,6 +72,26 @@ let addChild child = function
 
 判別共用体 1 つに操作関数を重ねる形なので、クラス階層や可変の子リストを持たずに Composite を記述できます。
 
+### 動的なツリー構築: addChild
+
+`addChild` 関数を使うと、既存のタスクツリーに子タスクを動的に追加できます。
+
+```fsharp
+let addChild (child: Task) = function
+    | CompositeTask(name, children) -> CompositeTask(name, children @ [ child ])
+    | leaf -> CompositeTask(getName leaf, [ leaf; child ])
+```
+
+`CompositeTask` に対しては子リストの末尾に追加します。`LeafTask` に対して呼んだ場合は、元の Leaf と新しい子を含む `CompositeTask` に昇格させます。
+
+```fsharp
+[<Fact>]
+let ``子タスクを追加できる`` () =
+    let task = CompositeTask("親", [ LeafTask("子1", 1.0) ])
+    let updated = addChild (LeafTask("子2", 2.0)) task
+    Assert.Equal(2, getLeafCount updated)
+```
+
 ### Refactor
 
 パターンマッチングにより、各ケースの処理が明確に分離されています。`function` キーワードで引数を直接マッチングする F# のイディオムを使っています。

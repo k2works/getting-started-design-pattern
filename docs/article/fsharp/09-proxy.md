@@ -103,6 +103,32 @@ let loggingProxy log name f input =
 
 保護・ロギングのどちらも「元の関数を包む関数」として表現でき、ラッパー同士の合成も容易です。
 
+### ログプロキシの詳細
+
+`loggingProxy` は、任意の関数呼び出しの前後にログエントリを記録するプロキシです。`log`（`string list ref`）に呼び出し開始と完了のメッセージを追記します。
+
+```fsharp
+let loggingProxy (log: string list ref) (name: string) (f: 'T -> 'U) (input: 'T) : 'U =
+    log.Value <- log.Value @ [ sprintf "%s が呼び出されました" name ]
+    let result = f input
+    log.Value <- log.Value @ [ sprintf "%s が完了しました" name ]
+    result
+```
+
+元の関数 `f` のシグネチャ `'T -> 'U` を変えずに透過的にラップするため、呼び出し側はプロキシであることを意識しません。
+
+```fsharp
+[<Fact>]
+let ``ログプロキシは関数呼び出しを記録する`` () =
+    let log = ref []
+    let proxiedFn = loggingProxy log "double" (fun x -> x * 2)
+    let result = proxiedFn 5
+    Assert.Equal(10, result)
+    Assert.Equal(2, log.Value.Length)
+    Assert.Contains("double が呼び出されました", log.Value.[0])
+    Assert.Contains("double が完了しました", log.Value.[1])
+```
+
 ## OOP 版（C#）との比較
 
 - C# では Proxy クラスが Subject と同じインターフェースを実装する

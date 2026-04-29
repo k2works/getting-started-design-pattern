@@ -93,6 +93,23 @@ AST の各ノード型と評価規則を同じ場所に並べることで、文�
 
 `evaluateBinary` ヘルパー関数で二項演算の共通ロジックを抽出しました。`Result` 型でゼロ除算や未定義変数のエラーを安全に伝播します。
 
+#### 二項演算の内部構造: evaluateBinary と evaluateBinaryResult
+
+二項演算の評価は 2 段階のヘルパーに分解されています。
+
+```fsharp
+and private evaluateBinary env left right op =
+    evaluateBinaryResult (evaluate env left) (evaluate env right) op
+
+and private evaluateBinaryResult leftResult rightResult op =
+    match leftResult, rightResult with
+    | Ok l, Ok r -> Ok(op l r)
+    | Error e, _ -> Error e
+    | _, Error e -> Error e
+```
+
+`evaluateBinary` は左右の部分式を `evaluate` してから `evaluateBinaryResult` に渡します。`evaluateBinaryResult` は 2 つの `Result` 値を受け取り、両方が `Ok` のときだけ演算子 `op` を適用します。この分離により、`Divide` のゼロ除算チェックのように右辺を先に評価してから分岐したいケースで `evaluateBinaryResult` を直接呼び出せます。
+
 ## OOP 版（C#）との比較
 
 ### C# 版

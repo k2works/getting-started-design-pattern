@@ -74,9 +74,33 @@ type EmployeeSubject() =
 
 通知の仕組みは汎用の `Subject<'T>` に閉じ込め、ドメイン固有の更新処理だけを `EmployeeSubject` に乗せる構成です。
 
+### オブザーバーの削除と件数管理
+
+`Subject<'T>` は `RemoveObserver` メソッドでオブザーバーの登録解除を、`ObserverCount` プロパティで現在の購読数の確認をサポートしています。
+
+```fsharp
+member _.RemoveObserver(observer: Observer<'T>) =
+    observers <- observers |> List.filter (fun o -> not (obj.ReferenceEquals(o, observer)))
+
+member _.ObserverCount = observers.Length
+```
+
+`RemoveObserver` は `obj.ReferenceEquals` を使って参照同一性でオブザーバーを特定し、リストから除外します。`EmployeeSubject` にも同様のメソッドが委譲されています。
+
+```fsharp
+[<Fact>]
+let ``オブザーバーを削除できる`` () =
+    let subject = Subject<string>()
+    let observer: Observer<string> = fun _ -> ()
+    subject.AddObserver(observer)
+    Assert.Equal(1, subject.ObserverCount)
+    subject.RemoveObserver(observer)
+    Assert.Equal(0, subject.ObserverCount)
+```
+
 ### Refactor
 
-通知の仕組みをジェネリックにし、従業員の給与変更監視に特化した `EmployeeSubject` を追加しました。
+通知の仕組みをジェネリックにし、従業員の給与変更監視に特化した `EmployeeSubject` を追加しました。`RemoveObserver` と `ObserverCount` により、購読のライフサイクル管理も可能です。
 
 ## OOP 版（C#）との比較
 

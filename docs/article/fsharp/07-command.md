@@ -89,6 +89,40 @@ let appendText text =
 
 コマンドを「状態変換のペア」として持つため、実行履歴の管理は純粋なレコード更新に落とし込めます。
 
+### Redo: 取り消したコマンドをやり直す
+
+`redo` 関数は `RedoStack` から直前に取り消されたコマンドを取り出し、再実行します。`undo` が `RedoStack` にコマンドを積むため、undo と redo を交互に行き来できます。
+
+```fsharp
+let redo (history: CommandHistory<'TState>) =
+    match history.RedoStack with
+    | [] -> history
+    | lastCommand :: rest ->
+        { State = lastCommand.Execute history.State
+          UndoStack = lastCommand :: history.UndoStack
+          RedoStack = rest }
+```
+
+新しいコマンドが `execute` されると `RedoStack` はクリアされます。これにより、undo 後に新しい操作を行った場合、古い redo 履歴が無効化される一般的な振る舞いを実現しています。
+
+```fsharp
+[<Fact>]
+let ``取り消したコマンドをやり直せる`` () =
+    let history =
+        create ""
+        |> execute (appendText "Hello")
+        |> execute (appendText " World")
+        |> undo
+        |> redo
+    Assert.Equal("Hello World", history.State)
+
+[<Fact>]
+let ``空の redo スタックで redo しても安全`` () =
+    let history = create "test"
+    let history = redo history
+    Assert.Equal("test", history.State)
+```
+
 ### Refactor
 
 パイプライン演算子（`|>`）により、コマンドの連鎖が読みやすくなっています。イミュータブルな `CommandHistory` により、各状態のスナップショットが自然に保持されます。

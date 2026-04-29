@@ -88,6 +88,37 @@ let animalSound = function
 
 生成後の振る舞いも同じ判別共用体に対する関数として定義できるので、クラスごとのメソッド分散を避けられます。
 
+### ヘルパー関数: animalName, animalHabitat, plantName
+
+判別共用体の各ケースからフィールドを取り出すヘルパー関数が用意されています。パターンマッチングで全ケースを網羅し、型安全にフィールドを抽出します。
+
+```fsharp
+let animalName = function
+    | Dog name | Cat name | Duck name | Frog name -> name
+
+let animalHabitat = function
+    | Dog _ | Cat _ -> Land
+    | Duck _ -> Air
+    | Frog _ -> Water
+
+let plantName = function
+    | Algae name -> name
+    | Tree(name, _) -> name
+    | Flower(name, _) -> name
+```
+
+`animalName` と `plantName` は判別共用体の各ケースに共通する `name` フィールドを取り出します。`animalHabitat` は動物の種類から `Habitat` 判別共用体へのマッピングを行います。
+
+```fsharp
+// 使用例
+let dog = Dog "ポチ"
+animalName dog      // "ポチ"
+animalHabitat dog   // Land
+
+let tree = Tree("桜", 10.5)
+plantName tree      // "桜"
+```
+
 ### Refactor
 
 `Result` 型を使うことで、不正な入力に対するエラーハンドリングが型安全に行えます。
