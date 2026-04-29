@@ -23,6 +23,13 @@ class Logger {
   {static} + count : Int
 }
 
+class AppConfig {
+  {static} - settings : Map[String, String]
+  {static} + get(key: String) : Option[String]
+  {static} + set(key: String, value: String) : Unit
+  {static} + reset() : Unit
+}
+
 note right of Logger
   Scala の object は
   言語レベルで
@@ -72,11 +79,46 @@ object Logger:
 
 読み取り用メソッドを少し足しておくと、共有状態の検証をテストしやすくなります。
 
+### Green+: AppConfig によるアプリケーション設定管理
+
+実装には `AppConfig` オブジェクトも含まれています。`get` / `set` / `reset` の 3 つのメソッドでアプリケーション設定をシングルトンとして管理します。
+
+```scala
+object AppConfig:
+  private var _settings: Map[String, String] = Map(
+    "appName" -> "DesignPatterns",
+    "version" -> "1.0.0",
+    "debug"   -> "false"
+  )
+
+  def get(key: String): Option[String] = _settings.get(key)
+
+  def set(key: String, value: String): Unit =
+    _settings = _settings + (key -> value)
+
+  def reset(): Unit =
+    _settings = Map(
+      "appName" -> "DesignPatterns",
+      "version" -> "1.0.0",
+      "debug"   -> "false"
+    )
+```
+
+`get` は `Option[String]` を返すため、存在しないキーへのアクセスも型安全です。`reset()` はテスト間の状態リセットや、設定の初期化に利用できます。
+
+```scala
+AppConfig.get("appName")         // Some("DesignPatterns")
+AppConfig.set("debug", "true")
+AppConfig.get("debug")           // Some("true")
+AppConfig.reset()                // デフォルト値に復元
+```
+
 ### Refactor: 振り返り
 
 - **Scala の `object` は言語レベルでシングルトンを保証**します。他の言語のようにプライベートコンストラクタやスレッドセーフなインスタンス生成を実装する必要がありません。
 - `eq` メソッドは参照同一性を検査し、同一のオブジェクトであることを確認します。
 - `beforeEach` でテスト間の状態をリセットしています。シングルトンの可変状態はテストの独立性に注意が必要です。
+- `AppConfig` は `Logger` と同様に `object` で定義され、アプリケーション設定の一元管理を実現します。
 
 ---
 

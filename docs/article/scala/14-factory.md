@@ -24,8 +24,18 @@ object JungleFactory
 
 interface Animal <<trait>> {
   + name : String
+  + legs : Int
+  + habitatType : HabitatType
   + speak : String
 }
+
+enum HabitatType {
+  Land
+  Water
+  Amphibian
+}
+
+class Duck
 
 interface Plant <<trait>> {
   + name : String
@@ -41,6 +51,8 @@ OrganismFactory <|.. PondFactory
 OrganismFactory <|.. JungleFactory
 Animal <|.. Frog
 Animal <|.. Tiger
+Animal <|.. Duck
+Animal --> HabitatType
 Plant <|.. Algae
 Plant <|.. WaterLily
 PondFactory --> Frog : creates
@@ -97,11 +109,38 @@ case class Environment(factory: OrganismFactory):
 
 Factory を差し替えて環境全体の構成結果まで見えるようにしておくと、抽象化の効果が伝わります。
 
+### Green+: Duck クラスと HabitatType enum
+
+実装には `Duck` クラスと `HabitatType` enum も含まれています。
+
+```scala
+enum HabitatType:
+  case Land, Water, Amphibian
+
+case class Duck(name: String) extends Animal:
+  val legs: Int                = 2
+  val habitatType: HabitatType = HabitatType.Amphibian
+  val speak: String            = "ガーガー"
+```
+
+`HabitatType` は動物の生息環境を表す enum です。`Tiger` は `Land`、`Frog` と `Duck` は `Amphibian` に分類されます。`Animal` trait に `habitatType` プロパティを持たせることで、生態系のモデリングがより豊かになります。
+
+```scala
+test("Animal trait の共通プロパティ") {
+  val duck = Duck("アヒル太郎")
+  assertEquals(duck.legs, 2)
+  assertEquals(duck.speak, "ガーガー")
+}
+```
+
+`Duck` はファクトリ経由では生成されませんが、`Animal` trait を実装しているため、必要に応じて新しいファクトリ（例えば `FarmFactory`）を作成して生成対象に含めることができます。
+
 ### Refactor: 振り返り
 
 - **`object` でファクトリを定義**: Scala のシングルトンオブジェクトがファクトリの自然な表現です。
 - **ケースクラス**: `Tiger(name)` のような簡潔な生成構文は、ケースクラスの `apply` メソッドによるものです。
 - **trait による抽象化**: `OrganismFactory` trait により、ファクトリの差し替えが型安全に行えます。
+- **enum `HabitatType`**: 生息環境を型安全に分類し、`Animal` の属性として利用します。
 
 ---
 

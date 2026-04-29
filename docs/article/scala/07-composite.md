@@ -18,6 +18,7 @@ abstract class Task {
   + getTimeRequired : Double
   + getName : String
   + totalBasicTasks : Int
+  + addChild(child: Task) : Task
 }
 
 class "Task.Leaf" as Leaf {
@@ -76,12 +77,43 @@ object Task:
       case Task.Composite(_, children) => children.map(_.totalBasicTasks).sum
 ```
 
+### Green+: addChild による木構造の動的構築
+
+実装には `addChild` 拡張メソッドも含まれています。Composite にはサブタスクを追加でき、Leaf に対して呼ぶと例外が発生します。
+
+```scala
+extension (task: Task)
+  def addChild(child: Task): Task = task match
+    case Task.Composite(name, children) => Task.Composite(name, children :+ child)
+    case leaf: Task.Leaf                => throw IllegalArgumentException("Leaf にはサブタスクを追加できません")
+```
+
+テストコード:
+
+```scala
+test("addChild でサブタスクを追加する") {
+  val project = Task.Composite("プロジェクト", List.empty)
+  val updated = project.addChild(Task.Leaf("タスク1", 1.0))
+  assertEquals(updated.totalBasicTasks, 1)
+}
+
+test("Leaf に addChild すると例外が発生する") {
+  val leaf = Task.Leaf("タスク", 1.0)
+  intercept[IllegalArgumentException] {
+    leaf.addChild(Task.Leaf("子", 0.5))
+  }
+}
+```
+
+`List[Task]` はイミュータブルなので、`addChild` は新しい `Task.Composite` を返します。元のタスクは変更されません。
+
 ### Refactor: 振り返り
 
 - **enum（ADT）** により、Leaf と Composite の 2 つのバリアントを型安全に定義します。
 - **拡張メソッド（extension）** により、enum の値に対してメソッドを追加します。
 - **パターンマッチ** の網羅性チェックにより、新しいバリアントを追加した場合にコンパイラが未処理のケースを警告します。
 - `List[Task]` はイミュータブルなので、`addChild` は新しい Composite を返します。
+- `addChild` は Leaf に対して `IllegalArgumentException` をスローし、木構造の整合性を保ちます。
 
 ---
 

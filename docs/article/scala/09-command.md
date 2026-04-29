@@ -115,6 +115,36 @@ class CommandHistory:
 
 `undo` に必要な削除前文字列と、履歴管理まで実装すると Command の価値が具体化します。
 
+### Green+: CompositeCommand で複数コマンドを一括管理する
+
+`CompositeCommand` は複数のコマンドをまとめて実行・Undo するクラスです。`undo()` では `commands.reverse` により、実行時と逆順で取り消しを行います。
+
+```scala
+class CompositeCommand(commands: List[Command]) extends Command:
+  override def execute(): Unit     = commands.foreach(_.execute())
+  override def undo(): Unit        = commands.reverse.foreach(_.undo())
+  override val description: String = commands.map(_.description).mkString("; ")
+```
+
+テストコード:
+
+```scala
+test("CompositeCommand で複数のコマンドを一括実行する") {
+  val doc      = SliderDocument()
+  val commands = List(
+    InsertCommand(doc, 0, "A"),
+    InsertCommand(doc, 1, "B"),
+    InsertCommand(doc, 2, "C")
+  )
+  val composite = CompositeCommand(commands)
+  composite.execute()
+
+  assertEquals(doc.content, "ABC")
+}
+```
+
+`undo()` が逆順で実行される理由は、後から実行されたコマンドほど先に取り消す必要があるためです。例えば位置 0 に "A"、位置 1 に "B" を挿入した場合、Undo では "B" を先に削除しないと位置がずれてしまいます。
+
 ### Refactor: 振り返り
 
 - `Command` trait は `execute` / `undo` / `description` の 3 つのメソッドを定義します。

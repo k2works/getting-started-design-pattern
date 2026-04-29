@@ -82,11 +82,45 @@ class NumberingWriter(protected val wrapped: Writer) extends WriterDecorator:
     s"$lineNumber: ${wrapped.writeLine(line)}"
 ```
 
+### Green+: CheckSumWriter と TimestampWriter
+
+実装には `TimestampWriter` と `CheckSumWriter` も含まれています。
+
+```scala
+class TimestampWriter(protected val wrapped: Writer, timestamp: String = "2024-01-01") extends WriterDecorator:
+  override def writeLine(line: String): String =
+    s"[$timestamp] ${wrapped.writeLine(line)}"
+
+class CheckSumWriter(protected val wrapped: Writer) extends WriterDecorator:
+  override def writeLine(line: String): String =
+    val base     = wrapped.writeLine(line)
+    val checksum = base.hashCode.toHexString
+    s"$base [checksum: $checksum]"
+```
+
+`CheckSumWriter` は `wrapped.writeLine(line)` の結果に対して `hashCode` ベースのチェックサムを付与します。他のデコレータと自由に積み重ねることができます。
+
+```scala
+test("CheckSumWriter でチェックサムを付与する") {
+  val writer = CheckSumWriter(SimpleWriter())
+  val output = writer.writeLine("Hello")
+  assert(output.startsWith("Hello [checksum:"))
+}
+```
+
+3 つのデコレータを全て積み重ねることも可能です:
+
+```scala
+val writer = CheckSumWriter(TimestampWriter(NumberingWriter(SimpleWriter()), "2024-01-01"))
+// 出力例: "[2024-01-01] 1: Hello [checksum: xxxxxxxx]"
+```
+
 ### Refactor: 振り返り
 
 - `WriterDecorator` は `wrapped` を保持する基底 trait で、デフォルトでは委譲するだけです。
 - 各デコレータはコンストラクタで `wrapped` を受け取り、`writeLine` をオーバーライドして機能を追加します。
 - デコレータの積み重ね順序で出力が変わります: `TimestampWriter(NumberingWriter(...))` と `NumberingWriter(TimestampWriter(...))` は異なる結果になります。
+- `writeLines` メソッドは基底の `Writer` trait で定義されており、全デコレータで自動的に利用できます。
 
 ---
 

@@ -35,6 +35,7 @@ class ProtectionProxy {
 class VirtualProxy {
   - owner : String
   + realAccount : RealBankAccount
+  + isInitialized : Boolean
 }
 
 BankAccount <|.. RealBankAccount
@@ -88,10 +89,46 @@ class VirtualProxy(owner: String) extends BankAccount:
   // ...
 ```
 
+### Green+: require によるバリデーションと isInitialized
+
+`RealBankAccount` は `require()` で入力値のバリデーションを行います。
+
+```scala
+class RealBankAccount(owner: String, private var _balance: Double = 0.0) extends BankAccount:
+  override def deposit(amount: Double): Unit =
+    require(amount > 0, "預入額は正の数でなければなりません")
+    _balance += amount
+
+  override def withdraw(amount: Double): Boolean =
+    require(amount > 0, "引出額は正の数でなければなりません")
+    if _balance >= amount then
+      _balance -= amount
+      true
+    else false
+```
+
+`require()` は Scala 標準ライブラリの事前条件チェックで、条件を満たさない場合 `IllegalArgumentException` をスローします。
+
+`VirtualProxy` には `isInitialized` メソッドがあり、`lazy val` が初期化済みかどうかを確認できます。
+
+```scala
+class VirtualProxy(owner: String) extends BankAccount:
+  lazy val realAccount: RealBankAccount = RealBankAccount(owner)
+
+  def isInitialized: Boolean =
+    try
+      realAccount
+      true
+    catch case _: Exception => false
+```
+
+`isInitialized` は内部の `lazy val` にアクセスすることで初期化を判定します。`deposit` や `withdraw` を一度も呼んでいない段階では `realAccount` は未生成のままです。
+
 ### Refactor: 振り返り
 
 - **ProtectionProxy**: 認証状態を内部で管理し、未認証時は `SecurityException` をスローします。
-- **VirtualProxy**: Scala の `lazy val` により、初回アクセス時にのみ `RealBankAccount` を生成します。
+- **VirtualProxy**: Scala の `lazy val` により、初回アクセス時にのみ `RealBankAccount` を生成します。`isInitialized` で初期化状態を確認できます。
+- **RealBankAccount**: `require()` による事前条件チェックで、不正な入力を早期に検出します。
 - どちらのプロキシも `BankAccount` trait を実装するため、クライアントコードからは透過的に利用できます。
 
 ---

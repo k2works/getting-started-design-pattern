@@ -25,6 +25,8 @@ class Portfolio {
   + sortedByBalance : List[Account]
   + sortedByName : List[Account]
   + totalBalance : Double
+  + findByName(name: String) : Option[Account]
+  + filterBy(predicate: Account => Boolean) : List[Account]
 }
 
 interface "Iterable[Account]" as Iter
@@ -83,11 +85,36 @@ class Portfolio(private val accounts: List[Account]) extends Iterable[Account]:
   def totalBalance: Double = accounts.map(_.balance).sum
 ```
 
+### Green+: findByName と filterBy による検索・フィルタリング
+
+実装には名前による検索と述語によるフィルタリングも含まれています。
+
+```scala
+def findByName(name: String): Option[Account] =
+  accounts.find(_.name == name)
+
+def filterBy(predicate: Account => Boolean): List[Account] =
+  accounts.filter(predicate)
+```
+
+`findByName` は `Option[Account]` を返すため、見つからない場合も型安全に扱えます。`filterBy` は高階関数を引数に取り、任意の条件でフィルタリングできます。
+
+```scala
+// 名前で検索
+portfolio.findByName("普通預金")  // Some(Account("普通預金", 1000.0))
+portfolio.findByName("存在しない") // None
+
+// 残高 2000 以上の口座を抽出
+portfolio.filterBy(_.balance >= 2000)
+```
+
 ### Refactor: 振り返り
 
 - **`Iterable[Account]`** を extends することで、`for` 式、`map`、`filter`、`sum` などの高階関数がすべて使えます。
 - **`given Ordering[Account]`** は型クラスパターンの典型例で、暗黙のソート順を定義します。
 - `sorted` メソッドは `using` で暗黙の `Ordering` を受け取ります。
+- `findByName` は `Option` 型で null 安全な検索を提供します。
+- `filterBy` は関数を引数に取る高階関数で、柔軟な条件指定が可能です。
 
 ---
 
