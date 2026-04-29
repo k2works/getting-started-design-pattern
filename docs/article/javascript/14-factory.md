@@ -137,10 +137,55 @@ export class OrganismFactory {
 }
 ```
 
+#### type() メソッド
+
+各生物クラスには `type()` メソッドがあり、自身の種類名を文字列で返します。ファクトリで生成されたオブジェクトの型を実行時に確認する手段として利用できます。
+
+```javascript
+export class Duck {
+  constructor(name) { this.name = name; }
+  speak() { return `${this.name}: ガーガー`; }
+  type() { return 'Duck'; }
+}
+
+export class Frog {
+  constructor(name) { this.name = name; }
+  speak() { return `${this.name}: ゲロゲロ`; }
+  type() { return 'Frog'; }
+}
+
+export class Tiger {
+  constructor(name) { this.name = name; }
+  speak() { return `${this.name}: ガオー`; }
+  type() { return 'Tiger'; }
+}
+
+export class WaterLily {
+  constructor(name) { this.name = name; }
+  grow() { return `${this.name} が水面に広がる`; }
+  type() { return 'WaterLily'; }
+}
+
+export class Algae {
+  constructor(name) { this.name = name; }
+  grow() { return `${this.name} が繁殖する`; }
+  type() { return 'Algae'; }
+}
+
+export class Tree {
+  constructor(name) { this.name = name; }
+  grow() { return `${this.name} がそびえ立つ`; }
+  type() { return 'Tree'; }
+}
+```
+
+動物クラス（`Duck`、`Frog`、`Tiger`）は `speak()` と `type()` を、植物クラス（`WaterLily`、`Algae`、`Tree`）は `grow()` と `type()` を持ちます。`type()` メソッドにより、`instanceof` を使わずにオブジェクトの種類を判別できます。
+
 ### Refactor: 振り返り
 
 - JavaScript ではクラスが第一級オブジェクトなので、`AnimalClass` を変数として渡し、`new AnimalClass(name)` で生成できます。
 - `Pond`（Factory Method）はクラス参照を直接受け取り、`OrganismFactory`（Abstract Factory）は生成メソッドを提供します。
+- 各生物クラスの `type()` メソッドにより、生成されたオブジェクトの種類を文字列として取得できます。
 
 ---
 

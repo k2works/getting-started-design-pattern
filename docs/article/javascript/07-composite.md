@@ -97,6 +97,9 @@ export class CompositeTask extends Task {
     this.subTasks = [];
   }
   addSubTask(task) { this.subTasks.push(task); }
+  removeSubTask(task) {
+    this.subTasks = this.subTasks.filter((t) => t !== task);
+  }
   getTimeRequired() {
     return this.subTasks.reduce((sum, t) => sum + t.getTimeRequired(), 0);
   }
@@ -106,10 +109,60 @@ export class CompositeTask extends Task {
 }
 ```
 
+#### リーフタスク一覧
+
+7 つのリーフタスクがそれぞれ固定の所要時間を持ちます。
+
+| クラス名 | タスク名 | 所要時間 |
+|----------|----------|----------|
+| `AddDryIngredientsTask` | 乾燥材料を加える | 1.0 |
+| `AddLiquidsTask` | 液体を加える | 0.5 |
+| `MixTask` | 混ぜる | 3.0 |
+| `FillPanTask` | 型に流し込む | 0.5 |
+| `BakeTask` | 焼く | 30.0 |
+| `FrostTask` | フロスティングする | 5.0 |
+| `LickSpoonTask` | スプーンをなめる | 0.1 |
+
+#### MakeCakeTask の構成
+
+`MakeCakeTask` は以下のようにコンポジットとリーフを組み合わせた木構造になっています。
+
+```
+MakeCakeTask (40.1)
+├── MakeBatterTask (4.5)
+│   ├── AddDryIngredientsTask (1.0)
+│   ├── AddLiquidsTask (0.5)
+│   └── MixTask (3.0)
+├── FillPanTask (0.5)
+├── BakeTask (30.0)
+├── FrostTask (5.0)
+└── LickSpoonTask (0.1)
+```
+
+#### removeSubTask() メソッド
+
+`CompositeTask` は `removeSubTask(task)` メソッドでサブタスクを動的に削除できます。`filter` で参照一致しない要素だけを残すことで実現しています。
+
+```javascript
+it('サブタスクを動的に追加・削除できる', () => {
+  const composite = new CompositeTask('テスト');
+  const task1 = new AddDryIngredientsTask();
+  const task2 = new FillPanTask();
+
+  composite.addSubTask(task1);
+  composite.addSubTask(task2);
+  expect(composite.getTimeRequired()).toBe(1.5);
+
+  composite.removeSubTask(task1);
+  expect(composite.getTimeRequired()).toBe(0.5);
+});
+```
+
 ### Refactor: 振り返り
 
 - リーフの `totalBasicTasks` は `1` を返し、コンポジットは子タスクの合計を返します。再帰的な同一インターフェースがパターンの核です。
 - `reduce` を使った集計は JavaScript らしい書き方です。
+- `removeSubTask` により、実行時にツリー構造を変更できます。
 
 ---
 

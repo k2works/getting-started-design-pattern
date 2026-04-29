@@ -115,9 +115,121 @@ export class CreateFileCommand {
 }
 ```
 
+#### DeleteFileCommand のバックアップ機構
+
+`DeleteFileCommand` は `_backup` フィールドを持ち、`execute()` 時にファイル内容をバックアップします。`undo()` ではバックアップから復元します。
+
+```javascript
+export class DeleteFileCommand {
+  constructor(filePath) {
+    this.filePath = filePath;
+    this.description = `ファイル削除: ${filePath}`;
+    this._backup = null;
+  }
+
+  execute() {
+    if (existsSync(this.filePath)) {
+      this._backup = readFileSync(this.filePath, 'utf-8');
+      unlinkSync(this.filePath);
+    }
+  }
+
+  undo() {
+    if (this._backup !== null) {
+      writeFileSync(this.filePath, this._backup, 'utf-8');
+    }
+  }
+}
+```
+
+```javascript
+it('DeleteFileCommand の undo でファイルを復元できる', () => {
+  writeFileSync(testFile, 'original', 'utf-8');
+  const cmd = new DeleteFileCommand(testFile);
+  cmd.execute();
+  cmd.undo();
+
+  expect(existsSync(testFile)).toBe(true);
+  expect(readFileSync(testFile, 'utf-8')).toBe('original');
+});
+```
+
+#### CompositeCommand の逆順 undo
+
+`CompositeCommand` は複数のコマンドを一括で実行します。`undo()` では配列を **逆順** にして取り消すことで、操作の整合性を保ちます。
+
+```javascript
+export class CompositeCommand {
+  constructor() {
+    this.commands = [];
+    this.description = 'コンポジットコマンド';
+  }
+
+  addCommand(command) { this.commands.push(command); }
+
+  execute() {
+    for (const command of this.commands) {
+      command.execute();
+    }
+  }
+
+  undo() {
+    for (const command of [...this.commands].reverse()) {
+      command.undo();
+    }
+  }
+}
+```
+
+```javascript
+it('CompositeCommand で複数コマンドを一括実行できる', () => {
+  const file1 = join(tempDir, 'cmd-comp-1.txt');
+  const file2 = join(tempDir, 'cmd-comp-2.txt');
+
+  const composite = new CompositeCommand();
+  composite.addCommand(new CreateFileCommand(file1, 'one'));
+  composite.addCommand(new CreateFileCommand(file2, 'two'));
+  composite.execute();
+
+  expect(existsSync(file1)).toBe(true);
+  expect(existsSync(file2)).toBe(true);
+
+  composite.undo();
+  expect(existsSync(file1)).toBe(false);
+  expect(existsSync(file2)).toBe(false);
+});
+```
+
+#### SlickButton: コールバック関数による軽量 Command
+
+`SlickButton` はコマンドオブジェクトの代わりにコールバック関数を受け取る軽量な実装です。undo が不要な単純な操作に適しています。
+
+```javascript
+export class SlickButton {
+  constructor(callback) {
+    this.callback = callback;
+  }
+
+  click() {
+    this.callback();
+  }
+}
+```
+
+```javascript
+it('SlickButton がコールバック関数を実行する', () => {
+  let clicked = false;
+  const button = new SlickButton(() => { clicked = true; });
+  button.click();
+
+  expect(clicked).toBe(true);
+});
+```
+
 ### Refactor: 振り返り
 
-- `CompositeCommand` は Composite パターンとの組み合わせです。`undo()` は逆順に実行します。
+- `CompositeCommand` は Composite パターンとの組み合わせです。`undo()` は `[...this.commands].reverse()` で逆順に実行し、操作の整合性を保ちます。
+- `DeleteFileCommand` は `_backup` フィールドで削除前のファイル内容を保持し、`undo()` 時に復元する Memento 的なアプローチを採用しています。
 - `SlickButton` は、JavaScript ではコマンドの代わりにコールバック関数を直接渡すことが多いことを示しています。
 
 ---

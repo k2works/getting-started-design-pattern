@@ -114,13 +114,70 @@ export class Employee {
     this._salary = newSalary;
     this.notifyObservers({ property: 'salary', old, new: newSalary });
   }
+
+  get title() { return this._title; }
+  set title(newTitle) {
+    const old = this._title;
+    this._title = newTitle;
+    this.notifyObservers({ property: 'title', old, new: newTitle });
+  }
 }
+```
+
+`title` プロパティにも `get`/`set` アクセサを定義し、役職変更時にもオブザーバーへ通知が走るようにしています。
+
+#### TaxMan オブザーバー
+
+`Payroll` と同様に、`TaxMan` は税務通知を担当するオブザーバーです。
+
+```javascript
+export class TaxMan {
+  constructor() {
+    this.notifications = [];
+  }
+
+  update(employee, change) {
+    this.notifications.push(
+      `${employee.name} に新しい税金通知を送付: ${change.property} = ${change.new}`
+    );
+  }
+}
+```
+
+#### title 変更通知と複数オブザーバーのテスト
+
+```javascript
+it('title 変更で TaxMan に通知が届く', () => {
+  const employee = new Employee('鈴木', 'エンジニア', 400000);
+  const taxMan = new TaxMan();
+  employee.addObserver(taxMan);
+
+  employee.title = 'シニアエンジニア';
+
+  expect(taxMan.notifications).toHaveLength(1);
+  expect(taxMan.notifications[0]).toContain('鈴木');
+  expect(taxMan.notifications[0]).toContain('シニアエンジニア');
+});
+
+it('複数のオブザーバーに同時通知する', () => {
+  const employee = new Employee('佐藤', 'マネージャー', 700000);
+  const payroll = new Payroll();
+  const taxMan = new TaxMan();
+  employee.addObserver(payroll);
+  employee.addObserver(taxMan);
+
+  employee.salary = 800000;
+
+  expect(payroll.notifications).toHaveLength(1);
+  expect(taxMan.notifications).toHaveLength(1);
+});
 ```
 
 ### Refactor: 振り返り
 
-- JavaScript の `get` / `set` アクセサを使い、プロパティ代入 `employee.salary = 600000` の裏でオブザーバー通知が走る設計にしました。
-- Observer は `update(employee, change)` メソッドを持つ任意のオブジェクトです（Duck Typing）。
+- JavaScript の `get` / `set` アクセサを使い、プロパティ代入 `employee.salary = 600000` や `employee.title = 'シニアエンジニア'` の裏でオブザーバー通知が走る設計にしました。
+- `salary` と `title` の両方がオブザーバー通知の対象になっています。変更情報オブジェクトの `property` フィールドで、どのプロパティが変更されたかをオブザーバーが識別できます。
+- Observer は `update(employee, change)` メソッドを持つ任意のオブジェクトです（Duck Typing）。`Payroll` は給与計算用、`TaxMan` は税務通知用と、責務が分離されています。
 
 ---
 

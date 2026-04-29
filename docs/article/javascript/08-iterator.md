@@ -119,9 +119,46 @@ export class FilteredPortfolio {
 }
 ```
 
+#### totalBalance ゲッター
+
+`totalBalance` は `for-of` で自分自身をイテレートし、全口座の残高合計を計算します。イテレータを自ら利用している点が特徴的です。
+
+```javascript
+get totalBalance() {
+  let total = 0;
+  for (const account of this) {
+    total += account.balance;
+  }
+  return total;
+}
+```
+
+```javascript
+it('Portfolio の totalBalance が全口座の合計を返す', () => {
+  const portfolio = new Portfolio();
+  portfolio.addAccount(new Account('A', 100));
+  portfolio.addAccount(new Account('B', 200));
+  portfolio.addAccount(new Account('C', 300));
+
+  expect(portfolio.totalBalance).toBe(600);
+});
+```
+
+#### length ゲッター
+
+`length` は内部の `accounts` 配列の要素数を返します。コレクションのサイズを内部構造を公開せずに提供します。
+
+```javascript
+get length() {
+  return this.accounts.length;
+}
+```
+
 ### Refactor: 振り返り
 
 - `[Symbol.iterator]()` を実装することで、`for-of`、スプレッド構文 `[...portfolio]`、分割代入がすべて使えます。
+- `totalBalance` ゲッターは `for-of` で自分自身をイテレートしており、イテレータプロトコルを内部でも活用しています。
+- `length` ゲッターにより、内部の配列を直接公開せずにコレクションのサイズを提供します。
 - `FilteredPortfolio` はジェネレータ関数 `*[Symbol.iterator]()` で実装しました。`yield` により、必要な要素だけを遅延評価で返します。
 
 ---

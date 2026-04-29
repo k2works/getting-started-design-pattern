@@ -41,11 +41,11 @@ note bottom of NumberingWriter
   クラスベース Decorator
 end note
 
-class "withNumbering" as WN <<module>> {
+class "withNumbering" as WN <<function>> {
   + (writer) : writer
 }
 
-class "withTimeStamping" as WT <<module>> {
+class "withTimeStamping" as WT <<function>> {
   + (writer, timeProvider) : writer
 }
 
@@ -117,9 +117,58 @@ export function withNumbering(writer) {
 }
 ```
 
+#### TimeStampingWriter の setTimeProvider() メソッド
+
+`TimeStampingWriter` はデフォルトで `new Date().toISOString()` を時刻プロバイダとして使用します。`setTimeProvider(fn)` メソッドにより、テスト時に時刻を固定できます。
+
+```javascript
+export class TimeStampingWriter {
+  constructor(writer) {
+    this._writer = writer;
+    this._getTime = () => new Date().toISOString();  // デフォルトの時刻プロバイダ
+  }
+
+  setTimeProvider(fn) {
+    this._getTime = fn;  // テスト用に時刻を差し替え可能
+  }
+
+  writeLine(line) {
+    this._writer.writeLine(`${this._getTime()} ${line}`);
+  }
+
+  getContents() { return this._writer.getContents(); }
+}
+```
+
+#### withTimeStamping 関数の timeProvider パラメータ
+
+高階関数版の `withTimeStamping` は、第 2 引数に `timeProvider` を受け取ります。デフォルトは `() => new Date().toISOString()` で、テスト時にはカスタムの時刻関数を渡せます。
+
+```javascript
+export function withTimeStamping(writer, timeProvider = () => new Date().toISOString()) {
+  const originalWriteLine = writer.writeLine.bind(writer);
+  writer.writeLine = (line) => {
+    originalWriteLine(`${timeProvider()} ${line}`);
+  };
+  return writer;
+}
+```
+
+```javascript
+it('withTimeStamping がタイムスタンプを付与する', () => {
+  const writer = withTimeStamping(
+    new SimpleWriter(),
+    () => '2025-01-01T00:00:00Z'  // テスト用の固定時刻
+  );
+  writer.writeLine('hello');
+  expect(writer.getContents()).toBe('2025-01-01T00:00:00Z hello');
+});
+```
+
 ### Refactor: 振り返り
 
 - クラスベースの Decorator は、同じインターフェース（`writeLine` / `getContents`）を持つラッパーです。
+- `TimeStampingWriter` の `setTimeProvider()` と `withTimeStamping` の `timeProvider` 引数は、テスタビリティのための依存性注入（DI）パターンです。時刻のような非決定的な依存を外部から差し替え可能にしています。
 - 高階関数版は、`writeLine` メソッドを直接置き換えます。新しいクラスを作らずに機能を追加できますが、元のオブジェクトを変更する副作用があります。
 
 ---

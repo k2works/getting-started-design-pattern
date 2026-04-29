@@ -98,9 +98,46 @@ export class BritishTextObjectAdapter {
 }
 ```
 
+#### TextObject クラス
+
+`TextObject` は Renderer が期待するインターフェースを定義するクラスです。`text`、`sizeInches`、`color` の 3 つのプロパティを持ちます。
+
+```javascript
+export class TextObject {
+  constructor(text, sizeInches, color) {
+    this.text = text;
+    this.sizeInches = sizeInches;
+    this.color = color;
+  }
+}
+```
+
+```javascript
+it('TextObject をそのまま Renderer で描画できる', () => {
+  const text = new TextObject('Hello', 1.0, 'red');
+  const renderer = new Renderer();
+  const output = renderer.render(text);
+
+  expect(output).toBe('Hello (1.0in, red)');
+});
+```
+
+#### Renderer クラス
+
+`Renderer` は `textObject` を受け取り、`text`、`sizeInches`、`color` プロパティを使って描画結果の文字列を生成します。`TextObject` でも `BritishTextObjectAdapter` でも、同じインターフェースを持つオブジェクトであれば描画できます。
+
+```javascript
+export class Renderer {
+  render(textObject) {
+    return `${textObject.text} (${textObject.sizeInches.toFixed(1)}in, ${textObject.color})`;
+  }
+}
+```
+
 ### Refactor: 振り返り
 
 - `get` / `set` アクセサで変換ロジックを透過的に提供しています。
+- `Renderer` は `TextObject` のインターフェース（`text`、`sizeInches`、`color`）にのみ依存しており、Duck Typing により `BritishTextObjectAdapter` もそのまま利用できます。
 - Adapter を通じた変更は元の `BritishTextObject` に反映されます（双方向変換）。
 
 ---
