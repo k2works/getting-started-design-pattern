@@ -23,7 +23,27 @@ class AddDryIngredientsTask {
   + getTimeRequired() : float
 }
 
+class AddLiquidsTask {
+  + getTimeRequired() : float
+}
+
 class MixTask {
+  + getTimeRequired() : float
+}
+
+class FillPanTask {
+  + getTimeRequired() : float
+}
+
+class BakeTask {
+  + getTimeRequired() : float
+}
+
+class FrostTask {
+  + getTimeRequired() : float
+}
+
+class PackTask {
   + getTimeRequired() : float
 }
 
@@ -31,6 +51,7 @@ class CompositeTask {
   - subTasks : Task[]
   + addSubTask(Task) : void
   + removeSubTask(Task) : void
+  + getSubTasks() : Task[]
   + getTimeRequired() : float
   + totalBasicTasks() : int
 }
@@ -39,7 +60,12 @@ class MakeBatterTask
 class MakeCakeTask
 
 Task <|-- AddDryIngredientsTask
+Task <|-- AddLiquidsTask
 Task <|-- MixTask
+Task <|-- FillPanTask
+Task <|-- BakeTask
+Task <|-- FrostTask
+Task <|-- PackTask
 Task <|-- CompositeTask
 CompositeTask <|-- MakeBatterTask
 CompositeTask <|-- MakeCakeTask
@@ -98,10 +124,37 @@ class CompositeTask extends Task
 }
 ```
 
+`CompositeTask` は子タスクを取得するための `getSubTasks()` メソッドも提供しています。
+
+```php
+/** @return Task[] */
+public function getSubTasks(): array
+{
+    return $this->subTasks;
+}
+```
+
+#### リーフタスクの一覧
+
+各リーフタスクは固有の所要時間を持ちます。
+
+| クラス | タスク名 | 所要時間（分） |
+|--------|----------|--------------|
+| `AddDryIngredientsTask` | 小麦粉と砂糖を加える | 1.0 |
+| `AddLiquidsTask` | 卵とバターを加える | 0.5 |
+| `MixTask` | 混ぜる | 3.0 |
+| `FillPanTask` | 型に入れる | 0.5 |
+| `BakeTask` | 焼く | 25.0 |
+| `FrostTask` | デコレーションする | 10.0 |
+| `PackTask` | 箱詰めする | 5.0 |
+
+コンポジットタスク `MakeBatterTask`（生地を作る）は AddDryIngredients + AddLiquids + Mix = **4.5 分**、`MakeCakeTask`（ケーキを作る）は全体で **45.0 分** です。
+
 ### Refactor: 振り返り
 
 - `array_map` + `array_sum` の組み合わせで再帰的な集計をシンプルに表現できます
 - Leaf の `totalBasicTasks()` は常に 1 を返し、Composite は子の合計を返します
+- `getSubTasks()` でコンポジットの内部構造を外部から参照でき、ツリーの走査が可能になります
 
 ---
 

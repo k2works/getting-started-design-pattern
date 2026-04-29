@@ -45,10 +45,23 @@ class FrogPond {
   + createPlant() : Plant
 }
 
+class Duck
+class Frog
+class Tiger
+class WaterLily
+class Algae
+class Tree
+
 Pond <|-- DuckPond
 Pond <|-- FrogPond
 Pond --> Animal
 Pond --> Plant
+Animal <|.. Duck
+Animal <|.. Frog
+Animal <|.. Tiger
+Plant <|.. WaterLily
+Plant <|.. Algae
+Plant <|.. Tree
 @enduml
 ```
 
@@ -145,11 +158,51 @@ class OrganismFactory
 }
 ```
 
+#### 具象クラスの一覧
+
+**Animal の実装:**
+
+| クラス | `eat()` の戻り値 | `speak()` の戻り値 |
+|--------|----------------|-------------------|
+| `Duck` | `{name} はパンを食べています` | `ガーガー` |
+| `Frog` | `{name} は虫を食べています` | `ケロケロ` |
+| `Tiger` | `{name} は肉を食べています` | `ガオー` |
+
+**Plant の実装:**
+
+| クラス | `grow()` の戻り値 |
+|--------|-----------------|
+| `WaterLily` | `{name} は水面に広がっています` |
+| `Algae` | `{name} は水中で増殖しています` |
+| `Tree` | `{name} は大きく成長しています` |
+
+Abstract Factory を使えば、Tiger と Tree のような新しい組み合わせも自由に作成できます。
+
+```php
+public function testAbstractFactoryAnimalBehavior(): void
+{
+    $factory = new OrganismFactory(Tiger::class, Tree::class);
+    $habitat = new Habitat($factory, 'タイガー', '杉');
+
+    $this->assertSame('ガオー', $habitat->getAnimal()->speak());
+    $this->assertStringContainsString('肉を食べています', $habitat->getAnimal()->eat());
+}
+
+public function testAbstractFactoryPlantBehavior(): void
+{
+    $factory = new OrganismFactory(Duck::class, Tree::class);
+    $habitat = new Habitat($factory, 'アヒル', '松');
+
+    $this->assertStringContainsString('大きく成長しています', $habitat->getPlant()->grow());
+}
+```
+
 ### Refactor: 振り返り
 
 - Factory Method はテンプレートメソッドの「生成版」です
 - Abstract Factory はファクトリオブジェクトを委譲で注入するため、より柔軟です
 - PHP では `new ($className)($args)` で動的なインスタンス生成が可能です
+- 新しい動物（Tiger）や植物（Algae, Tree）を追加しても、既存の Factory / Pond コードを変更する必要はありません。Open-Closed Principle が守られています
 
 ---
 

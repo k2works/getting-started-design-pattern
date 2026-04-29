@@ -122,6 +122,16 @@ abstract class Report
         return implode("\n", $lines);
     }
 
+    /** 本文出力: $this->text を順にイテレーションする */
+    protected function outputBody(): array
+    {
+        $lines = [];
+        foreach ($this->text as $line) {
+            $lines = array_merge($lines, $this->outputLine($line));
+        }
+        return $lines;
+    }
+
     /** フックメソッド（デフォルトは何もしない） */
     protected function outputStart(): array { return []; }
     protected function outputHead(): array { return $this->outputLine($this->title); }
@@ -157,6 +167,7 @@ class HtmlReport extends Report
 - PHP の `abstract` キーワードで抽象メソッドを言語レベルで強制できます。Ruby の `raise NotImplementedError` に相当するイディオムが不要です
 - フックメソッドは空の配列 `[]` を返すデフォルト実装で提供し、必要な部分だけオーバーライドします
 - 文字列結合ではなく配列を組み立てて最後に `implode` するアプローチで、テスト容易性を確保しています
+- `outputBody()` メソッドは `$this->text` 配列を `foreach` でイテレーションし、各行を `outputLine()` に委譲します。これにより、本文の行数に関わらず同じ骨格で動作します
 
 ---
 

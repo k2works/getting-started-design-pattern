@@ -127,11 +127,51 @@ class LaptopBuilder extends ComputerBuilder
 }
 ```
 
+#### Computer のゲッターメソッドと describe()
+
+構築された `Computer` オブジェクトは、各パーツへのアクセサと自己記述メソッドを提供します。
+
+```php
+class Computer
+{
+    public function getDisplay(): string { return $this->display; }
+    public function getMotherboard(): Motherboard { return $this->motherboard; }
+    /** @return Drive[] */
+    public function getDrives(): array { return $this->drives; }
+    public function getMemoryGb(): int { return $this->memoryGb; }
+
+    public function describe(): string
+    {
+        $driveInfo = implode(
+            ', ',
+            array_map(fn(Drive $d) => "{$d->getType()} {$d->getSizeGb()}GB", $this->drives)
+        );
+        return "Computer: {$this->display}, {$this->motherboard->getModel()}, {$this->memoryGb}GB RAM, [{$driveInfo}]";
+    }
+}
+```
+
+`describe()` メソッドは、コンピュータの構成を人間が読める文字列で返します。ドライブ情報は `array_map` で整形し、`implode` で結合しています。
+
+```php
+public function testComputerDescribe(): void
+{
+    $computer = new Computer('テスト画面', new Motherboard('テストMB'), [new Drive('SSD', 500)], 16);
+    $desc = $computer->describe();
+
+    $this->assertStringContainsString('テスト画面', $desc);
+    $this->assertStringContainsString('テストMB', $desc);
+    $this->assertStringContainsString('SSD 500GB', $desc);
+    $this->assertStringContainsString('16GB RAM', $desc);
+}
+```
+
 ### Refactor: 振り返り
 
 - `static` 戻り値型でメソッドチェーン（Fluent Interface）を実現
 - バリデーションは `build()` 時に実行。構築中は自由に部品を追加・変更できます
 - `reset()` でビルダーを再利用可能にします
+- `Computer::describe()` はオブジェクトの自己記述を提供し、デバッグやログ出力に活用できます
 
 ---
 

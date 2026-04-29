@@ -101,10 +101,41 @@ class NumberingWriter extends WriterDecorator
 }
 ```
 
+**TimeStampingWriter** --- タイムスタンプの付与と、テスト用の固定時刻パラメータを実装します。
+
+```php
+class TimeStampingWriter extends WriterDecorator
+{
+    private ?string $fixedTime;
+
+    public function __construct(Writer $wrapped, ?string $fixedTime = null)
+    {
+        parent::__construct($wrapped);
+        $this->fixedTime = $fixedTime;
+    }
+
+    public function writeLine(string $line): void
+    {
+        $time = $this->fixedTime ?? date('Y-m-d H:i:s');
+        $this->wrapped->writeLine("[{$time}] {$line}");
+    }
+}
+```
+
+コンストラクタの第 2 引数 `$fixedTime` はオプショナルパラメータです。`null`（デフォルト）の場合は `date()` で現在時刻を取得し、文字列が渡された場合はその値を固定タイムスタンプとして使用します。このパターンにより、テスト時に決定的な（deterministic）出力を得ることができ、時刻に依存しないアサーションが可能になります。
+
+```php
+// テストでは固定時刻を渡して決定的な結果を得る
+$writer = new TimeStampingWriter(new SimpleWriter(), '2024-01-01 12:00:00');
+$writer->writeLine('Hello');
+$this->assertSame(['[2024-01-01 12:00:00] Hello'], $writer->getOutput());
+```
+
 ### Refactor: 振り返り
 
 - Decorator の積み重ね順序によって出力が変わります（外側の Decorator が先に処理する）
 - `getOutput()` はラップされた Writer に委譲するため、最内部の SimpleWriter の出力を取得します
+- `TimeStampingWriter` の `$fixedTime` パラメータは、テスト容易性のための設計です。本番コードでは省略して現在時刻を使い、テストでは固定値を注入します
 
 ---
 

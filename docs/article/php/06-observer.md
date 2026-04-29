@@ -26,6 +26,7 @@ class Employee {
   + addObserver(Observer) : void
   + removeObserver(Observer) : void
   + setSalary(float) : void
+  + setTitle(string) : void
   - notifyObservers() : void
 }
 
@@ -49,7 +50,7 @@ Observer <|.. TaxMan
 
 **登場人物**:
 
-- **Subject（Employee）**: 状態を保持し、Observer のリストを管理する
+- **Subject（Employee）**: 状態を保持し、Observer のリストを管理する。`setSalary()` と `setTitle()` の両方で通知を発行する
 - **Observer（Observer interface）**: 通知を受けるインターフェース
 - **ConcreteObserver（Payroll / TaxMan）**: 通知に応じた処理を実装する
 
@@ -94,6 +95,12 @@ class Employee
         $this->notifyObservers();
     }
 
+    public function setTitle(string $title): void
+    {
+        $this->title = $title;
+        $this->notifyObservers();
+    }
+
     public function addObserver(Observer $observer): void
     {
         $this->observers->offsetSet($observer);
@@ -108,10 +115,31 @@ class Employee
 }
 ```
 
+#### 役職変更による通知のテスト
+
+給与変更だけでなく、役職（title）の変更でも Observer に通知されます。
+
+```php
+public function testTitleChangeNotifiesObservers(): void
+{
+    $employee = new Employee('山田', 'ジュニア', 400000);
+    $payroll = new Payroll();
+    $employee->addObserver($payroll);
+
+    $employee->setTitle('シニア');
+
+    $this->assertCount(1, $payroll->getLog());
+    $this->assertSame('シニア', $employee->getTitle());
+}
+```
+
+`setTitle()` は `setSalary()` と同様に内部で `notifyObservers()` を呼び出すため、状態変更の種類に関わらず Observer に通知されます。
+
 ### Refactor: 振り返り
 
 - `SplObjectStorage` はオブジェクトをキーとするコレクションで、同一 Observer の重複登録を自然に防ぎます
 - `foreach` で直接イテレーションできるため、Observer の走査がシンプルです
+- `setSalary()` と `setTitle()` の両方で `notifyObservers()` を呼ぶことで、あらゆる状態変更を Observer に通知します
 
 ---
 
