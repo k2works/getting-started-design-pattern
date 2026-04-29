@@ -97,14 +97,60 @@ class FileName(Expression):
     def evaluate(self, directory):
         return sorted(str(p) for p in Path(directory).rglob(self._pattern) if p.is_file())
 
+class Writable(Expression):
+    """書き込み可能なファイル"""
+
+    def evaluate(self, directory):
+        import os
+        return sorted(
+            str(p) for p in Path(directory).rglob("*")
+            if p.is_file() and os.access(p, os.W_OK)
+        )
+
+
 class And(Expression):
+    """AND 複合式（集合の積集合）"""
+
     def __init__(self, left, right):
         self._left = left
         self._right = right
 
     def evaluate(self, directory):
-        return sorted(set(self._left.evaluate(directory)) & set(self._right.evaluate(directory)))
+        left_set = set(self._left.evaluate(directory))
+        right_set = set(self._right.evaluate(directory))
+        return sorted(left_set & right_set)
+
+
+class Or(Expression):
+    """OR 複合式（集合の和集合）"""
+
+    def __init__(self, left, right):
+        self._left = left
+        self._right = right
+
+    def evaluate(self, directory):
+        left_set = set(self._left.evaluate(directory))
+        right_set = set(self._right.evaluate(directory))
+        return sorted(left_set | right_set)
+
+
+class Not(Expression):
+    """NOT 式（全体集合との差集合）"""
+
+    def __init__(self, expression):
+        self._expression = expression
+
+    def evaluate(self, directory):
+        all_files = set(All().evaluate(directory))
+        excluded = set(self._expression.evaluate(directory))
+        return sorted(all_files - excluded)
 ```
+
+複合式はすべて集合演算で実装されています。
+
+- `And` — `set` の `&`（積集合: intersection）で両方の条件を満たすファイルを返す
+- `Or` — `set` の `|`（和集合: union）でいずれかの条件を満たすファイルを返す
+- `Not` — `set` の `-`（差集合: difference）で `All` の結果から除外対象を引く
 
 ---
 

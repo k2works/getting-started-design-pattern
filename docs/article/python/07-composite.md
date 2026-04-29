@@ -29,17 +29,39 @@ class CompositeTask {
   + total_basic_tasks : int <<property>>
 }
 
-class AddDryIngredientsTask
-class MixTask
-class BakeTask
+class AddDryIngredientsTask {
+  + get_time_required() : 1.0
+}
+class AddLiquidsTask {
+  + get_time_required() : 1.0
+}
+class MixTask {
+  + get_time_required() : 3.0
+}
+class FillPanTask {
+  + get_time_required() : 2.0
+}
+class BakeTask {
+  + get_time_required() : 10.0
+}
+class FrostTask {
+  + get_time_required() : 4.0
+}
+class LickSpoonTask {
+  + get_time_required() : 1.0
+}
 
 class MakeBatterTask
 class MakeCakeTask
 
 Task <|-- CompositeTask
 Task <|-- AddDryIngredientsTask
+Task <|-- AddLiquidsTask
 Task <|-- MixTask
+Task <|-- FillPanTask
 Task <|-- BakeTask
+Task <|-- FrostTask
+Task <|-- LickSpoonTask
 CompositeTask <|-- MakeBatterTask
 CompositeTask <|-- MakeCakeTask
 
@@ -50,7 +72,14 @@ CompositeTask o--> "*" Task : _sub_tasks
 **登場人物**:
 
 - **Component（Task）**: リーフとコンポジットの共通インターフェース
-- **Leaf（AddDryIngredientsTask 等）**: 末端のタスク
+- **Leaf（リーフタスク群）**: 末端のタスク。それぞれ固有の所要時間を持つ
+    - `AddDryIngredientsTask`（乾燥材料を加える: 1.0 時間）
+    - `AddLiquidsTask`（液体材料を加える: 1.0 時間）
+    - `MixTask`（混ぜる: 3.0 時間）
+    - `FillPanTask`（型に流し込む: 2.0 時間）
+    - `BakeTask`（焼く: 10.0 時間）
+    - `FrostTask`（アイシングする: 4.0 時間）
+    - `LickSpoonTask`（スプーンをなめる: 1.0 時間）
 - **Composite（CompositeTask / MakeBatterTask / MakeCakeTask）**: 子タスクを持つ複合タスク
 
 ---
@@ -129,6 +158,10 @@ class CompositeTask(Task):
         super().__init__(name)
         self._sub_tasks: list[Task] = []
 
+    @property
+    def sub_tasks(self) -> list[Task]:
+        return list(self._sub_tasks)
+
     def add_sub_task(self, task: Task) -> None:
         self._sub_tasks.append(task)
         task.parent = self
@@ -145,6 +178,8 @@ class CompositeTask(Task):
         return sum(t.total_basic_tasks for t in self._sub_tasks)
 ```
 
+`sub_tasks` プロパティは内部リストのコピーを返します。これにより、外部から直接 `_sub_tasks` を操作できないようカプセル化しています。
+
 リーフタスクは `get_time_required()` をオーバーライドするだけです。
 
 ```python
@@ -154,6 +189,58 @@ class AddDryIngredientsTask(Task):
 
     def get_time_required(self) -> float:
         return 1.0
+
+
+class AddLiquidsTask(Task):
+    def __init__(self) -> None:
+        super().__init__("液体材料を加える")
+
+    def get_time_required(self) -> float:
+        return 1.0
+
+
+class FillPanTask(Task):
+    def __init__(self) -> None:
+        super().__init__("型に流し込む")
+
+    def get_time_required(self) -> float:
+        return 2.0
+
+
+class LickSpoonTask(Task):
+    def __init__(self) -> None:
+        super().__init__("スプーンをなめる")
+
+    def get_time_required(self) -> float:
+        return 1.0
+```
+
+`MakeBatterTask` はコンストラクタで自動的にサブタスクを追加する複合タスクです。
+
+```python
+class MakeBatterTask(CompositeTask):
+    """生地を作る"""
+
+    def __init__(self) -> None:
+        super().__init__("生地を作る")
+        self.add_sub_task(AddDryIngredientsTask())
+        self.add_sub_task(AddLiquidsTask())
+        self.add_sub_task(MixTask())
+```
+
+`MakeCakeTask` は `MakeBatterTask` を含む全体のタスクツリーを構成します。
+
+```python
+class MakeCakeTask(CompositeTask):
+    """ケーキを作る"""
+
+    def __init__(self) -> None:
+        super().__init__("ケーキを作る")
+        self.add_sub_task(MakeBatterTask())
+        self.add_sub_task(FillPanTask())
+        self.add_sub_task(BakeTask())
+        self.add_sub_task(FrostTask())
+        self.add_sub_task(LickSpoonTask())
 ```
 
 ### Refactor: 振り返り

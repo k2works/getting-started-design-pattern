@@ -90,6 +90,14 @@ class TestEmployee:
         assert payroll.last_notification != ""
         assert taxman.last_notification != ""
 
+    def test_タイトル変更でオブザーバーに通知される(self):
+        emp = Employee("田中", "エンジニア", 500000)
+        taxman = TaxMan()
+        emp.add_observer(taxman)
+
+        emp.title = "シニアエンジニア"
+        assert "田中" in taxman.last_notification
+
     def test_オブザーバーを削除できる(self):
         emp = Employee("田中", "エンジニア", 500000)
         payroll = Payroll()
@@ -99,6 +107,8 @@ class TestEmployee:
         emp.salary = 600000
         assert payroll.last_notification == ""
 ```
+
+`title` プロパティの setter も `salary` と同様に `_notify_observers()` を呼び出します。これにより、役職変更時にも全オブザーバーに通知が届きます。
 
 ### Green: 実装する
 
@@ -175,7 +185,7 @@ class TaxMan:
 
 ### Refactor: 振り返り
 
-- `@property` の setter に通知ロジックを組み込むことで、`emp.salary = 600000` という自然な代入構文で Observer への通知が発火します。
+- `@property` の setter に通知ロジックを組み込むことで、`emp.salary = 600000` や `emp.title = "シニアエンジニア"` という自然な代入構文で Observer への通知が発火します。`salary` と `title` の両方が setter を持ち、変更時に `_notify_observers()` を呼び出す設計です。
 - `Observer` は `Protocol` で定義しているため、`Payroll` や `TaxMan` は明示的に `Observer` を継承する必要がありません。`update` メソッドを持つだけで適合します。
 
 ---

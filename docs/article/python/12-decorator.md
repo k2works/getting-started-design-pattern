@@ -137,9 +137,12 @@ class TimeStampingWriter:
         self._writer = writer
         self._clock = clock
 
-    def write_line(self, line: str) -> None:
+    def _get_timestamp(self) -> str:
         ts = self._clock if self._clock else datetime.now()
-        self._writer.write_line(f"{ts.isoformat()}: {line}")
+        return ts.isoformat()
+
+    def write_line(self, line: str) -> None:
+        self._writer.write_line(f"{self._get_timestamp()}: {line}")
 
     @property
     def lines(self) -> list[str]:
@@ -166,6 +169,7 @@ def with_numbering(write_func):
 - クラスベースのデコレーターはダックタイピングで動作します。`NumberingWriter` と `SimpleWriter` は同じ `write_line` メソッドを持つため、デコレーターを何層でも重ねられます。
 - Python の `@decorator` 構文は関数を変換する仕組みで、GoF の Decorator パターンとは異なる概念です。しかし「既存の振る舞いを拡張する」という本質は共通しています。
 - テスト容易性のため、`clock` パラメータを注入可能にしています（依存性の注入）。
+- `TimeStampingWriter` ではタイムスタンプ取得ロジックを `_get_timestamp()` メソッドに抽出しています。これにより、タイムスタンプの生成方法を変更したい場合にサブクラスでオーバーライドでき、`write_line` の責務が明確になります。
 
 ---
 

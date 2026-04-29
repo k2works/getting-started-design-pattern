@@ -31,17 +31,34 @@ class Drive <<dataclass>> {
   + writable : bool
 }
 
+enum DriveType {
+  CD
+  DVD
+  HARD_DISK
+}
+
+enum DisplayType {
+  CRT
+  LCD
+}
+
 class ComputerBuilder {
   + turbo() : ComputerBuilder
   + memory_size(size) : ComputerBuilder
   + add_cd() : ComputerBuilder
   + add_dvd() : ComputerBuilder
   + add_hard_disk(size) : ComputerBuilder
+  - _validate()
   + build() : Computer
 }
 
-class DesktopBuilder
-class LaptopBuilder
+class DesktopBuilder {
+  デフォルト: CRT
+}
+class LaptopBuilder {
+  デフォルト: LCD
+  LCD 以外は ValueError
+}
 
 ComputerBuilder <|-- DesktopBuilder
 ComputerBuilder <|-- LaptopBuilder
@@ -75,13 +92,48 @@ def test_validation_no_hard_disk():
 
 ### Green: 実装する
 
+`DriveType` と `DisplayType` は `Enum` クラスで定義します。
+
 ```python
+from enum import Enum, auto
+
+class DriveType(Enum):
+    CD = auto()
+    DVD = auto()
+    HARD_DISK = auto()
+
+
+class DisplayType(Enum):
+    CRT = auto()
+    LCD = auto()
+```
+
+データクラスで値オブジェクトを定義します。
+
+```python
+@dataclass(frozen=True)
+class Drive:
+    type: DriveType
+    size: int
+    writable: bool
+
+
+@dataclass(frozen=True)
+class Motherboard:
+    cpu: str
+    memory_size: int
+
+
 @dataclass(frozen=True)
 class Computer:
     display: DisplayType
     motherboard: Motherboard
     drives: list[Drive] = field(default_factory=list)
+```
 
+ビルダーの基底クラスです。`memory_size()` メソッドでメモリサイズを設定できます。
+
+```python
 class ComputerBuilder:
     def __init__(self):
         self._turbo = False
@@ -105,11 +157,35 @@ class ComputerBuilder:
         if not any(d.type == DriveType.HARD_DISK for d in self._drives):
             raise ValueError("Must have at least one hard disk")
 
+    def memory_size(self, size):
+        self._memory_size = size
+        return self
+
     def build(self):
         self._validate()
         cpu = "TurboCPU" if self._turbo else "BasicCPU"
         motherboard = Motherboard(cpu=cpu, memory_size=self._memory_size)
         return Computer(display=self._display, motherboard=motherboard, drives=list(self._drives))
+```
+
+`LaptopBuilder` はデフォルトで LCD ディスプレイを使用し、`build()` 時に LCD 以外が設定されていると `ValueError` を送出します。
+
+```python
+class DesktopBuilder(ComputerBuilder):
+    def __init__(self) -> None:
+        super().__init__()
+        self._display = DisplayType.CRT
+
+
+class LaptopBuilder(ComputerBuilder):
+    def __init__(self) -> None:
+        super().__init__()
+        self._display = DisplayType.LCD
+
+    def build(self) -> Computer:
+        if self._display != DisplayType.LCD:
+            raise ValueError("Laptop display must be LCD")
+        return super().build()
 ```
 
 ---

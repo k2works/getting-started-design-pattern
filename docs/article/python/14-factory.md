@@ -60,6 +60,17 @@ Habitat --> OrganismFactory
 @enduml
 ```
 
+**具象クラス**:
+
+- **動物**（`Animal` プロトコル: `speak()`, `eat()`, `sleep()`）
+    - `Duck` — `"Quack!"` / `"Duck is eating."` / `"Duck is sleeping."`
+    - `Frog` — `"Croak!"` / `"Frog is eating."` / `"Frog is sleeping."`
+    - `Tiger` — `"Roar!"` / `"Tiger is eating."` / `"Tiger is sleeping."`
+- **植物**（`Plant` プロトコル: `grow()`）
+    - `WaterLily` — `"WaterLily is growing."`
+    - `Algae` — `"Algae is growing."`
+    - `Tree` — `"Tree is growing."`
+
 ---
 
 ## TDD で作る
@@ -82,6 +93,49 @@ def test_habitat_with_abstract_factory():
 ```
 
 ### Green: 実装する
+
+**動物と植物の具象クラス**:
+
+```python
+class Animal(Protocol):
+    def speak(self) -> str: ...
+    def eat(self) -> str: ...
+    def sleep(self) -> str: ...
+
+
+class Duck:
+    def speak(self) -> str: return "Quack!"
+    def eat(self) -> str: return "Duck is eating."
+    def sleep(self) -> str: return "Duck is sleeping."
+
+
+class Frog:
+    def speak(self) -> str: return "Croak!"
+    def eat(self) -> str: return "Frog is eating."
+    def sleep(self) -> str: return "Frog is sleeping."
+
+
+class Tiger:
+    def speak(self) -> str: return "Roar!"
+    def eat(self) -> str: return "Tiger is eating."
+    def sleep(self) -> str: return "Tiger is sleeping."
+
+
+class Plant(Protocol):
+    def grow(self) -> str: ...
+
+
+class WaterLily:
+    def grow(self) -> str: return "WaterLily is growing."
+
+
+class Algae:
+    def grow(self) -> str: return "Algae is growing."
+
+
+class Tree:
+    def grow(self) -> str: return "Tree is growing."
+```
 
 **Factory Method（クラスオブジェクトを渡す）**:
 
