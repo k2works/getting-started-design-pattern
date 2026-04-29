@@ -102,6 +102,7 @@
 | スキル | 用途 |
 | :--- | :--- |
 | `practicing-getting-start-tdd` | TDD プログラミング入門の対話式チュートリアル |
+| `practicing-getting-start-design-pattern` | デザインパターン プログラミング入門の対話式チュートリアル |
 
 ### 共通
 

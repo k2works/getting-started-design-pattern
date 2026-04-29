@@ -6,7 +6,7 @@
 
 ## コンテキスト
 
-一次資料 `tmp/ruby-design-pattern/` は Ruby 2.x 時代に作成されたコードで、以下の問題がある。
+一次資料 `docs/reference/ruby-design-pattern/` は Ruby 2.x 時代に作成されたコードで、以下の問題がある。
 
 - `require './xxx'` の相対パスが Ruby 3.x のデフォルト `$LOAD_PATH` で動かないケースがある
 - minitest の spec スタイル（`must_equal`、`must_output`）は将来的に非推奨

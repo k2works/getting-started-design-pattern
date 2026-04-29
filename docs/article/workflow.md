@@ -2,7 +2,7 @@
 
 ## 概要
 
-本シリーズは `outline.md` に定義された構成に従い、章ごとに執筆と実装を同期しながら進めます。一次資料の Ruby 実装（`tmp/ruby-design-pattern/`）から各言語へ「翻訳」する形で、TDD によって動作を保証しながら執筆します。
+本シリーズは `outline.md` に定義された構成に従い、章ごとに執筆と実装を同期しながら進めます。一次資料の Ruby 実装（`docs/reference/ruby-design-pattern/`）から各言語へ「翻訳」する形で、TDD によって動作を保証しながら執筆します。
 
 ## ワークフロー図
 
@@ -20,7 +20,7 @@ end note
 
 :一次資料の確認;
 note right
-  tmp/ruby-design-pattern/{pattern}/
+  docs/reference/ruby-design-pattern/{pattern}/
   - .rb ファイル
   - *_test.rb
   - *.puml クラス図
@@ -83,7 +83,7 @@ title 章ごとの執筆・実装サイクル
 
 |資料調査|
 start
-:tmp/ruby-design-pattern/{pattern}/ を読み込み;
+:docs/reference/ruby-design-pattern/{pattern}/ を読み込み;
 note right
   - クラス図 (*.puml)
   - 実装 (*.rb)
@@ -251,9 +251,9 @@ npm run docs:build
 | 部 | 参照先 |
 |---|---|
 | 第 1 部: パターンとは何か | Russ Olsen 本 Part I、GoF 本 Chapter 1〜2 |
-| 第 2 部: 振る舞いの取り扱い | `tmp/ruby-design-pattern/template_method`〜`Iterator` |
-| 第 3 部: 操作と関係の表現 | `tmp/ruby-design-pattern/command`〜`decorator` |
-| 第 4 部: オブジェクトの作成と解釈 | `tmp/ruby-design-pattern/singleton`〜`interpreter` |
+| 第 2 部: 振る舞いの取り扱い | `docs/reference/ruby-design-pattern/template_method`〜`Iterator` |
+| 第 3 部: 操作と関係の表現 | `docs/reference/ruby-design-pattern/command`〜`decorator` |
+| 第 4 部: オブジェクトの作成と解釈 | `docs/reference/ruby-design-pattern/singleton`〜`interpreter` |
 
 ### 3. 執筆フォーマット
 
@@ -479,7 +479,7 @@ cd apps/ruby/design-pattern/04-template-method
 #    bundle add minitest
 
 # 4. 一次資料を参考にしながら TDD サイクル開始
-#    tmp/ruby-design-pattern/template_method/ を読み込み
+#    docs/reference/ruby-design-pattern/template_method/ を読み込み
 #    テスト作成 → 実行（Red） → 実装（Green） → リファクタリング
 ```
 
@@ -510,5 +510,5 @@ cd apps/ruby/design-pattern/04-template-method
 
 - [執筆計画アウトライン](outline.md)
 - [記事トップ](index.md)
-- 一次資料: `tmp/ruby-design-pattern/`
+- 一次資料: `docs/reference/ruby-design-pattern/`
 - 前作: [テスト駆動開発から始めるプログラミング入門](getting-start-tdd/index.md)

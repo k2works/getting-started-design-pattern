@@ -20,7 +20,7 @@
 1. **記事**: Ruby の 16 章すべてが `docs/article/ruby/` に執筆完了
 2. **実装**: `apps/ruby/design-pattern/` に TDD で実装した 13 パターンが minitest で動作する状態
 3. **テンプレート**: 後続 13 言語で再利用可能な章構成・記事フォーマットが確立
-4. **一次資料との対応**: `tmp/ruby-design-pattern/` の各パターンと本シリーズ記事 / 実装の対応が ADR に記録されている
+4. **一次資料との対応**: `docs/reference/ruby-design-pattern/` の各パターンと本シリーズ記事 / 実装の対応が ADR に記録されている
 
 ### 成功基準
 
@@ -56,7 +56,7 @@
 3. 操作と関係系パターン 4 種（Command / Adapter / Proxy / Decorator）が第 3 部（章 9-12）で TDD で構築できる
 4. 生成と解釈系パターン 4 種（Singleton / Factory / Builder / Interpreter）が第 4 部（章 13-16）で TDD で構築できる
 5. 記事内のコード例が `apps/ruby/design-pattern/{NN-pattern}/` の実装と一致している
-6. 一次資料 `tmp/ruby-design-pattern/` との対応関係が ADR に記録されている
+6. 一次資料 `docs/reference/ruby-design-pattern/` との対応関係が ADR に記録されている
 
 ### タスク
 
@@ -82,7 +82,7 @@
 
 **小計**: 8h（理想時間）
 
-**参照**: `tmp/ruby-design-pattern/README.md`、Russ Olsen 本 Part I
+**参照**: `docs/reference/ruby-design-pattern/README.md`、Russ Olsen 本 Part I
 
 #### 2. 第 2 部: 振る舞いの取り扱い（4 SP）
 
@@ -96,7 +96,7 @@
 
 **小計**: 13h（理想時間）
 
-**参照**: `tmp/ruby-design-pattern/template_method/` 〜 `Iterator/`
+**参照**: `docs/reference/ruby-design-pattern/template_method/` 〜 `Iterator/`
 
 #### 3. 第 3 部: 操作と関係の表現（4 SP）
 
@@ -109,7 +109,7 @@
 
 **小計**: 11.5h（理想時間）
 
-**参照**: `tmp/ruby-design-pattern/command/` 〜 `decorator/`
+**参照**: `docs/reference/ruby-design-pattern/command/` 〜 `decorator/`
 
 #### 4. 第 4 部: オブジェクトの作成と解釈（4 SP）
 
@@ -122,7 +122,7 @@
 
 **小計**: 12.5h（理想時間）
 
-**参照**: `tmp/ruby-design-pattern/singleton/` 〜 `interpreter/`
+**参照**: `docs/reference/ruby-design-pattern/singleton/` 〜 `interpreter/`
 
 #### 5. 仕上げ（バッファ）
 
@@ -323,7 +323,7 @@ apps/ruby/design-pattern/
 
 | リスク | 影響度 | 対策 |
 |--------|--------|------|
-| 一次資料の Ruby コードが古く、minitest 仕様の変更で動かない | 高 | Day 1 の冒頭で `tmp/ruby-design-pattern/` を `bundle exec rake test` で実行確認。動かない場合は Ruby 3.x 仕様で書き直す |
+| 一次資料の Ruby コードが古く、minitest 仕様の変更で動かない | 高 | Day 1 の冒頭で `docs/reference/ruby-design-pattern/` を `bundle exec rake test` で実行確認。動かない場合は Ruby 3.x 仕様で書き直す |
 | 16 章を 2 週間で完成させるペースが厳しい | 中 | 56h 計画 + 4h バッファ（60h 想定）の枠で抑える。バッファ消費時はパターンごとの「言語固有の表現」セクションを最小化 |
 | 章間の構成・用語の不統一 | 中 | 第 1 部執筆時にスタイルガイドを `docs/article/ruby/index.md` に明文化 |
 | MkDocs プレビューで PlantUML が正しくレンダリングされない | 低 | 既存の前作 TDD 入門でレンダリング済みのため低リスク |
@@ -366,6 +366,6 @@ apps/ruby/design-pattern/
 - [リリース計画](./release_plan.md)
 - [執筆計画アウトライン](../article/outline.md)
 - [執筆ワークフロー](../article/workflow.md)
-- 一次資料: `tmp/ruby-design-pattern/`
+- 一次資料: `docs/reference/ruby-design-pattern/`
 - 前作: [テスト駆動開発から始めるプログラミング入門](../../tmp/getting-started-tdd/docs/article/index.md)
 - [イテレーション 1 ふりかえり](./retrospective-1.md)（IT1 終了時に作成）

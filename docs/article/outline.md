@@ -2,7 +2,7 @@
 
 ## 概要
 
-「デザインパターンからはじめるプログラミング入門」シリーズの執筆計画です。`tmp/ruby-design-pattern/` の Ruby 実装（Russ Olsen 『Design Patterns in Ruby』に基づく 13 パターン）を一次資料として、14 言語で統一的な章構成の記事として再構成します。
+「デザインパターンからはじめるプログラミング入門」シリーズの執筆計画です。`docs/reference/ruby-design-pattern/` の Ruby 実装（Russ Olsen 『Design Patterns in Ruby』に基づく 13 パターン）を一次資料として、14 言語で統一的な章構成の記事として再構成します。
 
 前作「テスト駆動開発から始めるプログラミング入門」の続編として位置づけ、TDD 第 3 部（オブジェクト指向設計）で扱った Strategy / Template Method などのリファクタリングを起点に、GoF の代表パターン全体へ拡張します。
 
@@ -10,14 +10,14 @@
 
 | 資料 | パス | 内容 |
 |------|------|------|
-| Ruby 実装 | `tmp/ruby-design-pattern/` | 13 パターンの Ruby + minitest 実装 |
+| Ruby 実装 | `docs/reference/ruby-design-pattern/` | 13 パターンの Ruby + minitest 実装 |
 | 出典書籍 | Russ Olsen 『Design Patterns in Ruby』 | Ruby 視点での GoF パターン解説 |
 | 補完書籍 | GoF 『Design Patterns』 | パターンの原典 |
 | 連携 | [前作 TDD 入門](getting-start-tdd/index.md)（IT8 まで完了） | 14 言語の Nix 環境とテスティング基盤を再利用 |
 
 ## 対象パターン
 
-`tmp/ruby-design-pattern/` に含まれる 13 パターンを全て扱います。
+`docs/reference/ruby-design-pattern/` に含まれる 13 パターンを全て扱います。
 
 | カテゴリ | パターン | Ruby 素材ディレクトリ |
 |----------|----------|----------------------|
@@ -62,7 +62,7 @@
 
 ### 第 1 部: パターンとは何か
 
-`tmp/ruby-design-pattern/` 全体の前提を整理する導入部。Russ Olsen 本の Part I 相当。
+`docs/reference/ruby-design-pattern/` 全体の前提を整理する導入部。Russ Olsen 本の Part I 相当。
 
 | 章 | テーマ | 内容 |
 |----|--------|------|
@@ -86,7 +86,7 @@
 
 ### 第 2 部: 振る舞いの取り扱い
 
-`tmp/ruby-design-pattern/` の中でも最も基本的な振る舞い系パターン群。Russ Olsen 本の Part II 前半相当。
+`docs/reference/ruby-design-pattern/` の中でも最も基本的な振る舞い系パターン群。Russ Olsen 本の Part II 前半相当。
 
 | 章 | パターン | Ruby 素材 | 主要ファイル | 学びの中心 |
 |----|----------|-----------|--------------|-----------|
@@ -281,4 +281,4 @@ apps/
 - 『リファクタリング 第 2 版』 - Martin Fowler
 - 『テスト駆動開発』 - Kent Beck
 - [前作: テスト駆動開発から始めるプログラミング入門](getting-start-tdd/index.md)
-- [一次資料: ruby-design-pattern](https://github.com/nslocum/design-patterns-in-ruby) を改変した `tmp/ruby-design-pattern/`
+- [一次資料: ruby-design-pattern](https://github.com/nslocum/design-patterns-in-ruby) を改変した `docs/reference/ruby-design-pattern/`

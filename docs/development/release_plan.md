@@ -200,7 +200,7 @@ gantt
 - 5 言語 × 16 章の記事
 - 5 言語の TDD 実装コード（`apps/{lang}/design-pattern/`）
 - 言語別 index ページとナビゲーション
-- 一次資料 `tmp/ruby-design-pattern/` との対応関係（Ruby 版で記録）
+- 一次資料 `docs/reference/ruby-design-pattern/` との対応関係（Ruby 版で記録）
 
 **リリース条件**:
 
