@@ -71,6 +71,74 @@ end
 
 `JsonData` や `XmlData` の実装を追加していくと、呼び出し側を変えずに対応型だけ増やせる利点が明確になります。
 
+## 各データ型の defimpl
+
+### CsvData
+
+CSV データは行のリストを持ち、各行をカンマ区切りで結合し、行間を改行で結合します。
+
+```elixir
+defimpl Printable, for: CsvData do
+  def format(%{rows: rows}) do
+    Enum.map_join(rows, "\n", fn row -> Enum.join(row, ",") end)
+  end
+end
+
+Printable.format(%CsvData{rows: [["name", "age"], ["Alice", "30"]]})
+# => "name,age\nAlice,30"
+```
+
+### JsonData
+
+JSON データはキーバリューのマップを持ち、`key: value` 形式でフォーマットします。
+
+```elixir
+defimpl Printable, for: JsonData do
+  def format(%{entries: entries}) do
+    entries
+    |> Enum.map_join(", ", fn {k, v} -> "#{k}: #{v}" end)
+    |> then(&"{#{&1}}")
+  end
+end
+
+Printable.format(%JsonData{entries: %{name: "Alice", age: 30}})
+# => "{age: 30, name: Alice}"
+```
+
+### XmlData
+
+XML データはタグと値のペアのリストを持ち、XML 要素として整形します。
+
+```elixir
+defimpl Printable, for: XmlData do
+  def format(%{elements: elements}) do
+    elements
+    |> Enum.map_join("\n", fn {tag, value} -> "<#{tag}>#{value}</#{tag}>" end)
+    |> then(&"<root>\n#{&1}\n</root>")
+  end
+end
+
+Printable.format(%XmlData{elements: [{:name, "Alice"}, {:age, 30}]})
+# => "<root>\n<name>Alice</name>\n<age>30</age>\n</root>"
+```
+
+## ポリモーフィックな利用例
+
+異なるデータ型を同じインターフェースで統一的に処理できます。呼び出し側はデータの型を意識する必要がありません。
+
+```elixir
+data_list = [
+  %CsvData{rows: [["a", "b"]]},
+  %JsonData{entries: %{x: 1}},
+  %XmlData{elements: [{:y, 2}]}
+]
+
+# 全データを同じインターフェースで整形
+Enum.each(data_list, fn data ->
+  IO.puts(Printable.format(data))
+end)
+```
+
 ## Elixir らしさ
 
 - Protocol は既存の型に対して後から実装を追加できる（オープン拡張）
@@ -80,5 +148,6 @@ end
 ## まとめ
 
 - Adapter は Protocol と defimpl で自然に表現される
+- CsvData、JsonData、XmlData の 3 つの `defimpl` で異なるフォーマットに対応
 - 既存の型に後から適合させることが可能（オープン拡張）
 - 型安全なポリモーフィズムを実現する

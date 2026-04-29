@@ -98,8 +98,72 @@ end
 
 クエリビルダーと HTML ビルダーのように対象を分けて並べると、Builder が「段階的に組み立てる流れ」自体のパターンだと分かりやすくなります。
 
+## HTML 要素ビルダー
+
+クエリビルダーと同じパイプラインの考え方で、HTML 要素を段階的に構築できます。
+
+### 要素の作成と属性の追加
+
+```elixir
+element =
+  Builder.new_element("div")
+  |> Builder.attr("class", "container")
+  |> Builder.attr("id", "main")
+```
+
+`new_element/1` はタグ名を受け取り、空の属性・子要素・テキストを持つマップを返します。
+
+```elixir
+def new_element(tag) do
+  %{tag: tag, attributes: %{}, children: [], text: nil}
+end
+```
+
+### テキストの設定
+
+`text/2` で要素のテキストコンテンツを設定します。
+
+```elixir
+Builder.new_element("p")
+|> Builder.text("Hello, World!")
+|> Builder.to_html()
+# => "<p>Hello, World!</p>"
+```
+
+### 子要素の追加
+
+`child/2` で子要素をネストできます。子要素もビルダーで構築します。
+
+```elixir
+html =
+  Builder.new_element("div")
+  |> Builder.attr("class", "container")
+  |> Builder.child(
+    Builder.new_element("h1")
+    |> Builder.text("Title")
+  )
+  |> Builder.child(
+    Builder.new_element("p")
+    |> Builder.text("Content")
+  )
+  |> Builder.to_html()
+
+# => "<div class=\"container\"><h1>Title</h1><p>Content</p></div>"
+```
+
+### to_html/1 の変換ルール
+
+`to_html/1` は以下の優先順位で内部コンテンツを決定します。
+
+1. `text` が設定されていればテキストを出力
+2. `children` が存在すれば子要素を再帰的に HTML に変換して出力
+3. どちらもなければ空の要素を出力
+
+属性は `key="value"` 形式でタグに付与されます。
+
 ## まとめ
 
 - Builder はパイプライン `|>` と Map 操作で段階的に構築する
 - 各ビルダー関数は不変データの変換として表現される
-- `to_sql/1` や `to_html/1` で最終的なデータに変換する
+- `to_sql/1` でクエリを SQL 文字列に変換する
+- `new_element/1`、`attr/3`、`text/2`、`child/2`、`to_html/1` で HTML を段階的に構築する

@@ -87,6 +87,35 @@ end
 
 ステップ関数をマップに閉じ込めておくと、一部だけ差し替えるテンプレートやフォーマット追加がしやすくなります。
 
+## Map.get/3 によるステップフォールバック
+
+各ステップの取得には `Map.get/3` の第 3 引数にデフォルト関数の参照を渡しています。ステップマップにキーが含まれていなければデフォルト実装が使われます。
+
+```elixir
+defp header(data, steps) do
+  header_fn = Map.get(steps, :header, &default_header/1)
+  header_fn.(data)
+end
+```
+
+`&default_header/1` はモジュール内のプライベート関数への参照です。`Map.get/3` はマップにキー `:header` が存在すればその値（ユーザー指定の関数）を、存在しなければ第 3 引数のデフォルト関数を返します。これにより、ステップマップを部分的に渡すだけで一部のステップだけを差し替えられます。
+
+## 部分的なカスタマイズ
+
+ステップマップに全キーを含める必要はありません。指定したステップだけが差し替わり、残りはデフォルト実装が使われます。
+
+```elixir
+# footer だけをカスタマイズ（header と body はデフォルトのまま）
+custom_footer_only = %{
+  footer: fn -> "--- Custom Footer ---" end
+}
+
+result = TemplateMethod.generate_report(["Alice", "Bob"], custom_footer_only)
+# => "=== Report ===\nAlice, Bob\n--- Custom Footer ---"
+```
+
+この設計により、すべてのステップを再定義しなくても、必要な部分だけを柔軟にカスタマイズできます。
+
 ## Elixir らしさ
 
 - クラス継承の代わりに関数マップで差し替え

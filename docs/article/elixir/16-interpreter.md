@@ -95,6 +95,64 @@ end
 
 AST の構築関数と評価関数を分けておくと、`to_string_expr/1` のような別の解釈器を後付けしやすくなります。
 
+## to_string_expr/1 による式の文字列表現
+
+`to_string_expr/1` は式の AST を人間が読める数学的な表記に変換します。`evaluate/2` と同じ再帰構造ですが、計算する代わりに文字列を組み立てます。
+
+```elixir
+expr =
+  Interpreter.multiply(
+    Interpreter.add(Interpreter.literal(2), Interpreter.variable(:x)),
+    Interpreter.literal(4)
+  )
+
+Interpreter.to_string_expr(expr)
+# => "((2 + x) * 4)"
+```
+
+各演算子の変換規則は以下のとおりです。
+
+| 構築関数 | タグ | to_string_expr の出力 |
+|----------|------|----------------------|
+| `literal(5)` | `{:literal, 5}` | `"5"` |
+| `variable(:x)` | `{:variable, :x}` | `"x"` |
+| `add(a, b)` | `{:add, a, b}` | `"(a + b)"` |
+| `subtract(a, b)` | `{:subtract, a, b}` | `"(a - b)"` |
+| `multiply(a, b)` | `{:multiply, a, b}` | `"(a * b)"` |
+| `divide(a, b)` | `{:divide, a, b}` | `"(a / b)"` |
+
+二項演算は常に括弧で囲まれるため、演算子の優先順位を明示的に表現します。
+
+## 全演算子の使用例
+
+```elixir
+# 基本演算
+Interpreter.evaluate(Interpreter.add(Interpreter.literal(3), Interpreter.literal(7)))
+# => 10
+
+Interpreter.evaluate(Interpreter.subtract(Interpreter.literal(10), Interpreter.literal(4)))
+# => 6
+
+Interpreter.evaluate(Interpreter.multiply(Interpreter.literal(3), Interpreter.literal(5)))
+# => 15
+
+Interpreter.evaluate(Interpreter.divide(Interpreter.literal(10), Interpreter.literal(3)))
+# => 3.3333...
+
+# ゼロ除算はエラーを返す
+Interpreter.evaluate(Interpreter.divide(Interpreter.literal(10), Interpreter.literal(0)))
+# => {:error, :division_by_zero}
+
+# 変数を含む式
+expr = Interpreter.add(Interpreter.variable(:x), Interpreter.variable(:y))
+Interpreter.evaluate(expr, %{x: 10, y: 20})
+# => 30
+
+# 式の文字列表現
+Interpreter.to_string_expr(expr)
+# => "(x + y)"
+```
+
 ## Elixir らしさ
 
 - タグ付きタプルが AST ノードの自然な表現
@@ -105,6 +163,7 @@ AST の構築関数と評価関数を分けておくと、`to_string_expr/1` の
 ## まとめ
 
 - Interpreter はタグ付きタプルと再帰的パターンマッチングで表現する
+- 6 種類の演算子（literal, add, subtract, multiply, divide, variable）で式を構築する
 - 環境マップで変数のスコープを管理
+- `to_string_expr/1` で式を数学的な文字列表現に変換できる
 - Elixir のマクロシステムとの親和性が高い
-- `to_string_expr/1` で式の文字列表現も提供

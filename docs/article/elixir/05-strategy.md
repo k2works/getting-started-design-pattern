@@ -67,6 +67,36 @@ end
 
 単純な戦略はキャプチャ構文 `&`、パラメタ付きの戦略はクロージャで表現すると、使い分けがはっきりします。
 
+## クロージャによるパラメタライズド戦略
+
+`discount_pricing/1` は割引率を受け取り、その率を閉じ込めたクロージャ（関数）を返します。戦略そのものをパラメータで生成するパターンです。
+
+```elixir
+def discount_pricing(rate) do
+  fn items -> Enum.sum(items) * (1 - rate) end
+end
+```
+
+`rate` はクロージャの中に閉じ込められるため、返された関数は `rate` を記憶しています。これにより、異なる割引率の戦略を動的に生成できます。
+
+```elixir
+# 10% 割引戦略を生成
+ten_percent_off = Strategy.discount_pricing(0.1)
+Strategy.calculate_price([1000, 2000, 3000], ten_percent_off)
+# => 5400.0
+
+# 30% 割引戦略を生成
+thirty_percent_off = Strategy.discount_pricing(0.3)
+Strategy.calculate_price([1000, 2000, 3000], thirty_percent_off)
+# => 4200.0
+
+# 通常価格戦略
+Strategy.calculate_price([1000, 2000, 3000], Strategy.normal_pricing())
+# => 6000
+```
+
+このパターンは、クロージャが「設定を持つ関数」として働く点が特徴です。OOP では Strategy インターフェースの実装クラスにフィールドを持たせますが、Elixir ではクロージャが同じ役割を果たします。
+
 ## Elixir らしさ
 
 - 関数が第一級オブジェクトなので、Strategy パターンは言語に組み込まれている
