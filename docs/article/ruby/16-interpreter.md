@@ -278,6 +278,66 @@ end
 
 端末式（`All`, `FileName`, `Bigger`）と複合式（`And`, `Or`, `Not`）の責務が明確に分離されています。新しい検索条件を追加するには、`Expression` を継承して `evaluate` を実装するだけです。既存のコードを変更する必要はなく、開放閉鎖原則に従っています。
 
+**Writable 式**:
+
+開放閉鎖原則の好例として、`Writable` クラスがあります。`Expression` を継承し `evaluate` を実装するだけで、書き込み可能なファイルを検索する新しい端末式が追加できます。
+
+```ruby
+class Writable < Expression
+  def evaluate(dir)
+    results = []
+    Find.find(dir) do |path|
+      next if File.directory?(path)
+      results << path if File.writable?(path)
+    end
+    results
+  end
+end
+```
+
+`Writable` は他の式と自由に組み合わせられます。
+
+```ruby
+# 書き込み可能な .txt ファイル
+expr = And.new(FileName.new("*.txt"), Writable.new)
+
+# 100 バイト以上、かつ書き込み不可のファイル
+expr = And.new(Bigger.new(100), Not.new(Writable.new))
+
+# 書き込み可能、または .csv ファイル
+expr = Or.new(Writable.new, FileName.new("*.csv"))
+```
+
+**テスト例**:
+
+```ruby
+def test_writable_filters_writable_files
+  result = Writable.new.evaluate(@test_dir)
+  basenames = result.map { |f| File.basename(f) }
+
+  assert_includes basenames, 'big.txt'
+  refute_includes basenames, 'readonly.txt'
+end
+```
+
+**演算子による式の構築**:
+
+`Expression` 基底クラスで定義した `|` と `&` 演算子により、式オブジェクトをコードレベルで組み合わせられます。
+
+```ruby
+def test_operator_pipe_creates_or
+  expr = FileName.new('*.txt') | FileName.new('*.csv')
+  assert_instance_of Or, expr
+end
+
+def test_operator_ampersand_creates_and
+  expr = FileName.new('*.txt') & Bigger.new(100)
+  assert_instance_of And, expr
+end
+```
+
+`|` は `Or` オブジェクトを、`&` は `And` オブジェクトを生成します。Ruby の演算子オーバーロードにより、`new` を明示的に呼び出さなくても自然な構文で複合式を構築できます。
+
 ---
 
 ## Ruby らしい実装
@@ -308,7 +368,7 @@ Parser によるテキストベースの構文と、演算子 DSL によるコ�
 |------|------|
 | **意図** | 言語の文法をクラス階層で表現し、式を組み合わせて解釈・実行する |
 | **適用場面** | 検索条件の組み合わせ、ルールエンジン、クエリビルダー |
-| **端末式と複合式** | 端末式（`FileName`, `Bigger`）がリーフ、複合式（`And`, `Or`, `Not`）がノード |
+| **端末式と複合式** | 端末式（`FileName`, `Bigger`, `Writable`）がリーフ、複合式（`And`, `Or`, `Not`）がノード |
 | **Parser** | テキストを再帰下降構文解析で AST に変換 |
 | **Ruby の強み** | `|` `&` 演算子のオーバーロードで DSL を構築。配列の集合演算がそのまま使える |
 | **関連パターン** | Composite（木構造の表現）、Strategy（評価アルゴリズムの差し替え） |

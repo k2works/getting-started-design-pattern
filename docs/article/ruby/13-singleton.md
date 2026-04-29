@@ -203,6 +203,47 @@ end
 
 クラスメソッドだけで構成するため、インスタンスの概念自体が不要になります。ただしクラス変数 `@@` はサブクラスと共有されるため、継承時に意図しない共有が発生することがあります。
 
+`level=` と `level` のクラスメソッドを定義することで、ログレベルを動的に変更できます。
+
+```ruby
+class ClassBasedLogger
+  def self.level=(new_level)
+    @@level = new_level
+  end
+
+  def self.level
+    @@level
+  end
+
+  def self.reset!
+    @@log = StringIO.new
+    @@level = INFO
+  end
+end
+```
+
+**テスト例**:
+
+```ruby
+class ClassBasedLoggerTest < Minitest::Test
+  def setup
+    ClassBasedLogger.reset!
+  end
+
+  def test_respects_level_setting
+    ClassBasedLogger.level = ClassBasedLogger::ERROR
+    ClassBasedLogger.info('should not appear')
+    ClassBasedLogger.error('should appear')
+
+    content = ClassBasedLogger.logged_content
+    refute_includes content, '[INFO]'
+    assert_includes content, '[ERROR] should appear'
+  end
+end
+```
+
+`setup` で `reset!` を呼んでいることに注目してください。Singleton はグローバル状態を持つため、あるテストで変更したログレベルやログ内容が次のテストに漏れ出す問題があります。`reset!` メソッドは内部状態を初期値に戻すことで、テスト間の独立性を保証します。
+
 **モジュールベース**:
 
 ```ruby
@@ -233,6 +274,47 @@ end
 ```
 
 モジュールはインスタンス化できないため、「唯一の存在」が言語レベルで保証されます。モジュールのインスタンス変数 `@` はそのモジュール固有のため、クラス変数 `@@` の継承問題もありません。
+
+モジュールベースでも同様に `level=`、`level`、`reset!` を定義します。
+
+```ruby
+module ModuleBasedLogger
+  def self.level=(new_level)
+    @level = new_level
+  end
+
+  def self.level
+    @level
+  end
+
+  def self.reset!
+    @log = StringIO.new
+    @level = INFO
+  end
+end
+```
+
+**テスト例**:
+
+```ruby
+class ModuleBasedLoggerTest < Minitest::Test
+  def setup
+    ModuleBasedLogger.reset!
+  end
+
+  def test_respects_level_setting
+    ModuleBasedLogger.level = ModuleBasedLogger::ERROR
+    ModuleBasedLogger.info('should not appear')
+    ModuleBasedLogger.error('should appear')
+
+    content = ModuleBasedLogger.logged_content
+    refute_includes content, '[INFO]'
+    assert_includes content, '[ERROR] should appear'
+  end
+end
+```
+
+`reset!` メソッドは Singleton パターンのテスタビリティにおける重要なプラクティスです。Singleton のグローバル状態はテストの敵ですが、`reset!` を用意しておくことで各テストを独立して実行できます。本番コードでは使わず、テスト専用のメソッドとして位置づけます。
 
 3 つのアプローチの使い分けは以下の通りです。
 

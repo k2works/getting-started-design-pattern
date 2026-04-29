@@ -143,6 +143,45 @@ end
 
 ---
 
+## 配列的アクセス
+
+`CompositeTask` では `[]` と `[]=` 演算子をオーバーロードすることで、サブタスクへの配列的なアクセスを提供しています。これにより、コンポジットオブジェクトを Ruby の配列のように直感的に操作できます。
+
+```ruby
+class CompositeTask < Task
+  def [](index)
+    @sub_tasks[index]
+  end
+
+  def []=(index, task)
+    @sub_tasks[index] = task
+    task.parent = self
+  end
+end
+```
+
+`[]=` でサブタスクを差し替えたとき、新しいタスクの `parent` が自動的に設定される点がポイントです。ツリー構造の整合性を保つための配慮です。
+
+**テスト例**:
+
+```ruby
+def test_array_access
+  cake = MakeCakeTask.new
+  assert_equal '生地を作る', cake[0].name
+  assert_equal '型に流し込む', cake[1].name
+end
+
+def test_parent_child_relationship
+  cake = MakeCakeTask.new
+  batter = cake[0]
+  assert_equal cake, batter.parent
+end
+```
+
+`cake[0]` で最初のサブタスク「生地を作る」に、`cake[1]` で「型に流し込む」にアクセスできます。配列と同じインデックス記法を使えるため、Composite パターンの内部構造を意識せずにサブタスクを操作できます。
+
+---
+
 ## まとめ
 
 | 観点 | 内容 |
