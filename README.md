@@ -31,8 +31,7 @@ gh codespace create --repo k2works/getting-started-design-pattern --branch sandb
 
 3. Codespaces の起動後、教材を開いて写経を開始します。
 
-- スライド: [デザインパターンからはじめるプログラミング入門 AI 時代の写経](https://k2works.github.io/getting-started-design-pattern/slide/%E3%82%B9%E3%83%A9%E3%82%A4%E3%83%89.html)
-- ドキュメント: [MkDocs サイト](https://k2works.github.io/getting-started-design-pattern/)
+- 教材: [デザインパターンから始めるプログラミング入門 AI 時代の写経](https://k2works.github.io/getting-started-design-pattern/article/)
 
 必要に応じて、ローカルでドキュメントを起動できます。
 
