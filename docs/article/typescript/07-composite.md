@@ -85,6 +85,50 @@ class CompositeTask extends Task {
 
 合計時間と基本タスク数の両方を再帰で通しておくと、Composite の利点が見えやすくなります。
 
+### リーフタスク一覧
+
+実装では以下のリーフタスクが定義されており、それぞれ固定の所要時間を返します。
+
+| クラス名 | タスク名 | getTimeRequired() |
+|:---|:---|---:|
+| `AddDryIngredientsTask` | Add Dry Ingredients | 1.0 |
+| `AddLiquidsTask` | Add Liquids | 0.5 |
+| `MixTask` | Mix | 3.0 |
+| `FillPanTask` | Fill Pan | 0.5 |
+| `BakeTask` | Bake | 25.0 |
+| `FrostTask` | Frost | 10.0 |
+| `PackageTask` | Package | 5.0 |
+
+`MakeBatterTask` は `AddDryIngredientsTask` + `AddLiquidsTask` + `MixTask` を子タスクとして持ち、合計 4.5 を返します。`MakeCakeTask` は `MakeBatterTask` を含む全 7 タスクの合計 45.0 を返します。
+
+### getSubTasks() と removeSubTask()
+
+`CompositeTask` は子タスクの参照取得と削除もサポートしています。
+
+```typescript
+getSubTasks(): ReadonlyArray<Task> {
+  return this.subTasks;
+}
+
+removeSubTask(task: Task): void {
+  this.subTasks = this.subTasks.filter((t) => t !== task);
+}
+```
+
+`getSubTasks()` は `ReadonlyArray<Task>` を返すため、外部から直接 `push` や `splice` で子タスク配列を変更することはできません。`removeSubTask()` は参照一致（`!==`）で対象を除外した新しい配列を作成します。
+
+```typescript
+it('CompositeTask にサブタスクを追加・削除できる', () => {
+  const composite = new CompositeTask('Test');
+  const pkg = new PackageTask();
+  composite.addSubTask(pkg);
+  expect(composite.getTimeRequired()).toBe(5.0);
+
+  composite.removeSubTask(pkg);
+  expect(composite.getTimeRequired()).toBe(0);
+});
+```
+
 ### Refactor
 
 - `abstract class Task` で共通インターフェースを強制

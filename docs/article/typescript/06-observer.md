@@ -105,6 +105,66 @@ class Payroll implements Observer {
 
 まずは給与変更通知だけに絞り、`Observer` 契約と通知経路を通します。
 
+### setTitle() による通知
+
+`Employee` は給与だけでなく、タイトル（役職）変更時にも `notifyObservers()` を呼び出します。
+
+```typescript
+setTitle(title: string): void {
+  this.title = title;
+  this.notifyObservers();
+}
+```
+
+```typescript
+it('タイトル変更時に TaxMan に通知される', () => {
+  const employee = new Employee('Bob', 'Engineer', 50000);
+  const taxMan = new TaxMan();
+  employee.addObserver(taxMan);
+
+  employee.setTitle('Senior Engineer');
+
+  expect(taxMan.getLastChange()).toContain('TaxMan');
+  expect(taxMan.getLastChange()).toContain('Bob');
+});
+```
+
+### getter メソッド
+
+`Employee` は `getName()`、`getTitle()`、`getSalary()` の 3 つの getter を持ちます。Observer の `update()` メソッド内でこれらを使い、通知メッセージを組み立てます。
+
+```typescript
+it('従業員の名前・タイトル・給与を取得できる', () => {
+  const employee = new Employee('Eve', 'CTO', 150000);
+  expect(employee.getName()).toBe('Eve');
+  expect(employee.getTitle()).toBe('CTO');
+  expect(employee.getSalary()).toBe(150000);
+});
+```
+
+### オブザーバーの削除
+
+`removeObserver()` で登録を解除すると、以降の状態変化は通知されません。
+
+```typescript
+it('オブザーバーを削除すると通知されなくなる', () => {
+  const employee = new Employee('Dave', 'Director', 90000);
+  const payroll = new Payroll();
+  employee.addObserver(payroll);
+
+  employee.setSalary(95000);
+  expect(payroll.getLastChange()).toContain('95000');
+
+  employee.removeObserver(payroll);
+  employee.setSalary(100000);
+
+  // payroll は古い変更のまま
+  expect(payroll.getLastChange()).toContain('95000');
+});
+```
+
+`removeObserver()` は `filter()` と参照一致で対象を除外します。削除後も `Payroll` オブジェクト自体は破棄されず、最後に受け取った通知の状態を保持し続けます。
+
 ### Refactor
 
 - `interface Observer` で通知プロトコルを型安全に定義

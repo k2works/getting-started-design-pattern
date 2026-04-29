@@ -56,6 +56,36 @@ export class SingletonLogger {
 }
 ```
 
+### インスタンスメソッド
+
+`SingletonLogger` は `log()` でメッセージを蓄積し、3 つのメソッドで蓄積された状態にアクセスします。
+
+```typescript
+log(message: string): void {
+  this.messages.push(message);
+}
+
+getMessages(): ReadonlyArray<string> {
+  return this.messages;
+}
+
+getLastMessage(): string | undefined {
+  return this.messages[this.messages.length - 1];
+}
+
+clear(): void {
+  this.messages = [];
+}
+```
+
+| メソッド | 戻り値型 | 説明 |
+|:---|:---|:---|
+| `getMessages()` | `ReadonlyArray<string>` | 全メッセージを読み取り専用配列で返す。外部から `push` できない |
+| `getLastMessage()` | `string` or `undefined` | 最後に記録されたメッセージを返す。空の場合は `undefined` |
+| `clear()` | `void` | メッセージ配列を空にリセットする |
+
+`getMessages()` が `ReadonlyArray<string>` を返す点が重要です。呼び出し側が配列を直接変更できないため、Singleton の内部状態の一貫性が保たれます。
+
 ### Refactor
 
 - `resetInstance()` をテスト用に追加し、テスト間の独立性を確保

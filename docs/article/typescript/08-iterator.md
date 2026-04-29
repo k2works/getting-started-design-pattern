@@ -67,6 +67,26 @@ it('Portfolio は for...of でイテレートできる', () => {
 }
 ```
 
+### compareTo() と sortByBalance()
+
+`Account` クラスは `compareTo()` メソッドを持ち、残高の差を返すことで比較を可能にします。
+
+```typescript
+compareTo(other: Account): number {
+  return this.balance - other.balance;
+}
+```
+
+戻り値が負なら `this` の方が残高が少なく、正なら `this` の方が多いことを意味します。この比較関数は `Portfolio.sortByBalance()` で使われ、残高の昇順にソートされたコピーを返します。
+
+```typescript
+sortByBalance(): Account[] {
+  return [...this.accounts].sort((a, b) => a.compareTo(b));
+}
+```
+
+スプレッド構文 `[...this.accounts]` で元の配列のコピーを作成してからソートするため、`Portfolio` 内部の順序は変更されません。`compareTo()` を `Account` クラスに定義することで、ソートのロジックをコレクション側ではなくドメインオブジェクト側に持たせている点が Comparable パターンの利点です。
+
 ### Refactor
 
 - `Iterable<Account>` インターフェースを実装し、`for...of` とスプレッド構文の両方をサポート
