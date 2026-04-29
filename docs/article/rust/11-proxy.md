@@ -96,12 +96,28 @@ pub struct ProtectionProxy {
 }
 
 impl ProtectionProxy {
-    pub fn deposit_as(&mut self, user: &str, amount: i64) -> Result<(), String> {
-        if user != self.owner {
-            return Err("access denied".into());
+    fn check_access(&self, user: &str) -> Result<(), String> {
+        if user == self.owner {
+            Ok(())
+        } else {
+            Err(format!("Access denied for user: {}", user))
         }
+    }
+
+    pub fn deposit_as(&mut self, user: &str, amount: i64) -> Result<(), String> {
+        self.check_access(user)?;
         self.account.deposit(amount);
         Ok(())
+    }
+
+    pub fn withdraw_as(&mut self, user: &str, amount: i64) -> Result<(), String> {
+        self.check_access(user)?;
+        self.account.withdraw(amount)
+    }
+
+    pub fn balance_as(&self, user: &str) -> Result<i64, String> {
+        self.check_access(user)?;
+        Ok(self.account.balance())
     }
 }
 
@@ -118,6 +134,33 @@ impl VirtualProxy {
     }
 }
 ```
+
+`check_access()` ヘルパーメソッドでアクセス制御ロジックを一元化しています。各操作メソッド（`deposit_as`, `withdraw_as`, `balance_as`）は `?` 演算子で `check_access()` のエラーを伝播させ、認可チェックの重複を排除しています。
+
+#### VirtualProxy の BankAccount トレイト実装
+
+`VirtualProxy` は `BankAccount` トレイトを実装しており、`RealBankAccount` と同じインターフェースで操作できます。`ensure_account()` で遅延初期化を行い、初回アクセス時にのみ実体を生成します。
+
+```rust
+impl BankAccount for VirtualProxy {
+    fn deposit(&mut self, amount: i64) {
+        self.ensure_account().deposit(amount);
+    }
+
+    fn withdraw(&mut self, amount: i64) -> Result<(), String> {
+        self.ensure_account().withdraw(amount)
+    }
+
+    fn balance(&self) -> i64 {
+        match &self.account {
+            Some(acc) => acc.balance(),
+            None => self.initial_balance,
+        }
+    }
+}
+```
+
+`balance()` メソッドは `&self`（不変参照）のため `ensure_account()` を呼べません。代わりに `Option` のパターンマッチで、未初期化時は `initial_balance` を返します。これにより、残高照会だけでは実体が生成されないという Virtual Proxy の意図が正確に表現されています。
 
 Protection Proxy と Virtual Proxy は目的が異なるため、責務を分けて別構造体にする方が読みやすくなります。
 

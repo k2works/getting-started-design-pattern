@@ -108,6 +108,29 @@ impl Writer for TimeStampingWriter {
 
 デコレータ自身は出力を保持せず、常に内側の Writer に委譲することで責務を単純化できます。
 
+### 逆順スタッキングのテスト
+
+デコレータの積み重ね順序を逆にすると、出力形式が変わることを確認するテストです。
+
+```rust
+#[test]
+fn reverse_stacking_order() {
+    let simple = Box::new(SimpleWriter::new());
+    let stamped = Box::new(TimeStampingWriter::new(simple, "10:00"));
+    let mut numbered = NumberingWriter::new(stamped);
+
+    numbered.write_line("alpha");
+    assert_eq!(numbered.output(), "[10:00] 1: alpha");
+}
+```
+
+通常の順序（SimpleWriter -> NumberingWriter -> TimeStampingWriter）では `"1: [09:00] hello"` となりますが、逆順（SimpleWriter -> TimeStampingWriter -> NumberingWriter）では `"[10:00] 1: alpha"` となります。
+
+- **通常順序**: 行番号が先に付与され、その後タイムスタンプが付く
+- **逆順**: タイムスタンプが先に付与され、その後行番号が付く
+
+この違いは、各デコレータが `write_line()` で装飾してから内側の Writer に委譲するためです。外側のデコレータの装飾が先に適用されます。
+
 ### Refactor
 
 デコレータの積み重ね順序を変えるだけで、出力形式が変わります。これが Decorator パターンの柔軟性です。

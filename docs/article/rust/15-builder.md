@@ -106,6 +106,47 @@ impl ComputerBuilder {
 }
 ```
 
+#### Drive と Motherboard のコンストラクタ
+
+`Drive` と `Motherboard` にはそれぞれ `new()` コンストラクタが用意されています。
+
+```rust
+impl Drive {
+    pub fn new(drive_type: &str, size_gb: u64) -> Self {
+        Self {
+            drive_type: drive_type.to_string(),
+            size_gb,
+        }
+    }
+}
+
+impl Motherboard {
+    pub fn new(model: &str, cpu: &str, memory_gb: u64) -> Self {
+        Self {
+            model: model.to_string(),
+            cpu: cpu.to_string(),
+            memory_gb,
+        }
+    }
+}
+```
+
+Builder 内部ではこれらのコンストラクタを使って部品を生成しています。部品を独立して構築できるため、テストや他のコンテキストでの再利用も容易です。
+
+#### Default トレイト実装
+
+`ComputerBuilder` には `Default` トレイトが実装されています。
+
+```rust
+impl Default for ComputerBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+```
+
+これにより `ComputerBuilder::default()` でもビルダーを作成でき、Clippy の `new_without_default` lint を回避しています。Rust のエコシステムでは `new()` を提供する型は `Default` も実装するのが慣習です。
+
 未設定値を `Option` で保持しておくと、`build()` が唯一の検証ポイントになります。
 
 ### Refactor

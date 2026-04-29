@@ -17,13 +17,13 @@ enum Expression {
   Not(Box<Expression>)
 }
 
-class interpreter <<module>> {
+class InterpreterFunctions <<(S,#FF7700)>> {
   +evaluate(expr, dir): Vec<String>
   -matches_expr(expr, path): bool
 }
 
 Expression --> Expression : And/Or/Not (recursive)
-interpreter --> Expression : evaluates
+InterpreterFunctions --> Expression : evaluates
 @enduml
 ```
 
@@ -97,6 +97,30 @@ fn matches_expr(expr: &Expression, path: &Path) -> bool {
 ### Refactor
 
 `Expression` にヘルパーメソッド `.and()`, `.or()`, `.not()` を追加して、式の構築を流暢にします。
+
+#### `not()` メソッドと Clippy 抑制
+
+`not()` メソッドには `#[allow(clippy::should_implement_trait)]` 属性が付与されています。
+
+```rust
+#[allow(clippy::should_implement_trait)]
+pub fn not(self) -> Expression {
+    Expression::Not(Box::new(self))
+}
+```
+
+Clippy は `not` という名前のメソッドを見ると、標準ライブラリの `std::ops::Not` トレイトを実装すべきだと警告します。しかし、ここでの `not()` は `!expr` という演算子ではなく、DSL のビルダーメソッドとして `Expression::FileName(".txt").not()` のように使う意図です。戻り値の型も `bool` ではなく `Expression` であるため、`Not` トレイトの実装は意味的に適切ではありません。
+
+#### テストの tempfile 依存
+
+テストではファイルシステム上に一時ディレクトリを作成してファイル検索を検証します。`tempfile` クレートを開発依存として使用しています。
+
+```toml
+[dev-dependencies]
+tempfile = "3"
+```
+
+`tempfile::tempdir()` で作成した一時ディレクトリはスコープを抜けると自動的に削除されるため、テスト後のクリーンアップが不要です。
 
 ## 他言語比較
 

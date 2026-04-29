@@ -87,6 +87,53 @@ impl<'a> IntoIterator for &'a Portfolio {
 }
 ```
 
+#### コレクション操作メソッド
+
+`Portfolio` には、標準的なコレクション操作メソッドも実装されています。
+
+```rust
+pub fn len(&self) -> usize {
+    self.accounts.len()
+}
+
+pub fn is_empty(&self) -> bool {
+    self.accounts.is_empty()
+}
+
+pub fn total_balance(&self) -> i64 {
+    self.iter().map(|a| a.balance).sum()
+}
+```
+
+`len()` と `is_empty()` は Rust のコレクション型の慣習に従ったメソッドです。`is_empty()` を提供しないと Clippy が警告を出します（`len_without_is_empty` lint）。
+
+`total_balance()` はイテレータアダプタを活用した集約メソッドです。`iter().map().sum()` というチェーンで、ループを書かずに合計値を算出しています。
+
+```rust
+#[test]
+fn empty_portfolio() {
+    let p = Portfolio::new();
+    assert!(p.is_empty());
+    assert_eq!(p.len(), 0);
+}
+
+#[test]
+fn total_balance_sums_all_accounts() {
+    let p = sample_portfolio();
+    assert_eq!(p.total_balance(), 8000);
+}
+```
+
+また、`Portfolio` には `Default` トレイトも実装されており、`Portfolio::default()` で空のポートフォリオを作成できます。
+
+```rust
+impl Default for Portfolio {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+```
+
 `&Portfolio` に `IntoIterator` を実装しておくと、所有権を消費せずに `for account in &portfolio` と書けます。
 
 ### Refactor

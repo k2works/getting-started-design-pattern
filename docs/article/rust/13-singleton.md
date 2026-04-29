@@ -15,12 +15,12 @@ class Logger {
   +clear()
 }
 
-class singleton <<module>> {
+class SingletonAccess <<(S,#FF7700)>> {
   -INSTANCE: OnceLock<Logger>
   +get_instance(): &'static Logger
 }
 
-singleton --> Logger : creates once
+SingletonAccess --> Logger : creates once
 @enduml
 ```
 
@@ -56,12 +56,47 @@ impl Logger {
     pub fn log(&self, message: &str) {
         self.messages.lock().unwrap().push(message.to_string());
     }
+
+    pub fn messages(&self) -> Vec<String> {
+        self.messages
+            .lock()
+            .expect("Logger mutex poisoned")
+            .clone()
+    }
+
+    pub fn clear(&self) {
+        self.messages
+            .lock()
+            .expect("Logger mutex poisoned")
+            .clear();
+    }
 }
 
 static INSTANCE: OnceLock<Logger> = OnceLock::new();
 
 pub fn get_instance() -> &'static Logger {
     INSTANCE.get_or_init(Logger::new)
+}
+```
+
+`messages()` ゲッターは `Mutex` をロックして内部の `Vec<String>` を `clone()` で返します。`clear()` メソッドはテスト間の状態リセットに使用します。Singleton はグローバル状態を共有するため、テストの独立性を保つにはテスト前後で `clear()` を呼ぶことが重要です。
+
+```rust
+#[test]
+fn logger_stores_messages() {
+    let logger = get_instance();
+    logger.clear();
+    logger.log("test message");
+    let msgs = logger.messages();
+    assert!(msgs.contains(&"test message".to_string()));
+}
+
+#[test]
+fn logger_clear_removes_all_messages() {
+    let logger = get_instance();
+    logger.log("to be cleared");
+    logger.clear();
+    assert!(logger.messages().is_empty());
 }
 ```
 

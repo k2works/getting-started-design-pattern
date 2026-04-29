@@ -26,7 +26,27 @@ end note
 
 ## TDD で作る
 
-### Red
+### Red — 給与の取得
+
+まず、`salary()` ゲッターメソッドで初期給与を取得できることを確認するテストから始めます。
+
+```rust
+#[test]
+fn initial_salary() {
+    let emp = Employee::new("Alice", 50_000);
+    assert_eq!(emp.salary(), 50_000);
+}
+```
+
+`salary` フィールドは `pub` ではなく非公開にし、ゲッターメソッド経由でアクセスします。これにより、外部から直接値を変更されることを防ぎ、`set_salary()` を通じた変更のみを許可できます。
+
+```rust
+pub fn salary(&self) -> i64 {
+    self.salary
+}
+```
+
+### Red — Observer 通知
 
 ```rust
 #[test]
@@ -85,6 +105,31 @@ impl Employee {
 ```
 
 クロージャに `FnMut` を使うことで、通知先が内部ログやカウンタを更新するケースも自然に扱えます。
+
+### 複数 Observer のテスト
+
+1 人の Employee に複数の Observer を登録した場合、すべての Observer が通知を受けることを確認します。
+
+```rust
+#[test]
+fn multiple_observers_all_notified() {
+    let count1: Rc<RefCell<u32>> = Rc::new(RefCell::new(0));
+    let count2: Rc<RefCell<u32>> = Rc::new(RefCell::new(0));
+    let c1 = Rc::clone(&count1);
+    let c2 = Rc::clone(&count2);
+
+    let mut emp = Employee::new("Carol", 30_000);
+    emp.add_observer(move |_, _| *c1.borrow_mut() += 1);
+    emp.add_observer(move |_, _| *c2.borrow_mut() += 1);
+
+    emp.set_salary(35_000);
+
+    assert_eq!(*count1.borrow(), 1);
+    assert_eq!(*count2.borrow(), 1);
+}
+```
+
+このテストでは `Rc<RefCell<u32>>` でカウンタを共有し、各 Observer がそれぞれ独立して呼び出されることを検証しています。Observer の実装がベクタベースであるため、登録順に通知されます。
 
 ### Refactor
 

@@ -90,6 +90,21 @@ impl Task {
 }
 ```
 
+#### `name()` ゲッター
+
+`Task` にはバリアント共通の `name()` ゲッターメソッドも実装されています。`Leaf` でも `Composite` でも同じインターフェースで名前を取得できます。
+
+```rust
+pub fn name(&self) -> &str {
+    match self {
+        Task::Leaf { name, .. } => name,
+        Task::Composite { name, .. } => name,
+    }
+}
+```
+
+パターンマッチで `..` を使い、不要なフィールドを無視しています。両バリアントに共通する `name` フィールドを統一的に返すことで、クライアントは `Task` の種類を意識せずに名前を取得できます。
+
 `Leaf` と `Composite` の分岐は `match` に集約されるため、クライアント側に型判定を漏らしません。
 
 ### Refactor
