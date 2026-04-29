@@ -113,6 +113,38 @@ public class TimeStampingWriter : IWriter
 
 `Func<DateTime>` を注入することで、テスト時に固定時刻を使用できます。
 
+### UpperCaseWriter の追加
+
+テキストを大文字に変換するデコレータを追加します。
+
+```csharp
+[Fact]
+public void UpperCaseWriter_ConvertsToUpperCase()
+{
+    var writer = new UpperCaseWriter(new SimpleWriter());
+
+    Assert.Equal("HELLO", writer.Write("hello"));
+}
+```
+
+実装はシンプルに `ToUpper()` を呼び出して内側の `IWriter` に委譲します。
+
+```csharp
+public class UpperCaseWriter : IWriter
+{
+    private readonly IWriter _inner;
+
+    public UpperCaseWriter(IWriter inner)
+    {
+        _inner = inner;
+    }
+
+    public string Write(string text) => _inner.Write(text.ToUpper());
+}
+```
+
+3 つのデコレータを自由に組み合わせることで、行番号付き・タイムスタンプ付き・大文字変換をどの順序でも積み重ねられます。
+
 ---
 
 ## 他言語との比較

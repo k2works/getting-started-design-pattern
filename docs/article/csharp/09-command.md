@@ -31,6 +31,7 @@ class CreateFileCommand {
 class DeleteFileCommand {
   - _path : string
   - _backupContent : string?
+  - _executed : bool
   + Execute() : string
   + Undo() : string
 }
@@ -96,6 +97,34 @@ public class CompositeCommand : ICommand
     }
 }
 ```
+
+### Description プロパティと状態追跡
+
+`ICommand` インターフェースには `Description` プロパティが含まれており、各コマンドが自身の操作内容を文字列で説明できます。
+
+```csharp
+public interface ICommand
+{
+    string Execute();
+    string Undo();
+    string Description { get; }
+}
+```
+
+各コマンドは `_executed` フラグで実行状態を追跡します。これにより、未実行のコマンドに対する Undo を安全に防止できます。
+
+```csharp
+public string Undo()
+{
+    if (!_executed)
+        return $"Cannot undo: file '{_path}' was never created";
+
+    _executed = false;
+    return $"Deleted file '{_path}'";
+}
+```
+
+`DeleteFileCommand` では、`Execute()` 時に `_backupContent` へバックアップ内容を保存し、`Undo()` 時にそれを使ってリストアします。これはコマンドの**元に戻す**操作に必要な情報をコマンド自身が保持する設計です。
 
 ---
 

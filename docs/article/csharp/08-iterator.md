@@ -21,6 +21,7 @@ interface "IEnumerable<Account>" as IE {
 class Portfolio {
   - _accounts : List<Account>
   + Add(account: Account)
+  + Count : int
   + TotalBalance : decimal
   + HighValueAccounts(threshold) : IEnumerable<Account>
   + SortedByBalance() : IEnumerable<Account>
@@ -105,6 +106,23 @@ foreach (var a in _accounts)
 // 宣言的（C# LINQ）
 var result = _accounts.Where(a => a.Balance >= threshold);
 ```
+
+### ユーティリティプロパティとメソッド
+
+`Portfolio` には反復処理以外にも便利なプロパティとメソッドがあります。
+
+```csharp
+// 口座数
+public int Count => _accounts.Count;
+
+// 全口座の合計残高
+public decimal TotalBalance => _accounts.Sum(a => a.Balance);
+
+// 口座名の一覧を射影
+public IEnumerable<string> AccountNames() => _accounts.Select(a => a.Name);
+```
+
+`Count` は口座数を返し、`TotalBalance` は LINQ の `Sum()` で全口座の残高合計を計算します。`AccountNames()` は `Select()` で口座名だけを射影して返します。これらはすべてコレクションの内部構造を公開せずにアクセスを提供しています。
 
 ### IComparable<T> でソート
 

@@ -38,6 +38,8 @@ class ProtectionProxy {
 
 class VirtualProxy {
   - _realAccount : Lazy<IBankAccount>
+  - _log : List<string>
+  + Log : List<string>
   + IsCreated : bool
   + Deposit(amount) : string
   + Withdraw(amount) : string
@@ -124,6 +126,32 @@ public bool IsCreated => _realAccount.IsValueCreated;
 // .Value にアクセスした時点で初めてファクトリが実行される
 public decimal Balance => _realAccount.Value.Balance;
 ```
+
+### VirtualProxy の Log プロパティ
+
+`VirtualProxy` は `Log` プロパティで遅延初期化の履歴を追跡できます。ファクトリが呼ばれた時点でログメッセージが記録されるため、テストで初期化タイミングを確認できます。
+
+```csharp
+private readonly List<string> _log = new();
+public List<string> Log => _log;
+```
+
+### RealBankAccount の残高不足チェック
+
+`RealBankAccount.Withdraw()` は残高不足の場合にエラーメッセージを返し、出金を拒否します。
+
+```csharp
+public string Withdraw(decimal amount)
+{
+    if (amount > _balance)
+        return $"Insufficient funds. Balance: {_balance:C}";
+
+    _balance -= amount;
+    return $"Withdrew {amount:C}. Balance: {_balance:C}";
+}
+```
+
+この防御的なチェックにより、口座残高が負になることを防ぎます。
 
 ---
 

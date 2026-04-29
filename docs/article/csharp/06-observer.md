@@ -16,10 +16,13 @@ title Observer パターン (C# イベント版)
 
 class Employee {
   - _name : string
+  - _title : string
   - _salary : decimal
   + Name : string
+  + Title : string
   + Salary : decimal
   + <<event>> PropertyChanged : Action<Employee, string>
+  - OnPropertyChanged(propertyName: string)
 }
 
 class Payroll {
@@ -99,6 +102,32 @@ public class Employee
 
 - C# の `event` キーワードにより、`+=` / `-=` でのサブスクリプション管理が言語レベルでサポートされる
 - `?.Invoke()` で null 安全な通知を実現
+
+### Employee の全プロパティと OnPropertyChanged ヘルパー
+
+`Employee` は `Name`、`Title`、`Salary` の 3 つのプロパティを持ちます。`Name` と `Title` は読み取り専用で、`Salary` のみ setter でイベントを発行します。
+
+```csharp
+public string Name => _name;
+public string Title => _title;
+
+public decimal Salary
+{
+    get => _salary;
+    set
+    {
+        _salary = value;
+        OnPropertyChanged(nameof(Salary));
+    }
+}
+
+private void OnPropertyChanged(string propertyName)
+{
+    PropertyChanged?.Invoke(this, propertyName);
+}
+```
+
+`OnPropertyChanged()` はプライベートヘルパーメソッドで、イベント発行のロジックを一箇所に集約しています。将来的に `Name` や `Title` も変更可能にする場合、それぞれの setter から `OnPropertyChanged()` を呼び出すだけで通知を追加できます。`nameof()` 演算子を使うことで、プロパティ名のタイプミスをコンパイル時に検出できます。
 
 ---
 

@@ -14,6 +14,14 @@
 @startuml
 title Singleton パターン (C# Lazy<T> 版)
 
+class SimpleLogger {
+  - _messages : List<string>
+  + Log(message: string)
+  + Messages : IReadOnlyList<string>
+  + LatestMessage : string
+  + MessageCount : int
+}
+
 class SingletonLogger {
   - {static} _instance : Lazy<SingletonLogger>
   - _messages : List<string>
@@ -23,12 +31,18 @@ class SingletonLogger {
   + Messages : IReadOnlyList<string>
   + LatestMessage : string
   + MessageCount : int
+  + Reset()
 }
 
 note right of SingletonLogger::_instance
   Lazy<T> により
   スレッドセーフな
   遅延初期化を実現
+end note
+
+note bottom of SimpleLogger
+  通常のクラス（比較用）
+  毎回新しいインスタンスを生成可能
 end note
 @enduml
 ```
@@ -84,6 +98,40 @@ public sealed class SingletonLogger
 ```
 
 単にインスタンスを返すだけでなく、共有状態を読むところまで実装して初めて Singleton の挙動を確認できます。
+
+### SimpleLogger との比較: なぜ Singleton が必要か
+
+まず、通常のクラスとして `SimpleLogger` を考えます。
+
+```csharp
+public class SimpleLogger
+{
+    private readonly List<string> _messages = new();
+
+    public void Log(string message) => _messages.Add(message);
+
+    public IReadOnlyList<string> Messages => _messages.AsReadOnly();
+
+    public string LatestMessage => _messages.Count > 0 ? _messages[^1] : "";
+
+    public int MessageCount => _messages.Count;
+}
+```
+
+`SimpleLogger` はインスタンスごとに独立したメッセージリストを持つため、異なる箇所で `new SimpleLogger()` するとログが分散します。`SingletonLogger` はアプリケーション全体で 1 つのインスタンスを共有するため、すべてのログが 1 箇所に集約されます。
+
+### MessageCount プロパティと Reset メソッド
+
+`MessageCount` はログに記録されたメッセージの件数を返します。`Reset()` はテスト用にメッセージリストをクリアするメソッドで、`internal` アクセス修飾子により同一アセンブリ内からのみ呼び出せます。
+
+```csharp
+public int MessageCount => _messages.Count;
+
+// For testing only
+internal void Reset() => _messages.Clear();
+```
+
+Singleton はグローバルな状態を持つため、テスト間で状態が共有されてしまいます。`Reset()` を用意することで、各テストの前にクリーンな状態を作ることができます。
 
 ---
 

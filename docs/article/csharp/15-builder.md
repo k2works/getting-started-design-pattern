@@ -118,6 +118,22 @@ public record Computer(
 // 値の等価性が自動的に提供される（プリミティブフィールドのみ）
 ```
 
+### Computer.Describe() メソッド
+
+`Computer` record には構成情報を人間が読みやすい文字列で返す `Describe()` メソッドがあります。
+
+```csharp
+public string Describe()
+{
+    var drives = string.Join(", ", Drives);
+    var gpu = Gpu != null ? $", GPU: {Gpu}" : "";
+    var type = Portable ? "Laptop" : "Desktop";
+    return $"{type} - Display: {Display}, Motherboard: {Motherboard}, Drives: [{drives}]{gpu}";
+}
+```
+
+`Portable` フラグに基づいてタイプを「Laptop」または「Desktop」と表示し、GPU がある場合のみ GPU 情報を含めます。`record` の自動生成 `ToString()` とは異なり、フォーマットを制御できます。
+
 ### Fluent Builder パターン
 
 ```csharp

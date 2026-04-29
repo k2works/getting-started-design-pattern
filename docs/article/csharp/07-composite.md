@@ -25,6 +25,7 @@ class CompositeTask {
   - _subTasks : List<Task>
   + AddSubTask(task: Task)
   + RemoveSubTask(task: Task)
+  + SubTaskCount : int
   + GetTimeRequired() : double
   + GetDescription(indent: int) : string
 }
@@ -101,6 +102,47 @@ public class CompositeTask : Task
 
 - LINQ の `Sum()` で子タスクの合計時間を簡潔に計算
 - `GetDescription` で再帰的にインデントを増やしてツリー表示
+
+### RemoveSubTask と SubTaskCount
+
+`CompositeTask` にはサブタスクの削除と件数取得の機能もあります。
+
+```csharp
+public void RemoveSubTask(Task task) => _subTasks.Remove(task);
+
+public int SubTaskCount => _subTasks.Count;
+```
+
+これにより、動的にタスクツリーを組み替えることができます。
+
+### 具象コンポジットクラス: MakeBatterTask と MakeCakeTask
+
+あらかじめサブタスクを組み込んだ具象クラスを用意することで、頻出するタスク構造を再利用できます。
+
+```csharp
+public class MakeBatterTask : CompositeTask
+{
+    public MakeBatterTask() : base("Make batter")
+    {
+        AddSubTask(new Task("Add dry ingredients", 1.0));
+        AddSubTask(new Task("Add liquids", 0.5));
+        AddSubTask(new Task("Mix", 3.0));
+    }
+}
+
+public class MakeCakeTask : CompositeTask
+{
+    public MakeCakeTask() : base("Make cake")
+    {
+        AddSubTask(new MakeBatterTask());
+        AddSubTask(new Task("Fill pan", 0.5));
+        AddSubTask(new Task("Bake", 2.0));
+        AddSubTask(new Task("Frost", 1.0));
+    }
+}
+```
+
+`MakeCakeTask` は `MakeBatterTask` をサブタスクとして含むため、再帰的な時間計算が行われます。合計時間は `1.0 + 0.5 + 3.0 + 0.5 + 2.0 + 1.0 = 8.0` 時間です。
 
 ---
 
