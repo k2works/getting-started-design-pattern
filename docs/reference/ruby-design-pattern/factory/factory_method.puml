@@ -1,0 +1,18 @@
+@startuml
+
+Product <|-- Product1
+Product <|-- Product2
+Product1 <--L ConcreteCreator1
+Product2 <--L ConcreteCreator2
+Creator <|-- ConcreteCreator1
+Creator <|-- ConcreteCreator2
+
+class Creator {
+factory_method()
+}
+
+class ConcreteCreator1 {
+factory_method()
+}
+
+@enduml

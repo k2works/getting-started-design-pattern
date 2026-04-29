@@ -1,0 +1,25 @@
+@startuml
+
+abstract class AbstractFactory
+
+AbstractFactory <|-- ConcreteFactoryA
+AbstractFactory <|-- ConcreteFactoryB
+ConcreteFactoryA <-- ProductA1
+ConcreteFactoryA <-- ProductA2
+ConcreteFactoryB <-- ProductB1
+ConcreteFactoryB <-- ProductB2
+
+class AbstractFactory {
+create_product1
+create_product2
+}
+class ConcreteFactoryA {
++create_product1()
++create_product2()
+}
+class ConcreteFactoryB {
++create_product1()
++create_product2()
+}
+
+@enduml

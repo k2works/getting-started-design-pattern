@@ -1,0 +1,10 @@
+@startuml
+rectangle "変化するものを分離する" as r1
+rectangle "インターフェースを軸に設計する" as r2
+rectangle "継承より委譲を選ぶ" as r3
+rectangle "あなたが必要なものだけ書く" as r4
+
+r1 --> r2 : 分離したら\n契約で繋ぐ
+r2 --> r3 : 繋ぎ方は\n委譲で
+r3 --> r4 : ただし\nやりすぎない
+@enduml

@@ -1,0 +1,29 @@
+@startuml
+start
+:問題を理解する;
+note right
+  パターンが解く
+  典型的な状況
+end note
+:素朴に実装する;
+note right
+  Red → Green
+  まずテストを通す
+end note
+:変更コストに気づく;
+note right
+  if 分岐の爆発
+  コピペの誘惑
+end note
+:パターンを適用する;
+note right
+  Refactor
+  変化を分離する
+end note
+:テストが通り続ける;
+note right
+  安全にリファクタリング
+  できた!
+end note
+stop
+@enduml

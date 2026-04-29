@@ -1,0 +1,12 @@
+@startuml
+
+class Client
+class Target
+class Adapter
+class Adaptee
+
+Target <--R Client
+Target <|-- Adapter
+Adaptee <--R Adapter
+
+@enduml

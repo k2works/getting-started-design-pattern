@@ -1,0 +1,34 @@
+@startmindmap
+
+* AI時代の写経 Part 2
+** デザインパターン
+*** GoF パターン
+*** Russ Olsen アプローチ
+*** 13 パターン
+*** TDD で実装
+** プログラミング入門
+*** 14 言語
+*** 16 章 4 部構成
+*** 振る舞い・構造・生成
+*** 言語イディオム
+** AI 時代の学び方
+*** GitHub Codespaces
+**** Nix devcontainer
+**** 即起動・統一環境
+*** Claude Code
+**** Agent Skills
+**** SKILL.md
+**** 対話式チュートリアル
+*** 多言語学習スタイル
+**** 比較学習
+**** OOP vs FP
+**** パターンの本質
+-- 前作との関係
+--- TDD 入門（Part 1）
+---- FizzBuzz
+---- Red-Green-Refactor
+--- デザインパターン（Part 2）
+---- Strategy / Template Method
+---- GoF 全体へ拡張
+
+@endmindmap

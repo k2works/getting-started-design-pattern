@@ -1,0 +1,18 @@
+@startuml
+
+class Component {
+operation()
+}
+class Leaf {
+operation()
+}
+class Composite {
+@subcompnents[]
+operation()
+}
+
+Component <|-- Leaf
+Component <|-- Composite
+Component <-- Composite
+
+@enduml

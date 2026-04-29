@@ -1,0 +1,29 @@
+@startuml
+start
+:Step 0: 開発環境の準備;
+note right
+  ユーザーの合意を得てから
+  コマンド実行
+end note
+:Step 1: 言語選択;
+note right
+  14 言語から学びたい言語を選ぶ
+  言語カテゴリ別の特徴を提示
+end note
+:Step 2: 章の選択;
+note right
+  16 章 4 部構成
+  経験レベルに応じて提案
+end note
+:Step 3: 対話式チュートリアル;
+note right
+  素朴な実装 → パターン適用
+  Red → Green → Refactor
+end note
+:Step 4: KPT 振り返り;
+note right
+  パターンの本質と
+  言語特性との関係をまとめる
+end note
+stop
+@enduml

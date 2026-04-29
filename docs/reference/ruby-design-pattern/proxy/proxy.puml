@@ -1,0 +1,19 @@
+@startuml
+
+abstract Service{
+do_something()
+}
+class RealService{
++do_something()
+}
+class ServiceProxy{
++@subject
++do_something()
+}
+note Right:def do_something\n @subject.do_something\nend
+
+Service <|-- RealService
+Service <|-- ServiceProxy
+RealService <--L ServiceProxy
+
+@enduml
