@@ -103,6 +103,55 @@ totalTasks (CompositeTask _ cs _)   = sum (map totalTasks cs)
 
 ---
 
+## サブタスクの追加と属性アクセス
+
+### addSubTask: コンポジットにサブタスクを追加
+
+`addSubTask` は `CompositeTask` に子タスクを追加します。`LeafTask` に対して呼んだ場合はそのまま返します。
+
+```haskell
+addSubTask :: Task -> Task -> Task
+addSubTask child (CompositeTask n cs p) = CompositeTask n (cs ++ [child]) p
+addSubTask _     leaf                   = leaf  -- リーフには追加できない
+```
+
+```haskell
+-- 使用例
+let group = CompositeTask "開発" [] 1
+    task1 = LeafTask "設計" 2.0 1
+    task2 = LeafTask "実装" 4.0 2
+    updated = addSubTask task2 (addSubTask task1 group)
+-- subTasks updated == [task1, task2]
+```
+
+### subTasks: サブタスクの取得
+
+`subTasks` はコンポジットの子要素リストを返します。リーフの場合は空リストです。
+
+```haskell
+subTasks :: Task -> [Task]
+subTasks (LeafTask _ _ _)       = []
+subTasks (CompositeTask _ cs _) = cs
+```
+
+### priority: 優先度の取得
+
+`priority` はタスクの優先度を返します。リーフとコンポジットの両方に対して統一的に使えます。
+
+```haskell
+priority :: Task -> Int
+priority (LeafTask _ _ p)       = p
+priority (CompositeTask _ _ p)  = p
+```
+
+```haskell
+-- 使用例
+let task = LeafTask "テスト" 1.0 3
+-- priority task == 3
+```
+
+---
+
 ## まとめ
 
 Haskell の再帰的 ADT は Composite パターンと完璧に合致します。パターンマッチによる場合分けは、OOP の仮想メソッドディスパッチに相当しますが、すべての場合を網羅しているかどうかをコンパイラがチェックしてくれます。

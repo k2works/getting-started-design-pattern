@@ -107,6 +107,30 @@ changeSalary newSal subj =
 
 ---
 
+## イベント履歴の取得
+
+IO 版では、発生したイベントの履歴を `getEvents` 関数で取得できます。これにより、どのような状態変化が起きたかを後から確認できます。
+
+```haskell
+getEvents :: ObserverSystem -> IO [Event]
+getEvents sys = readIORef (osEvents sys)
+```
+
+`updateSalary` が呼ばれるたびに `SalaryChanged` イベントが内部リストに蓄積されます。
+
+```haskell
+-- 使用例
+sys <- newObserverSystem (Employee "山田" 40000.0)
+updateSalary sys 50000.0
+updateSalary sys 60000.0
+events <- getEvents sys
+-- events == [SalaryChanged "山田" 40000.0 50000.0, SalaryChanged "山田" 50000.0 60000.0]
+```
+
+テストではイベント履歴の件数や内容を検証し、通知が正しく記録されていることを確認します。
+
+---
+
 ## まとめ
 
 Haskell では Observer パターンに 2 つのアプローチがあります。IO が必要な場合は IORef + コールバック、純粋な計算で済む場合は状態遷移関数が適しています。純粋版はテストが容易で推論しやすいため、可能な限り純粋版を選びましょう。

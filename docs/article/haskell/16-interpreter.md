@@ -141,12 +141,66 @@ display (Var name)  = name
 
 ### Refactor: 式の単純化
 
+`simplify` は代数的な恒等規則を適用して式を単純化します。実装ではすべての規則を網羅しています。
+
 ```haskell
 simplify :: Expr -> Expr
 simplify (Add a (Lit 0)) = simplify a    -- x + 0 = x
+simplify (Add (Lit 0) b) = simplify b    -- 0 + x = x
 simplify (Mul _ (Lit 0)) = Lit 0          -- x * 0 = 0
+simplify (Mul (Lit 0) _) = Lit 0          -- 0 * x = 0
+simplify (Mul a (Lit 1)) = simplify a    -- x * 1 = x
 simplify (Mul (Lit 1) b) = simplify b    -- 1 * x = x
 simplify (Neg (Neg a))   = simplify a    -- --x = x
+-- その他の式は再帰的に部分式を単純化
+simplify (Add a b) = Add (simplify a) (simplify b)
+simplify (Sub a b) = Sub (simplify a) (simplify b)
+simplify (Mul a b) = Mul (simplify a) (simplify b)
+simplify (Div a b) = Div (simplify a) (simplify b)
+simplify (Neg a)   = Neg (simplify a)
+simplify other     = other  -- Lit, Var はそのまま
+```
+
+## Var: 変数の取り扱い
+
+`Var` コンストラクタは変数を表します。`eval` は環境（変数名と値のペアリスト）を受け取り、変数を解決します。環境に存在しない変数は `0` として評価されます。
+
+```haskell
+eval env (Var name) = case lookup name env of
+                        Just v  -> v
+                        Nothing -> 0
+```
+
+```haskell
+-- 使用例
+let expr = Add (Var "x") (Mul (Var "y") (Lit 3.0))
+    env  = [("x", 10.0), ("y", 5.0)]
+-- eval env expr == 25.0（10 + 5 * 3）
+
+-- 未定義の変数は 0
+-- eval [] (Var "z") == 0.0
+```
+
+`display` での変数は変数名をそのまま表示します。
+
+```haskell
+display (Var name) = name
+-- display (Add (Var "x") (Lit 1.0)) == "(x + 1.0)"
+```
+
+## ゼロ除算の取り扱い
+
+`Div` の評価時、除数が 0 の場合はエラーを発生させず `0` を返します。これにより安全な評価が保証されます。
+
+```haskell
+eval env (Div a b) = let bv = eval env b
+                     in if bv == 0 then 0 else eval env a / bv
+```
+
+```haskell
+-- 使用例
+-- eval [] (Div (Lit 10.0) (Lit 0.0)) == 0.0
+-- eval [] (Div (Lit 10.0) (Lit 2.0)) == 5.0
 ```
 
 ---
@@ -165,6 +219,25 @@ data BoolExpr
 evalBool :: BoolExpr -> Bool
 evalBool (BoolLit b) = b
 evalBool (And a b)   = evalBool a && evalBool b
+```
+
+### displayBool: ブール式の表示
+
+`displayBool` はブール式を人間が読める形式で表示します。
+
+```haskell
+displayBool :: BoolExpr -> String
+displayBool (BoolLit True)  = "true"
+displayBool (BoolLit False) = "false"
+displayBool (And a b) = "(" ++ displayBool a ++ " AND " ++ displayBool b ++ ")"
+displayBool (Or a b)  = "(" ++ displayBool a ++ " OR " ++ displayBool b ++ ")"
+displayBool (Not a)   = "NOT(" ++ displayBool a ++ ")"
+```
+
+```haskell
+-- 使用例
+let expr = And (BoolLit True) (Or (BoolLit False) (Not (BoolLit True)))
+-- displayBool expr == "(true AND (false OR NOT(true)))"
 ```
 
 ---

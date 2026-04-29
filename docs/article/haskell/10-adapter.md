@@ -101,6 +101,33 @@ instance Renderable ModernPrinter where
 
 ---
 
+## renderAll: 複数の Renderable をまとめて出力
+
+`renderAll` は型クラス制約 `Renderable a =>` を持つ多相関数で、同じ型の `Renderable` インスタンスのリストをまとめて描画します。
+
+```haskell
+renderAll :: Renderable a => [a] -> String
+renderAll = concatMap render
+```
+
+```haskell
+-- 使用例: 旧式プリンタのリストをまとめて出力
+let printers = [ OldPrinter "報告書1" "内容A"
+               , OldPrinter "報告書2" "内容B" ]
+    result = renderAll printers
+-- result == "=== 報告書1 ===\n内容A\n=== 報告書2 ===\n内容B\n"
+
+-- モダンプリンタのリストも同様
+let mps = [ ModernPrinter "記事1" "本文1" "text"
+           , ModernPrinter "記事2" "本文2" "html" ]
+    result2 = renderAll mps
+-- result2 == "[記事1] 本文1<div><h1>記事2</h1><p>本文2</p></div>"
+```
+
+`renderAll` は型クラス制約による多相性を持つため、`Renderable` インスタンスであればどの型のリストにも適用できます。ただし Haskell のリストは同一型なので、`OldPrinter` と `ModernPrinter` を同じリストに混在させることはできません。異なる型を混在させたい場合は存在型やラッパーを使います。
+
+---
+
 ## まとめ
 
 Haskell の型クラスは、OOP の Adapter パターンをゼロコストで実現します。新しい型を `Renderable` のインスタンスにするだけで、既存のコード（`renderAll` など）がそのまま使えます。

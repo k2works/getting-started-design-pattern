@@ -96,6 +96,44 @@ filterByType target = filter (\acct -> acctType acct == target) . accounts
 
 ---
 
+## ポートフォリオの構築と統合
+
+### addAccount: 口座の追加
+
+`addAccount` は既存のポートフォリオに口座を追加した新しいポートフォリオを返します。イミュータブルなので元のポートフォリオは変更されません。
+
+```haskell
+addAccount :: Account -> Portfolio -> Portfolio
+addAccount a (Portfolio as) = Portfolio (as ++ [a])
+```
+
+```haskell
+-- 使用例
+let p = addAccount (Account "普通預金" Savings 100000.0)
+      . addAccount (Account "当座預金" Checking 50000.0)
+      $ newPortfolio
+-- accountNames p == ["当座預金", "普通預金"]
+```
+
+### mergePortfolios: 2 つのポートフォリオの統合
+
+`mergePortfolios` は 2 つのポートフォリオの口座リストを連結して 1 つにまとめます。
+
+```haskell
+mergePortfolios :: Portfolio -> Portfolio -> Portfolio
+mergePortfolios (Portfolio a) (Portfolio b) = Portfolio (a ++ b)
+```
+
+```haskell
+-- 使用例
+let p1 = addAccount (Account "預金A" Savings 100000.0) newPortfolio
+    p2 = addAccount (Account "投資B" Investment 200000.0) newPortfolio
+    merged = mergePortfolios p1 p2
+-- totalBalance merged == 300000.0
+```
+
+---
+
 ## まとめ
 
 Haskell では Iterator パターンは言語に組み込まれています。リストと高階関数（`map`、`filter`、`fold`、`sort`）がそのまま Iterator の抽象化です。OOP で必要な Iterator インターフェースと具象クラスは不要です。

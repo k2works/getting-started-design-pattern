@@ -106,12 +106,40 @@ withChecksum base lines0 =
 
 ---
 
-## 動的なデコレータリスト
+## applyDecorators: デコレータリストの動的適用
+
+`applyDecorators` は `Writer -> Writer` 型のデコレータのリストを受け取り、`foldr` で右から順に適用します。
 
 ```haskell
 applyDecorators :: [Writer -> Writer] -> Writer -> Writer
 applyDecorators decorators base = foldr ($) base decorators
 ```
+
+```haskell
+-- 使用例
+let writer = applyDecorators [withChecksum, withLineNumber] baseWriter
+    result = writer ["hello", "world"]
+-- result == ["1: hello", "2: world", "[checksum: 18]"]
+```
+
+## decorated: 事前合成されたデコレータ
+
+`decorated` はタイムスタンプ、行番号、チェックサムを事前に合成した `Writer` です。よく使う組み合わせをモジュールから直接エクスポートしています。
+
+```haskell
+decorated :: Writer
+decorated = withChecksum . withLineNumber . withTimestamp "2024-01-01" $ baseWriter
+```
+
+### デコレータの適用順序
+
+デコレータの適用順序は結果に影響します。関数合成 `(.)` は右から左に適用されるため、`decorated` では以下の順序で処理されます。
+
+1. `withTimestamp "2024-01-01"` -- まずタイムスタンプを付与
+2. `withLineNumber` -- タイムスタンプ付きの行に番号を付与
+3. `withChecksum` -- 最後にチェックサムを追加
+
+順序を変えると出力が変わります。例えば `withLineNumber . withTimestamp` とすると、行番号の後にタイムスタンプが付きます。目的に応じて適切な順序を選んでください。
 
 ---
 

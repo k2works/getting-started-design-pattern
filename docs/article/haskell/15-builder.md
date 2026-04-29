@@ -127,16 +127,78 @@ setOS value computer = computer { os = value }
 
 ---
 
+## setStorage: ストレージ設定
+
+`setStorage` はストレージ容量（GB）を設定するビルダー関数です。他の `set*` 関数と同様に `Computer -> Computer` 型で、関数チェーンに組み込めます。
+
+```haskell
+setStorage :: Int -> Computer -> Computer
+setStorage s c = c { storage = s }
+```
+
+```haskell
+-- 使用例
+let custom = setStorage 1000 . setMemory 32 $ defaultComputer
+-- storage custom == 1000
+```
+
+---
+
 ## プリセットビルダー
 
 よく使う構成をプリセットとして用意します。
 
+### buildGaming: ゲーミング PC
+
 ```haskell
 buildGaming :: Computer
 buildGaming = defaultComputer
-  { cpuType = "Intel i9", memory = 64
-  , gpu = "NVIDIA RTX 4090", os = "Windows"
+  { cpuType = "Intel i9", display = "27 inch 4K"
+  , memory = 64, storage = 2000
+  , os = "Windows", gpu = "NVIDIA RTX 4090"
   }
+```
+
+### buildOffice: オフィス PC
+
+```haskell
+buildOffice :: Computer
+buildOffice = defaultComputer
+  { cpuType = "Intel i3", display = "24 inch"
+  , memory = 16, storage = 512
+  , os = "Windows", gpu = "Integrated"
+  }
+```
+
+### buildServer: サーバ
+
+```haskell
+buildServer :: Computer
+buildServer = defaultComputer
+  { cpuType = "AMD EPYC", display = "None"
+  , memory = 256, storage = 8000
+  , os = "Linux", gpu = "None"
+  }
+```
+
+## computerSummary: 構成サマリ
+
+`computerSummary` はコンピュータの構成を 1 行の文字列で返します。構築結果の確認やデバッグに便利です。
+
+```haskell
+computerSummary :: Computer -> String
+computerSummary c =
+  cpuType c ++ " / " ++ display c
+  ++ " / " ++ show (memory c) ++ "GB RAM"
+  ++ " / " ++ show (storage c) ++ "GB SSD"
+  ++ " / " ++ os c
+  ++ " / GPU: " ++ gpu c
+```
+
+```haskell
+-- 使用例
+computerSummary buildGaming
+-- "Intel i9 / 27 inch 4K / 64GB RAM / 2000GB SSD / Windows / GPU: NVIDIA RTX 4090"
 ```
 
 ---

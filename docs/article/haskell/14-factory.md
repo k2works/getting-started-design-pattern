@@ -117,6 +117,68 @@ Factory の責務は `AnimalType` から適切なコンストラクタを選ぶ�
 
 ---
 
+## habitat: 生息地の取得
+
+`habitat` はパターンマッチで動物ごとの生息地を返します。`speak` と同じ構造で、振る舞いの追加が容易です。
+
+```haskell
+habitat :: Animal -> String
+habitat (Dog _ _)  = "家"
+habitat (Cat _ _)  = "家 / 外"
+habitat (Duck _ _) = "池"
+```
+
+```haskell
+-- 使用例
+let duck = createAnimal DuckType "ドナルド" 5
+-- habitat duck == "池"
+```
+
+## AnimalFactory 型エイリアスとカスタムファクトリ
+
+### AnimalFactory 型エイリアス
+
+`AnimalFactory` は `String -> Int -> Animal` の型エイリアスです。ファクトリ関数を第一級の値として扱えます。
+
+```haskell
+type AnimalFactory = String -> Int -> Animal
+```
+
+### defaultFactory: デフォルトファクトリ
+
+`defaultFactory` は常に `Dog` を生成するファクトリです。
+
+```haskell
+defaultFactory :: AnimalFactory
+defaultFactory = Dog
+```
+
+```haskell
+-- 使用例
+let pet = defaultFactory "タロウ" 2
+-- pet == Dog "タロウ" 2
+```
+
+### customFactory: カスタムファクトリ
+
+`customFactory` は `AnimalType` を受け取り、対応するファクトリを返します。`createAnimal` の部分適用として実装されています。
+
+```haskell
+customFactory :: AnimalType -> AnimalFactory
+customFactory = createAnimal
+```
+
+```haskell
+-- 使用例: 猫ファクトリを作って使う
+let catFactory = customFactory CatType
+    cat = catFactory "ミケ" 3
+-- speak cat == "ミケ says: ニャー!"
+```
+
+ファクトリ関数を型エイリアスで名前をつけることで、ファクトリを引数として渡したり、変数に束縛したりする際にコードの意図が明確になります。
+
+---
+
 ## まとめ
 
 Haskell では Factory パターンは ADT + スマートコンストラクタに帰着します。`AnimalType` の enum 値をパターンマッチで分岐させるだけで、型安全なファクトリが完成します。新しい動物を追加すると、パターンマッチの網羅性チェックが対応漏れを教えてくれます。

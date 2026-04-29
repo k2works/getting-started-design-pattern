@@ -99,6 +99,74 @@ enableDebug cfg = cfg { appDebug = True, appLogLevel = DEBUG }
 
 ---
 
+## LogLevel とログ機能
+
+### LogLevel 列挙型
+
+`LogLevel` は `DEBUG`、`INFO`、`WARN`、`ERROR` の 4 段階のログレベルを表します。`Ord` を derive しているため、レベルの大小比較ができます。
+
+```haskell
+data LogLevel = DEBUG | INFO | WARN | ERROR
+  deriving (Show, Eq, Ord)
+```
+
+### logMessage: ログレベルに応じたメッセージフォーマット
+
+`logMessage` は設定されたログレベル以上のメッセージのみをフォーマットして返します。レベルが足りない場合は空文字列を返します。
+
+```haskell
+logMessage :: AppConfig -> LogLevel -> String -> String
+logMessage cfg level msg
+  | level >= appLogLevel cfg = "[" ++ show level ++ "] " ++ appName cfg ++ ": " ++ msg
+  | otherwise = ""
+```
+
+```haskell
+-- 使用例（defaultConfig の appLogLevel は INFO）
+logMessage defaultConfig INFO "起動しました"
+-- "[INFO] DesignPatternApp: 起動しました"
+
+logMessage defaultConfig DEBUG "デバッグ情報"
+-- ""（DEBUG < INFO なのでフィルタされる）
+
+logMessage defaultConfig ERROR "エラー発生"
+-- "[ERROR] DesignPatternApp: エラー発生"
+```
+
+### configSummary: 設定のサマリ表示
+
+`configSummary` はアプリケーション設定の概要を 1 行の文字列で返します。
+
+```haskell
+configSummary :: AppConfig -> String
+configSummary cfg =
+  appName cfg ++ " v" ++ appVersion cfg
+  ++ " (debug=" ++ show (appDebug cfg)
+  ++ ", logLevel=" ++ show (appLogLevel cfg) ++ ")"
+```
+
+```haskell
+-- 使用例
+configSummary defaultConfig
+-- "DesignPatternApp v1.0.0 (debug=False, logLevel=INFO)"
+```
+
+## defaultDbConfig: データベース設定
+
+`defaultDbConfig` はデータベース接続のデフォルト設定をモジュールレベルのシングルトンとして提供します。
+
+```haskell
+defaultDbConfig :: DatabaseConfig
+defaultDbConfig = DatabaseConfig
+  { dbHost     = "localhost"
+  , dbPort     = 5432
+  , dbName     = "design_pattern"
+  , dbPoolSize = 10
+  }
+```
+
+---
+
 ## まとめ
 
 | 観点 | OOP | Haskell |
