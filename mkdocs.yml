@@ -63,76 +63,298 @@ exclude_docs: |
 
 nav:
   - Home: index.md
-  - 戦略:
-      - 概要: strategy/index.md
-  - 要件:
-      - 概要: requirements/index.md
-  - 設計:
-      - 概要: design/index.md
-  - 開発:
-      - 概要: development/index.md
-  - 運用:
-      - 概要: operation/index.md
-  - レビュー:
-      - 概要: review/index.md
-  - ADR:
-      - 概要: adr/index.md
   - 記事:
       - 概要: article/index.md
-      - テスト駆動開発から始めるプログラミング入門: article/getting-start-tdd/index.md
-      - Grokking Functional Programming: article/grokkingfp/index.md
-      - Grokking Concurrency: article/grokking-concurrency/index.md
-      - 関数型デザイン - 原則、パターン、実践: article/functional-desgin-ppp/index.md
-      - 実践データベース設計：基幹業務システム編: article/practical-database-design/index.md
+      - 執筆計画: article/outline.md
+      - 執筆ワークフロー: article/workflow.md
+      - 言語別記事:
+          - Ruby:
+              - 概要: article/ruby/index.md
+              - 第 1 章 デザインパターンとパターン思考: article/ruby/01-introduction-to-patterns.md
+              - 第 2 章 パターンを支える基本原則: article/ruby/02-principles-and-patterns.md
+              - 第 3 章 開発環境と TDD 基盤: article/ruby/03-tdd-and-tooling.md
+              - 第 4 章 Template Method: article/ruby/04-template-method.md
+              - 第 5 章 Strategy: article/ruby/05-strategy.md
+              - 第 6 章 Observer: article/ruby/06-observer.md
+              - 第 7 章 Composite: article/ruby/07-composite.md
+              - 第 8 章 Iterator: article/ruby/08-iterator.md
+              - 第 9 章 Command: article/ruby/09-command.md
+              - 第 10 章 Adapter: article/ruby/10-adapter.md
+              - 第 11 章 Proxy: article/ruby/11-proxy.md
+              - 第 12 章 Decorator: article/ruby/12-decorator.md
+              - 第 13 章 Singleton: article/ruby/13-singleton.md
+              - 第 14 章 Factory: article/ruby/14-factory.md
+              - 第 15 章 Builder: article/ruby/15-builder.md
+              - 第 16 章 Interpreter: article/ruby/16-interpreter.md
+          - Java:
+              - 概要: article/java/index.md
+              - 第 1 章 デザインパターンとパターン思考: article/java/01-introduction-to-patterns.md
+              - 第 2 章 パターンを支える基本原則: article/java/02-principles-and-patterns.md
+              - 第 3 章 開発環境と TDD 基盤: article/java/03-tdd-and-tooling.md
+              - 第 4 章 Template Method: article/java/04-template-method.md
+              - 第 5 章 Strategy: article/java/05-strategy.md
+              - 第 6 章 Observer: article/java/06-observer.md
+              - 第 7 章 Composite: article/java/07-composite.md
+              - 第 8 章 Iterator: article/java/08-iterator.md
+              - 第 9 章 Command: article/java/09-command.md
+              - 第 10 章 Adapter: article/java/10-adapter.md
+              - 第 11 章 Proxy: article/java/11-proxy.md
+              - 第 12 章 Decorator: article/java/12-decorator.md
+              - 第 13 章 Singleton: article/java/13-singleton.md
+              - 第 14 章 Factory: article/java/14-factory.md
+              - 第 15 章 Builder: article/java/15-builder.md
+              - 第 16 章 Interpreter: article/java/16-interpreter.md
+          - Python:
+              - 概要: article/python/index.md
+              - 第 1 章 デザインパターンとパターン思考: article/python/01-introduction-to-patterns.md
+              - 第 2 章 パターンを支える基本原則: article/python/02-principles-and-patterns.md
+              - 第 3 章 開発環境と TDD 基盤: article/python/03-tdd-and-tooling.md
+              - 第 4 章 Template Method: article/python/04-template-method.md
+              - 第 5 章 Strategy: article/python/05-strategy.md
+              - 第 6 章 Observer: article/python/06-observer.md
+              - 第 7 章 Composite: article/python/07-composite.md
+              - 第 8 章 Iterator: article/python/08-iterator.md
+              - 第 9 章 Command: article/python/09-command.md
+              - 第 10 章 Adapter: article/python/10-adapter.md
+              - 第 11 章 Proxy: article/python/11-proxy.md
+              - 第 12 章 Decorator: article/python/12-decorator.md
+              - 第 13 章 Singleton: article/python/13-singleton.md
+              - 第 14 章 Factory: article/python/14-factory.md
+              - 第 15 章 Builder: article/python/15-builder.md
+              - 第 16 章 Interpreter: article/python/16-interpreter.md
+          - JavaScript:
+              - 概要: article/javascript/index.md
+              - 第 1 章 デザインパターンとパターン思考: article/javascript/01-introduction-to-patterns.md
+              - 第 2 章 パターンを支える基本原則: article/javascript/02-principles-and-patterns.md
+              - 第 3 章 開発環境と TDD 基盤: article/javascript/03-tdd-and-tooling.md
+              - 第 4 章 Template Method: article/javascript/04-template-method.md
+              - 第 5 章 Strategy: article/javascript/05-strategy.md
+              - 第 6 章 Observer: article/javascript/06-observer.md
+              - 第 7 章 Composite: article/javascript/07-composite.md
+              - 第 8 章 Iterator: article/javascript/08-iterator.md
+              - 第 9 章 Command: article/javascript/09-command.md
+              - 第 10 章 Adapter: article/javascript/10-adapter.md
+              - 第 11 章 Proxy: article/javascript/11-proxy.md
+              - 第 12 章 Decorator: article/javascript/12-decorator.md
+              - 第 13 章 Singleton: article/javascript/13-singleton.md
+              - 第 14 章 Factory: article/javascript/14-factory.md
+              - 第 15 章 Builder: article/javascript/15-builder.md
+              - 第 16 章 Interpreter: article/javascript/16-interpreter.md
+          - TypeScript:
+              - 概要: article/typescript/index.md
+              - 第 1 章 デザインパターンとパターン思考: article/typescript/01-introduction-to-patterns.md
+              - 第 2 章 パターンを支える基本原則: article/typescript/02-principles-and-patterns.md
+              - 第 3 章 開発環境と TDD 基盤: article/typescript/03-tdd-and-tooling.md
+              - 第 4 章 Template Method: article/typescript/04-template-method.md
+              - 第 5 章 Strategy: article/typescript/05-strategy.md
+              - 第 6 章 Observer: article/typescript/06-observer.md
+              - 第 7 章 Composite: article/typescript/07-composite.md
+              - 第 8 章 Iterator: article/typescript/08-iterator.md
+              - 第 9 章 Command: article/typescript/09-command.md
+              - 第 10 章 Adapter: article/typescript/10-adapter.md
+              - 第 11 章 Proxy: article/typescript/11-proxy.md
+              - 第 12 章 Decorator: article/typescript/12-decorator.md
+              - 第 13 章 Singleton: article/typescript/13-singleton.md
+              - 第 14 章 Factory: article/typescript/14-factory.md
+              - 第 15 章 Builder: article/typescript/15-builder.md
+              - 第 16 章 Interpreter: article/typescript/16-interpreter.md
+          - "C#":
+              - 概要: article/csharp/index.md
+              - 第 1 章 デザインパターンとパターン思考: article/csharp/01-introduction-to-patterns.md
+              - 第 2 章 パターンを支える基本原則: article/csharp/02-principles-and-patterns.md
+              - 第 3 章 開発環境と TDD 基盤: article/csharp/03-tdd-and-tooling.md
+              - 第 4 章 Template Method: article/csharp/04-template-method.md
+              - 第 5 章 Strategy: article/csharp/05-strategy.md
+              - 第 6 章 Observer: article/csharp/06-observer.md
+              - 第 7 章 Composite: article/csharp/07-composite.md
+              - 第 8 章 Iterator: article/csharp/08-iterator.md
+              - 第 9 章 Command: article/csharp/09-command.md
+              - 第 10 章 Adapter: article/csharp/10-adapter.md
+              - 第 11 章 Proxy: article/csharp/11-proxy.md
+              - 第 12 章 Decorator: article/csharp/12-decorator.md
+              - 第 13 章 Singleton: article/csharp/13-singleton.md
+              - 第 14 章 Factory: article/csharp/14-factory.md
+              - 第 15 章 Builder: article/csharp/15-builder.md
+              - 第 16 章 Interpreter: article/csharp/16-interpreter.md
+          - "F#":
+              - 概要: article/fsharp/index.md
+              - 第 1 章 はじめに: article/fsharp/01-introduction-to-patterns.md
+              - 第 2 章 Template Method: article/fsharp/02-template-method.md
+              - 第 3 章 Strategy: article/fsharp/03-strategy.md
+              - 第 4 章 Observer: article/fsharp/04-observer.md
+              - 第 5 章 Composite: article/fsharp/05-composite.md
+              - 第 6 章 Iterator: article/fsharp/06-iterator.md
+              - 第 7 章 Command: article/fsharp/07-command.md
+              - 第 8 章 Adapter: article/fsharp/08-adapter.md
+              - 第 9 章 Proxy: article/fsharp/09-proxy.md
+              - 第 10 章 Decorator: article/fsharp/10-decorator.md
+              - 第 11 章 Singleton: article/fsharp/11-singleton.md
+              - 第 12 章 Factory: article/fsharp/12-factory.md
+              - 第 13 章 Builder: article/fsharp/13-builder.md
+              - 第 14 章 Interpreter: article/fsharp/14-interpreter.md
+              - 第 15 章 パターン総括: article/fsharp/15-patterns-summary.md
+              - 第 16 章 F# の全体像: article/fsharp/16-interpreter.md
+          - PHP:
+              - 概要: article/php/index.md
+              - 第 1 章 デザインパターンとパターン思考: article/php/01-introduction-to-patterns.md
+              - 第 2 章 パターンを支える基本原則: article/php/02-principles-and-patterns.md
+              - 第 3 章 開発環境と TDD 基盤: article/php/03-tdd-and-tooling.md
+              - 第 4 章 Template Method: article/php/04-template-method.md
+              - 第 5 章 Strategy: article/php/05-strategy.md
+              - 第 6 章 Observer: article/php/06-observer.md
+              - 第 7 章 Composite: article/php/07-composite.md
+              - 第 8 章 Iterator: article/php/08-iterator.md
+              - 第 9 章 Command: article/php/09-command.md
+              - 第 10 章 Adapter: article/php/10-adapter.md
+              - 第 11 章 Proxy: article/php/11-proxy.md
+              - 第 12 章 Decorator: article/php/12-decorator.md
+              - 第 13 章 Singleton: article/php/13-singleton.md
+              - 第 14 章 Factory: article/php/14-factory.md
+              - 第 15 章 Builder: article/php/15-builder.md
+              - 第 16 章 Interpreter: article/php/16-interpreter.md
+          - Go:
+              - 概要: article/go/index.md
+              - 第 1 章 デザインパターンとパターン思考: article/go/01-introduction-to-patterns.md
+              - 第 2 章 パターンを支える基本原則: article/go/02-principles-and-patterns.md
+              - 第 3 章 開発環境と TDD 基盤: article/go/03-tdd-and-tooling.md
+              - 第 4 章 Template Method: article/go/04-template-method.md
+              - 第 5 章 Strategy: article/go/05-strategy.md
+              - 第 6 章 Observer: article/go/06-observer.md
+              - 第 7 章 Composite: article/go/07-composite.md
+              - 第 8 章 Iterator: article/go/08-iterator.md
+              - 第 9 章 Command: article/go/09-command.md
+              - 第 10 章 Adapter: article/go/10-adapter.md
+              - 第 11 章 Proxy: article/go/11-proxy.md
+              - 第 12 章 Decorator: article/go/12-decorator.md
+              - 第 13 章 Singleton: article/go/13-singleton.md
+              - 第 14 章 Factory: article/go/14-factory.md
+              - 第 15 章 Builder: article/go/15-builder.md
+              - 第 16 章 Interpreter: article/go/16-interpreter.md
+          - Rust:
+              - 概要: article/rust/index.md
+              - 第 1 章 デザインパターンとパターン思考: article/rust/01-introduction-to-patterns.md
+              - 第 2 章 Rust の基礎と cargo test: article/rust/02-rust-basics-and-cargo-test.md
+              - 第 3 章 所有権・トレイト・列挙型: article/rust/03-ownership-traits-enums.md
+              - 第 4 章 Template Method: article/rust/04-template-method.md
+              - 第 5 章 Strategy: article/rust/05-strategy.md
+              - 第 6 章 Observer: article/rust/06-observer.md
+              - 第 7 章 Command: article/rust/07-command.md
+              - 第 8 章 Iterator: article/rust/08-iterator.md
+              - 第 9 章 Composite: article/rust/09-composite.md
+              - 第 10 章 Adapter: article/rust/10-adapter.md
+              - 第 11 章 Proxy: article/rust/11-proxy.md
+              - 第 12 章 Decorator: article/rust/12-decorator.md
+              - 第 13 章 Singleton: article/rust/13-singleton.md
+              - 第 14 章 Factory: article/rust/14-factory.md
+              - 第 15 章 Builder: article/rust/15-builder.md
+              - 第 16 章 Interpreter: article/rust/16-interpreter.md
+          - Clojure:
+              - 概要: article/clojure/index.md
+              - 第 1 章 デザインパターンとパターン思考: article/clojure/01-introduction-to-patterns.md
+              - 第 2 章 パターンを支える基本原則: article/clojure/02-principles-and-patterns.md
+              - 第 3 章 開発環境と TDD 基盤: article/clojure/03-tdd-and-tooling.md
+              - 第 4 章 Template Method: article/clojure/04-template-method.md
+              - 第 5 章 Strategy: article/clojure/05-strategy.md
+              - 第 6 章 Observer: article/clojure/06-observer.md
+              - 第 7 章 Composite: article/clojure/07-composite.md
+              - 第 8 章 Iterator: article/clojure/08-iterator.md
+              - 第 9 章 Command: article/clojure/09-command.md
+              - 第 10 章 Adapter: article/clojure/10-adapter.md
+              - 第 11 章 Proxy: article/clojure/11-proxy.md
+              - 第 12 章 Decorator: article/clojure/12-decorator.md
+              - 第 13 章 Singleton: article/clojure/13-singleton.md
+              - 第 14 章 Factory: article/clojure/14-factory.md
+              - 第 15 章 Builder: article/clojure/15-builder.md
+              - 第 16 章 Interpreter: article/clojure/16-interpreter.md
+          - Scala:
+              - 概要: article/scala/index.md
+              - 第 1 章 デザインパターンとパターン思考: article/scala/01-introduction-to-patterns.md
+              - 第 2 章 パターンを支える基本原則: article/scala/02-principles-and-patterns.md
+              - 第 3 章 開発環境と TDD 基盤: article/scala/03-tdd-and-tooling.md
+              - 第 4 章 Template Method: article/scala/04-template-method.md
+              - 第 5 章 Strategy: article/scala/05-strategy.md
+              - 第 6 章 Observer: article/scala/06-observer.md
+              - 第 7 章 Composite: article/scala/07-composite.md
+              - 第 8 章 Iterator: article/scala/08-iterator.md
+              - 第 9 章 Command: article/scala/09-command.md
+              - 第 10 章 Adapter: article/scala/10-adapter.md
+              - 第 11 章 Proxy: article/scala/11-proxy.md
+              - 第 12 章 Decorator: article/scala/12-decorator.md
+              - 第 13 章 Singleton: article/scala/13-singleton.md
+              - 第 14 章 Factory: article/scala/14-factory.md
+              - 第 15 章 Builder: article/scala/15-builder.md
+              - 第 16 章 Interpreter: article/scala/16-interpreter.md
+          - Elixir:
+              - 概要: article/elixir/index.md
+              - 第 1 章 デザインパターンとパターン思考: article/elixir/01-introduction-to-patterns.md
+              - 第 2 章 Elixir とパターンの世界: article/elixir/02-elixir-and-patterns.md
+              - 第 3 章 TDD で始めるパターン実装: article/elixir/03-tdd-and-patterns.md
+              - 第 4 章 Template Method: article/elixir/04-template-method.md
+              - 第 5 章 Strategy: article/elixir/05-strategy.md
+              - 第 6 章 Observer: article/elixir/06-observer.md
+              - 第 7 章 Composite: article/elixir/07-composite.md
+              - 第 8 章 Iterator: article/elixir/08-iterator.md
+              - 第 9 章 Command: article/elixir/09-command.md
+              - 第 10 章 Adapter: article/elixir/10-adapter.md
+              - 第 11 章 Proxy: article/elixir/11-proxy.md
+              - 第 12 章 Decorator: article/elixir/12-decorator.md
+              - 第 13 章 Singleton: article/elixir/13-singleton.md
+              - 第 14 章 Factory: article/elixir/14-factory.md
+              - 第 15 章 Builder: article/elixir/15-builder.md
+              - 第 16 章 Interpreter: article/elixir/16-interpreter.md
+          - Haskell:
+              - 概要: article/haskell/index.md
+              - 第 1 章 デザインパターンとパターン思考: article/haskell/01-introduction-to-patterns.md
+              - 第 2 章 パターンを支える基本原則: article/haskell/02-principles-and-patterns.md
+              - 第 3 章 開発環境と TDD 基盤: article/haskell/03-tdd-and-tooling.md
+              - 第 4 章 Template Method: article/haskell/04-template-method.md
+              - 第 5 章 Strategy: article/haskell/05-strategy.md
+              - 第 6 章 Observer: article/haskell/06-observer.md
+              - 第 7 章 Composite: article/haskell/07-composite.md
+              - 第 8 章 Iterator: article/haskell/08-iterator.md
+              - 第 9 章 Command: article/haskell/09-command.md
+              - 第 10 章 Adapter: article/haskell/10-adapter.md
+              - 第 11 章 Proxy: article/haskell/11-proxy.md
+              - 第 12 章 Decorator: article/haskell/12-decorator.md
+              - 第 13 章 Singleton: article/haskell/13-singleton.md
+              - 第 14 章 Factory: article/haskell/14-factory.md
+              - 第 15 章 Builder: article/haskell/15-builder.md
+              - 第 16 章 Interpreter: article/haskell/16-interpreter.md
+          - 多言語統合解説:
+              - 概要: article/all/index.md
+              - パターン思考の言語横断比較: article/all/01-pattern-thinking-across-languages.md
+              - OOP パターンと関数型代替: article/all/02-oop-vs-fp.md
+              - 各言語のイディオム集: article/all/03-language-idioms.md
+              - 過剰適用・誤用パターン: article/all/04-pattern-anti-patterns.md
+  - 開発:
+      - 概要: development/index.md
+      - リリース計画: development/release_plan.md
+      - イテレーション 1: development/iteration_plan-1.md
+      - ふりかえり 1: development/retrospective-1.md
+      - 完了報告書 1: development/iteration_report-1.md
+      - イテレーション 2: development/iteration_plan-2.md
+      - ふりかえり 2: development/retrospective-2.md
+      - 完了報告書 2: development/iteration_report-2.md
+      - イテレーション 3: development/iteration_plan-3.md
+      - ふりかえり 3: development/retrospective-3.md
+      - 完了報告書 3: development/iteration_report-3.md
+      - イテレーション 4: development/iteration_plan-4.md
+      - ふりかえり 4: development/retrospective-4.md
+      - 完了報告書 4: development/iteration_report-4.md
+      - イテレーション 5: development/iteration_plan-5.md
+      - ふりかえり 5: development/retrospective-5.md
+      - 完了報告書 5: development/iteration_report-5.md
+      - Phase 2 ふりかえり: development/retrospective-phase2.md
+  - ADR:
+      - 概要: adr/index.md
+  - 運用:
+      - 概要: operation/index.md
   - リファレンス:
-      - 概要: reference/index.md
-      - よいソフトウェアとは: reference/よいソフトウェアとは.md
-      - ロジカルシンキング: reference/ロジカルシンキング.md
       - 開発ガイド: reference/開発ガイド.md
-      - 経営戦略分析ガイド: reference/経営戦略分析ガイド.md
-      - ビジネスアーキテクチャ分析ガイド: reference/ビジネスアーキテクチャ分析ガイド.md
-      - 要件定義ガイド: reference/要件定義ガイド.md
-      - ユースケース作成ガイド: reference/ユースケース作成ガイド.md
-      - アーキテクチャ設計ガイド: reference/アーキテクチャ設計ガイド.md
-      - データモデル設計ガイド: reference/データモデル設計ガイド.md
-      - ドメインモデル設計ガイド: reference/ドメインモデル設計ガイド.md
-      - UI 設計ガイド: reference/UI設計ガイド.md
-      - テスト戦略ガイド: reference/テスト戦略ガイド.md
-      - 非機能要件定義ガイド: reference/非機能要件定義ガイド.md
-      - 運用要件定義ガイド: reference/運用要件定義ガイド.md
-      - インフラ設計ガイド: reference/インフラ設計ガイド.md
       - コーディングとテストガイド: reference/コーディングとテストガイド.md
       - エクストリームプログラミング: reference/エクストリームプログラミング.md
-      - リリースガイド: reference/リリースガイド.md
+      - よいソフトウェアとは: reference/よいソフトウェアとは.md
+      - アーキテクチャ設計ガイド: reference/アーキテクチャ設計ガイド.md
+      - テスト戦略ガイド: reference/テスト戦略ガイド.md
       - リリース・イテレーション計画ガイド: reference/リリース・イテレーション計画ガイド.md
-      - 環境変数管理ガイド: reference/環境変数管理ガイド.md
       - 言語別開発ガイド: reference/言語別開発ガイド.md
-      - Java アプリケーション環境構築ガイド: reference/Javaアプリケーション環境構築ガイド.md
-      - TypeScript アプリケーション環境構築ガイド: reference/TypeScriptアプリケーション環境構築ガイド.md
-      - 運用スクリプト作成ガイド: reference/運用スクリプト作成ガイド.md
-      - Codex CLI MCP アプリケーション開発フロー: reference/CodexCLIMCPアプリケーション開発フロー.md
-      - Codex CLI MCP サーバー設定手順: reference/CodexCLIMCPサーバー設定手順.md
-      - SonarQube ローカル環境セットアップ手順書: reference/SonarQubeローカル環境セットアップ手順書.md
-      - Vim 操作マニュアル: reference/Vim操作マニュアル.md
-      - 企業経営論: reference/企業経営論.md
-      - 運営管理: reference/運営管理.md
-  - テンプレート:
-      - 概要: template/index.md
-      - まずこれを読もうリスト: template/まずこれを読もうリスト.md
-      - ビジネスアーキテクチャ: template/ビジネスアーキテクチャ.md
-      - 要件定義: template/要件定義.md
-      - 完全形式のユースケース: template/完全形式のユースケース.md
-      - 設計: template/設計.md
-      - ADR: template/ADR.md
-      - インセプションデッキ: template/インセプションデッキ.md
-      - イテレーション計画: template/イテレーション計画.md
-      - イテレーション完了報告書: template/イテレーション完了報告書.md
-      - リリース計画: template/リリース計画.md
-      - リリース完了報告書: template/リリース完了報告書.md
-      - アプリケーション開発環境セットアップ手順書: template/アプリケーション開発環境セットアップ手順書.md
-      - 開発環境セットアップ手順書: template/開発環境セットアップ手順書.md
-      - AWS ステージング環境セットアップ手順書: template/AWSステージング環境セットアップ手順書.md
-      - AWS プロダクション環境セットアップ手順書: template/AWSプロダクション環境セットアップ手順書.md
-      - 企業分析: template/企業分析.md
-      - 事例分析: template/事例分析.md
-      - README: template/README.md

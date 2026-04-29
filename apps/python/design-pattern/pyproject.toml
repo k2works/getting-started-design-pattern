@@ -1,0 +1,30 @@
+[project]
+name = "design-pattern"
+version = "1.0.0"
+description = "Design Patterns in Python - TDD implementation"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+
+[tool.coverage.run]
+source = ["src"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 80
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "C90"]
+per-file-ignores = {"tests/*" = ["E731"]}
+
+[tool.ruff.lint.mccabe]
+max-complexity = 7

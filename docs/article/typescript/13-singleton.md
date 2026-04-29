@@ -1,0 +1,111 @@
+# 第 13 章 Singleton ― インスタンスを一つに制限する
+
+## はじめに
+
+Singleton パターンは、クラスのインスタンスが1つだけ存在することを保証し、グローバルなアクセスポイントを提供するパターンです。TypeScript では `private constructor` を使って言語レベルで制約を課すことができます。
+
+## パターンの構造
+
+```plantuml
+@startuml
+class SingletonLogger {
+  - {static} instance: SingletonLogger | null
+  - messages: string[]
+  - SingletonLogger()
+  + {static} getInstance(): SingletonLogger
+  + {static} resetInstance(): void
+  + log(message: string): void
+  + getMessages(): ReadonlyArray<string>
+  + getLastMessage(): string | undefined
+  + clear(): void
+}
+
+class "logger" as ModuleLogger <<module>> {
+  SingletonLogger.getInstance()
+}
+
+SingletonLogger --> SingletonLogger : instance
+ModuleLogger --> SingletonLogger : uses
+@enduml
+```
+
+## TDD で作る
+
+### Red: 同一インスタンス保証テスト
+
+```typescript
+it('getInstance は常に同一のインスタンスを返す', () => {
+  const a = SingletonLogger.getInstance();
+  const b = SingletonLogger.getInstance();
+  expect(a).toBe(b);
+});
+```
+
+### Green: private constructor の実装
+
+```typescript
+export class SingletonLogger {
+  private static instance: SingletonLogger | null = null;
+  private constructor() {}
+  static getInstance(): SingletonLogger {
+    if (SingletonLogger.instance === null) {
+      SingletonLogger.instance = new SingletonLogger();
+    }
+    return SingletonLogger.instance;
+  }
+}
+```
+
+### インスタンスメソッド
+
+`SingletonLogger` は `log()` でメッセージを蓄積し、3 つのメソッドで蓄積された状態にアクセスします。
+
+```typescript
+log(message: string): void {
+  this.messages.push(message);
+}
+
+getMessages(): ReadonlyArray<string> {
+  return this.messages;
+}
+
+getLastMessage(): string | undefined {
+  return this.messages[this.messages.length - 1];
+}
+
+clear(): void {
+  this.messages = [];
+}
+```
+
+| メソッド | 戻り値型 | 説明 |
+|:---|:---|:---|
+| `getMessages()` | `ReadonlyArray<string>` | 全メッセージを読み取り専用配列で返す。外部から `push` できない |
+| `getLastMessage()` | `string` or `undefined` | 最後に記録されたメッセージを返す。空の場合は `undefined` |
+| `clear()` | `void` | メッセージ配列を空にリセットする |
+
+`getMessages()` が `ReadonlyArray<string>` を返す点が重要です。呼び出し側が配列を直接変更できないため、Singleton の内部状態の一貫性が保たれます。
+
+### Refactor
+
+- `resetInstance()` をテスト用に追加し、テスト間の独立性を確保
+- `ReadonlyArray<string>` で外部からのメッセージ配列の変更を防止
+- モジュールレベルの `logger` 定数もエクスポートし、簡便なアクセス手段を提供
+
+## JavaScript との比較
+
+| 観点 | JavaScript | TypeScript |
+|:---|:---|:---|
+| private constructor | なし（慣例的に `_` プレフィックス） | `private constructor()` で言語サポート |
+| モジュール Singleton | ES Module のキャッシュで自然に実現 | 同上 + `private constructor` で明示的 |
+| ReadonlyArray | なし | `ReadonlyArray<T>` で不変性保証 |
+
+## まとめ
+
+| 項目 | 内容 |
+|:---|:---|
+| 意図 | クラスのインスタンスを一つに制限し、グローバルアクセスポイントを提供する |
+| 変わらないもの | インスタンスの一意性 |
+| 変わるもの | インスタンスの状態（ログメッセージ等） |
+| TypeScript の利点 | `private constructor` で不正な `new` をコンパイル時に防止。`ReadonlyArray` で不変性保証 |
+| 注意点 | テスタビリティへの影響。グローバル状態はテスト間の干渉を招く |

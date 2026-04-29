@@ -1,0 +1,22 @@
+name: CI Clojure
+
+on:
+  push:
+    branches: [main, develop]
+    paths: ['apps/clojure/design-pattern/**', '.github/workflows/ci-clojure.yml']
+  pull_request:
+    branches: [main]
+    paths: ['apps/clojure/design-pattern/**', '.github/workflows/ci-clojure.yml']
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/clojure/design-pattern
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeLaGuardo/setup-clojure@13.4
+        with:
+          lein: latest
+      - run: lein test

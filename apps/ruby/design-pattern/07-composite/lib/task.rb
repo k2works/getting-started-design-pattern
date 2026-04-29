@@ -1,0 +1,20 @@
+# frozen_string_literal: true
+
+# 基底タスククラス（Composite パターン - Component）
+class Task
+  attr_reader :name
+  attr_accessor :parent
+
+  def initialize(name)
+    @name = name
+    @parent = nil
+  end
+
+  def get_time_required
+    0.0
+  end
+
+  def total_number_basic_tasks
+    1
+  end
+end

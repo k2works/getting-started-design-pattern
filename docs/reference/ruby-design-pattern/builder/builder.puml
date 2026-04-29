@@ -1,0 +1,13 @@
+@startuml
+
+Builder <--R Director
+Product <--R Builder
+
+class Builder {
++ add_part1()
++ add_part2()
++ add_part3()
++ result()
+}
+
+@enduml

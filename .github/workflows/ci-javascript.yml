@@ -1,0 +1,37 @@
+name: CI JavaScript
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'apps/javascript/design-pattern/**'
+      - '.github/workflows/ci-javascript.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'apps/javascript/design-pattern/**'
+      - '.github/workflows/ci-javascript.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/javascript/design-pattern
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: apps/javascript/design-pattern/package-lock.json
+
+      - run: npm ci
+      - run: npm run test:coverage
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: js-coverage-report
+          path: apps/javascript/design-pattern/coverage/

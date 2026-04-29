@@ -1,0 +1,22 @@
+name: CI F#
+
+on:
+  push:
+    branches: [main, develop]
+    paths: ['apps/fsharp/design-pattern/**', '.github/workflows/ci-fsharp.yml']
+  pull_request:
+    branches: [main]
+    paths: ['apps/fsharp/design-pattern/**', '.github/workflows/ci-fsharp.yml']
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/fsharp/design-pattern
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - run: dotnet test --verbosity normal

@@ -1,0 +1,12 @@
+@startuml
+left to right direction
+
+rectangle "動的 OOP\nRuby / JS / Python / PHP" as dynamic #lightyellow
+rectangle "静的 OOP\nJava / TS / C#" as static_oop #lightblue
+rectangle "システム言語\nGo / Rust" as system #FFDAB9
+rectangle "関数型\nF# / Clojure / Scala\nElixir / Haskell" as fp #lightgreen
+
+dynamic --> static_oop : ダックタイピング vs\nインターフェース
+static_oop --> system : 継承 vs\n構造体埋め込み・トレイト
+system --> fp : パターン vs\n言語機能で代替
+@enduml

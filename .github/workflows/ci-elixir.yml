@@ -1,0 +1,24 @@
+name: CI Elixir
+
+on:
+  push:
+    branches: [main, develop]
+    paths: ['apps/elixir/design-pattern/**', '.github/workflows/ci-elixir.yml']
+  pull_request:
+    branches: [main]
+    paths: ['apps/elixir/design-pattern/**', '.github/workflows/ci-elixir.yml']
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/elixir/design-pattern
+    steps:
+      - uses: actions/checkout@v4
+      - uses: erlef/setup-beam@v1
+        with:
+          elixir-version: '1.18'
+          otp-version: '27'
+      - run: mix deps.get
+      - run: mix test

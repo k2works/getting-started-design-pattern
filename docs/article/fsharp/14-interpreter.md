@@ -1,0 +1,142 @@
+# 第 14 章：Interpreter — 判別共用体で AST を表現する
+
+## はじめに
+
+Interpreter パターンは、言語の文法を定義し、その文法に基づいて文を解釈します。F# では、判別共用体で AST（抽象構文木）を定義し、再帰的なパターンマッチングで評価します。これは関数型プログラミングの最も自然な応用の一つです。
+
+## パターンの構造
+
+```plantuml
+@startuml
+title Interpreter（F# 版）
+
+class "Expression" as E <<discriminated union>> {
+  + Number(float)
+  + Add(Expression, Expression)
+  + Subtract(Expression, Expression)
+  + Multiply(Expression, Expression)
+  + Divide(Expression, Expression)
+  + Variable(string)
+}
+
+class "Environment" as Env <<type alias>> {
+  Map~string, float~
+}
+
+class "Interpreter" as I <<module>> {
+  + evaluate(env, expr): Result
+  + toString(expr): string
+  + num(n): Expression
+  + var(name): Expression
+  + add(l, r): Expression
+}
+
+I --> E : evaluates
+I --> Env : uses
+E --> E : recursive
+@enduml
+```
+
+## TDD で作る
+
+### Red: 失敗するテストを書く
+
+```fsharp
+[<Fact>]
+let ``複雑な式を評価できる`` () =
+    // (3 + 4) * (10 - 5) = 35
+    let expr = mul (add (num 3.0) (num 4.0)) (sub (num 10.0) (num 5.0))
+    let result = evaluate Map.empty expr
+    Assert.Equal(Ok 35.0, result)
+```
+
+### Green: テストを通す最小のコードを書く
+
+```fsharp
+type Expression =
+    | Number of float
+    | Add of Expression * Expression
+    | Subtract of Expression * Expression
+    | Multiply of Expression * Expression
+    | Divide of Expression * Expression
+    | Variable of string
+
+type Environment = Map<string, float>
+
+let rec evaluate (env: Environment) = function
+    | Number n -> Ok n
+    | Variable name ->
+        env |> Map.tryFind name |> Result.ofOption (sprintf "未定義変数: %s" name)
+    | Add(left, right) ->
+        evaluateBinary env left right (+)
+    | Subtract(left, right) ->
+        evaluateBinary env left right (-)
+    | Multiply(left, right) ->
+        evaluateBinary env left right (*)
+    | Divide(left, right) ->
+        match evaluate env left, evaluate env right with
+        | Ok _, Ok 0.0 -> Error "0 では割れません"
+        | Ok l, Ok r -> Ok (l / r)
+        | Error e, _ -> Error e
+        | _, Error e -> Error e
+
+and evaluateBinary env left right op =
+    match evaluate env left, evaluate env right with
+    | Ok l, Ok r -> Ok (op l r)
+    | Error e, _ -> Error e
+    | _, Error e -> Error e
+```
+
+AST の各ノード型と評価規則を同じ場所に並べることで、文法と意味づけを一緒に保守できます。
+
+### Refactor
+
+`evaluateBinary` ヘルパー関数で二項演算の共通ロジックを抽出しました。`Result` 型でゼロ除算や未定義変数のエラーを安全に伝播します。
+
+#### 二項演算の内部構造: evaluateBinary と evaluateBinaryResult
+
+二項演算の評価は 2 段階のヘルパーに分解されています。
+
+```fsharp
+and private evaluateBinary env left right op =
+    evaluateBinaryResult (evaluate env left) (evaluate env right) op
+
+and private evaluateBinaryResult leftResult rightResult op =
+    match leftResult, rightResult with
+    | Ok l, Ok r -> Ok(op l r)
+    | Error e, _ -> Error e
+    | _, Error e -> Error e
+```
+
+`evaluateBinary` は左右の部分式を `evaluate` してから `evaluateBinaryResult` に渡します。`evaluateBinaryResult` は 2 つの `Result` 値を受け取り、両方が `Ok` のときだけ演算子 `op` を適用します。この分離により、`Divide` のゼロ除算チェックのように右辺を先に評価してから分岐したいケースで `evaluateBinaryResult` を直接呼び出せます。
+
+## OOP 版（C#）との比較
+
+### C# 版
+
+```csharp
+abstract class Expression { public abstract double Evaluate(Dictionary<string, double> env); }
+class NumberExpression : Expression {
+    private double value;
+    public override double Evaluate(...) => value;
+}
+class AddExpression : Expression {
+    private Expression left, right;
+    public override double Evaluate(var env) =>
+        left.Evaluate(env) + right.Evaluate(env);
+}
+```
+
+### F# 版の優位性
+
+- 判別共用体で全ノード型が 1 箇所に定義される
+- パターンマッチングで網羅性が保証される
+- `Result` 型でエラーが型安全に表現される
+- ビルダー関数（`num`, `add` など）で AST の構築が簡潔
+
+## まとめ
+
+- Interpreter は判別共用体の最も強力な応用例
+- 再帰的なパターンマッチングで AST を自然に評価できる
+- `Result` 型によりエラーが値として安全に伝播される
+- コンパイラ、DSL、数式評価器など幅広い応用がある

@@ -1,0 +1,22 @@
+@startuml
+
+abstract class Strategy {
+operation()
+}
+Strategy <--r Context
+Strategy <|-- Strategy1
+Strategy <|-- Strategy2
+
+class Context {
+-strategy
+}
+class Strategy1 {
+operation()
+}
+class Strategy1 {
+operation()
+}
+
+
+
+@enduml
