@@ -66,6 +66,57 @@ nnoremap <up> gk
 " バックスペースキーの有効化
 set backspace=indent,eol,start
 
+"----------------------------------------------------------
+" リポジトリローカルの Vim 拡張
+"----------------------------------------------------------
+function! s:find_upwards_dir(start_dir, target) abort
+  let l:dir = a:start_dir
+  while !empty(l:dir) && l:dir !=# fnamemodify(l:dir, ':h')
+    if filereadable(l:dir . '/' . a:target) || isdirectory(l:dir . '/' . a:target)
+      return l:dir
+    endif
+    let l:dir = fnamemodify(l:dir, ':h')
+  endwhile
+  if filereadable(l:dir . '/' . a:target) || isdirectory(l:dir . '/' . a:target)
+    return l:dir
+  endif
+  return ''
+endfunction
+
+function! s:add_repo_vim_runtimepath() abort
+  let l:start_dir = expand('%:p:h')
+  if empty(l:start_dir)
+    let l:start_dir = getcwd()
+  endif
+  let l:repo_root = s:find_upwards_dir(l:start_dir, '.git')
+  if empty(l:repo_root)
+    return
+  endif
+  let l:repo_vim = l:repo_root . '/ops/vim'
+  if isdirectory(l:repo_vim) && index(split(&runtimepath, ','), l:repo_vim) < 0
+    execute 'set runtimepath^=' . fnameescape(l:repo_vim)
+  endif
+endfunction
+
+function! s:vim_test_project_root() abort
+  if &filetype !=# 'haskell'
+    return getcwd()
+  endif
+  let l:start_dir = expand('%:p:h')
+  if empty(l:start_dir)
+    return getcwd()
+  endif
+  let l:project_root = s:find_upwards_dir(l:start_dir, 'cabal.project')
+  return empty(l:project_root) ? getcwd() : l:project_root
+endfunction
+
+call s:add_repo_vim_runtimepath()
+
+augroup repo_local_vim_runtimepath
+  autocmd!
+  autocmd BufEnter * call s:add_repo_vim_runtimepath()
+augroup end
+
 " 入力モード時のカーソル移動
 noremap! <C-p> <Up>
 noremap! <C-n> <Down>
@@ -526,6 +577,8 @@ nmap <silent> <leader>T :TestFile<CR>
 nmap <silent> <leader>a :TestSuite<CR>
 nmap <silent> <leader>l :TestLast<CR>
 nmap <silent> <leader>g :TestVisit<CR>
+let g:test#custom_runners = extend(get(g:, 'test#custom_runners', {}), {'Haskell': ['HUnitCabal']})
+let g:test#project_root = function('s:vim_test_project_root')
 let g:test#strategy = 'dispatch'
 
 "----------------------------------------------------------

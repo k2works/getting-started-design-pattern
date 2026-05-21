@@ -102,6 +102,8 @@
 | `<leader>l` | 最後に実行したテストを再実行 |
 | `<leader>g` | 最後に実行したテストファイルを開く |
 
+- Haskell 章ではリポジトリ同梱の custom runner を使い、`test/*Test.hs` + HUnit 構成でも `TestNearest` / `TestFile` / `TestSuite` を実行できます。
+
 ### [vim-go](https://github.com/fatih/vim-go) (Go開発)
 | キー | 動作 |
 |---|---|
@@ -131,6 +133,7 @@
 ### [Haskell 開発](https://github.com/neovimhaskell/haskell-vim)
 - **シンタックスハイライト**: `neovimhaskell/haskell-vim` により Haskell 構文が高度にサポートされます。
 - **LSP連携**: `nix develop .#haskell` 環境下で、`haskell-language-server` が利用可能です。`coc-haskell` 等の導入を推奨します。
+- **vim-test 連携**: `test/*Test.hs` と `test/Main.hs` を対象に、`cabal.project` がある章ディレクトリへ自動で移動して HUnit テストを実行します。
 
 ### [Java 開発](https://github.com/uiiaoo/java-syntax.vim)
 - **シンタックスハイライト**: `uiiaoo/java-syntax.vim` により Java 構文のハイライトが強化されています。
