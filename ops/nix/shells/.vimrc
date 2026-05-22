@@ -110,6 +110,25 @@ function! s:vim_test_project_root() abort
   return empty(l:project_root) ? getcwd() : l:project_root
 endfunction
 
+function! s:vim_test_alternate_file() abort
+  let l:file = expand('%:p')
+  if &filetype !=# 'haskell' || empty(l:file)
+    return ''
+  endif
+
+  if l:file =~# '/src/[^/]\+\.hs$'
+    let l:alternate = substitute(l:file, '/src/\([^/]\+\)\.hs$', '/test/\1Test.hs', '')
+    return filereadable(l:alternate) ? l:alternate : ''
+  endif
+
+  if l:file =~# '/test/[^/]\+Test\.hs$'
+    let l:alternate = substitute(l:file, '/test/\([^/]\+\)Test\.hs$', '/src/\1.hs', '')
+    return filereadable(l:alternate) ? l:alternate : ''
+  endif
+
+  return ''
+endfunction
+
 call s:add_repo_vim_runtimepath()
 
 augroup repo_local_vim_runtimepath
@@ -578,6 +597,7 @@ nmap <silent> <leader>a :TestSuite<CR>
 nmap <silent> <leader>l :TestLast<CR>
 nmap <silent> <leader>g :TestVisit<CR>
 let g:test#custom_runners = extend(get(g:, 'test#custom_runners', {}), {'Haskell': ['HUnitCabal']})
+let g:test#custom_alternate_file = function('s:vim_test_alternate_file')
 let g:test#project_root = function('s:vim_test_project_root')
 let g:test#strategy = 'dispatch'
 

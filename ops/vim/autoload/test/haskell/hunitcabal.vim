@@ -59,6 +59,11 @@ function! test#haskell#hunitcabal#build_args(args) abort
 endfunction
 
 function! test#haskell#hunitcabal#executable() abort
+  let l:repo_root = s:get_nearest_parent_dir(getcwd(), '.git')
+  if executable('nix') && !empty(l:repo_root)
+    let l:installable = escape(l:repo_root . '#haskell', '#')
+    return 'nix develop ' . l:installable . ' -c cabal'
+  endif
   return 'cabal'
 endfunction
 
@@ -107,12 +112,12 @@ endfunction
 function! s:get_nearest_parent_dir(pwd, file_name) abort
   let l:dir = a:pwd
   while !empty(l:dir) && l:dir !=# fnamemodify(l:dir, ':h')
-    if filereadable(l:dir . '/' . a:file_name)
+    if filereadable(l:dir . '/' . a:file_name) || isdirectory(l:dir . '/' . a:file_name)
       return l:dir
     endif
     let l:dir = fnamemodify(l:dir, ':h')
   endwhile
-  if filereadable(l:dir . '/' . a:file_name)
+  if filereadable(l:dir . '/' . a:file_name) || isdirectory(l:dir . '/' . a:file_name)
     return l:dir
   endif
   return ''
