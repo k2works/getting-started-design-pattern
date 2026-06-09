@@ -1,0 +1,23 @@
+cabal-version: 3.0
+name:          design-pattern-command
+version:       0.1.0.0
+build-type:    Simple
+
+library
+  exposed-modules:     Command
+  hs-source-dirs:      src
+  build-depends:       base >=4.14 && <5
+  default-language:    Haskell2010
+  ghc-options:         -Wall
+
+test-suite tests
+  type:                exitcode-stdio-1.0
+  main-is:             Main.hs
+  hs-source-dirs:      test
+  other-modules:       CommandTest
+  build-depends:
+      base >=4.14 && <5,
+      HUnit,
+      design-pattern-command
+  default-language:    Haskell2010
+  ghc-options:         -Wall
