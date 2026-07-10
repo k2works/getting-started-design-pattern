@@ -70,19 +70,19 @@ class TemplateMethodSuite extends munit.FunSuite:
     val report = HtmlReport()
     val output = report.outputReport()
 
-    assert(output.contains("<html>"))
-    assert(output.contains("<title>月次報告</title>"))
-    assert(output.contains("<p>順調</p>"))
-    assert(output.contains("</html>"))
+    assert(output.contains("<html>"), output)
+    assert(output.contains("<title>月次報告</title>"), output)
+    assert(output.contains("<p>順調</p>"), output)
+    assert(output.contains("</html>"), output)
   }
 
   test("PlainTextReport がプレーンテキスト形式で出力する") {
     val report = PlainTextReport()
     val output = report.outputReport()
 
-    assert(output.contains("**** 月次報告 ****"))
-    assert(output.contains("順調"))
-    assert(!output.contains("<html>"))
+    assert(output.contains("**** 月次報告 ****"), output)
+    assert(output.contains("順調"), output)
+    assert(!output.contains("<html>"), output)
   }
 ```
 
