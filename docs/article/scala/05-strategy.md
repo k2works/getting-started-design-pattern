@@ -50,14 +50,14 @@ class StrategySuite extends munit.FunSuite:
   test("HTML フォーマッタでレポートを出力する") {
     val report = Report()
     val output = report.outputReport()
-    assert(output.contains("<html>"))
+    assert(output.contains("<html>"), output)
   }
 
   test("プレーンテキストフォーマッタに切り替える") {
     val report = Report().withFormatter(plainTextFormatter)
     val output = report.outputReport()
-    assert(output.contains("**** 月次報告 ****"))
-    assert(!output.contains("<html>"))
+    assert(output.contains("**** 月次報告 ****"), output)
+    assert(!output.contains("<html>"), output)
   }
 
   test("ラムダ式でカスタムフォーマッタを渡す") {
