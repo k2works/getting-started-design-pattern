@@ -57,12 +57,12 @@ class IteratorSuite extends munit.FunSuite:
 
   test("for 式でイテレーションできる") {
     val names = for a <- portfolio yield a.name
-    assertEquals(names.toList, List("普通預金", "定期預金", "投資信託"))
+    assertEquals(names.toList, List("普通預金", "定期預金", "投資信託"), names)
   }
 
   test("残高でソートする") {
     val sorted = portfolio.sortedByBalance
-    assertEquals(sorted.map(_.name), List("普通預金", "投資信託", "定期預金"))
+    assertEquals(sorted.map(_.name), List("普通預金", "投資信託", "定期預金"), sorted)
   }
 ```
 
