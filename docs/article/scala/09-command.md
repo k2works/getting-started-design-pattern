@@ -61,7 +61,7 @@ class CommandSuite extends munit.FunSuite:
     val doc = SliderDocument()
     val cmd = InsertCommand(doc, 0, "Hello")
     cmd.execute()
-    assertEquals(doc.content, "Hello")
+    assertEquals(doc.content, "Hello", doc.content)
   }
 
   test("InsertCommand の undo で挿入を取り消す") {
@@ -69,7 +69,7 @@ class CommandSuite extends munit.FunSuite:
     val cmd = InsertCommand(doc, 0, "Hello")
     cmd.execute()
     cmd.undo()
-    assertEquals(doc.content, "")
+    assertEquals(doc.content, "", doc.content)
   }
 ```
 
@@ -139,7 +139,7 @@ test("CompositeCommand で複数のコマンドを一括実行する") {
   val composite = CompositeCommand(commands)
   composite.execute()
 
-  assertEquals(doc.content, "ABC")
+  assertEquals(doc.content, "ABC", doc.content)
 }
 ```
 
